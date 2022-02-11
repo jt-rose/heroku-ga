@@ -5,6 +5,8 @@ import express from "express";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { router as authRouter } from "./controllers/auth";
+import { router as userRouter } from "./controllers/user";
 
 const main = async () => {
   await dotenv.config();
@@ -51,6 +53,9 @@ const main = async () => {
   app.get("/", (_req, res) => {
     res.send("Hello World!");
   });
+
+  app.use("/auth", authRouter);
+  app.use("/user", userRouter);
 
   //___________________
   //Listener
