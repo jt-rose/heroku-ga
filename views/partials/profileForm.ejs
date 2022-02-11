@@ -1,13 +1,17 @@
-<form action="" method="post">
-  Username: <input type="text" name="username" /> Password:
-  <input type="text" name="password" /> Email:
-  <input type="text" name="email" /> Country:
-  <input type="text" name="country" /> cityOrState:
-  <input type="text" name="cityOrState" /> aboutMeText:<input
-    type="text"
-    name="aboutMeText"
-  />
-  languages: <input type="text" name="languages" /> hobbies:
-  <input type="text" name="hobbies" />
-  <button type="submit">Sign Up</button>
+<form action="/user/edit-profile?_method=PUT" method="post">
+  <label for="username">Username</label>
+  <input type="text" name="username" value="<%=user.username %>" />
+  <label for="email">Email</label>
+  <input type="text" name="email" value="<%=user.email %>" />
+  <label for="country">Country</label>
+  <input type="text" name="country" value="<%=user.country %>" />
+  <label for="cityOrState">State / Province</label>
+  <input type="text" name="cityOrState" value="<%=user.cityOrState %>" />
+  <label for="aboutMeText">About Me</label
+  ><textarea name="aboutMeText"><%=user.aboutMeText%></textarea>
+  <label for="languages">Languages</label>
+  <input type="text" name="languages" value="<%=user.languages[0] %>" />
+  <label for="hobbies">Hobbies</label>
+  <input type="text" name="hobbies" value="<%=user.hobbies[0] %>" />
+  <button type="submit">Sign UpUpdate</button>
 </form>
