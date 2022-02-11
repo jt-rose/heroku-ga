@@ -84,7 +84,7 @@ const main = async () => {
         httpOnly: true,
         sameSite: "lax",
         secure: __PROD__, // disable for dev in localhost
-        domain: __PROD__ ? "https://joybee.herokuapp.com" : undefined, // add domain when in prod
+        domain: __PROD__ ? ".herokuapp.com" : undefined, // add domain when in prod
       },
       secret: process.env.COOKIE_SECRET as string,
       resave: false,

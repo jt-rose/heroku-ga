@@ -98,7 +98,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                         httpOnly: true,
                         sameSite: "lax",
                         secure: __PROD__,
-                        domain: __PROD__ ? "https://joybee.herokuapp.com" : undefined, // add domain when in prod
+                        domain: __PROD__ ? ".herokuapp.com" : undefined, // add domain when in prod
                     },
                     secret: process.env.COOKIE_SECRET,
                     resave: false,
