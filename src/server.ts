@@ -1,11 +1,11 @@
 //___________________
 //Dependencies
 //___________________
-declare module "express-session" {
-  interface SessionData {
-    user: string;
-  }
-}
+// declare module "express-session" {
+//   interface SessionData {
+//     user: string;
+//   }
+// }
 import express, { Request, Response } from "express";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
@@ -104,7 +104,7 @@ const main = async () => {
   //localhost:3000
 
   app.get("/", (_req: Request, res: Response) => {
-    _req.session.user = "me";
+    console.log(_req.session.user);
     res.render("index.ejs", {
       title: "Index",
     });
