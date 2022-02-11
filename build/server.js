@@ -97,8 +97,8 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
                         httpOnly: true,
                         sameSite: "lax",
-                        secure: __PROD__,
-                        domain: __PROD__ ? ".herokuapp.com" : undefined, // add domain when in prod
+                        secure: __PROD__, // disable for dev in localhost
+                        //domain: __PROD__ ? ".herokuapp.com" : undefined, // add domain when in prod
                     },
                     secret: process.env.COOKIE_SECRET,
                     resave: false,
