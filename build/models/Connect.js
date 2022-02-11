@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { ObjectId } from "./ObjectId";
-var connectSchema = new mongoose.Schema({
+import { ObjectId } from "./ObjectId.js";
+export var connectSchema = new mongoose.Schema({
     from: { type: ObjectId, required: true },
     to: { type: ObjectId, required: true },
     date: { type: Date, required: true },

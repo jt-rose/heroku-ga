@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import { Connect } from "./Connect";
-import { Conversation } from "./Conversation";
-import { Meetup } from "./Meetup";
+import { connectSchema } from "./Connect.js";
+import { conversationSchema } from "./Conversation.js";
+import { meetupSchema } from "./Meetup.js";
 var userSchema = new mongoose.Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
@@ -17,8 +17,8 @@ var userSchema = new mongoose.Schema({
     // to limit mongo's excessive data duplication, we will only
     // store recently updated fields, manage these as changes are made
     // and limit pulling data on the full data set unless needed
-    updatedConnects: [Connect],
-    updatedConversations: [Conversation],
-    updatedMeetups: [Meetup],
+    updatedConnects: [connectSchema],
+    updatedConversations: [conversationSchema],
+    updatedMeetups: [meetupSchema],
 });
 export var User = mongoose.model("User", userSchema);

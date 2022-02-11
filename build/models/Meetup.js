@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
-import { ObjectId } from "./ObjectId";
-var meetupSchema = new mongoose.Schema({
+import { ObjectId } from "./ObjectId.js";
+export var meetupSchema = new mongoose.Schema({
     creator: { type: ObjectId, required: true },
     description: String,
     invitees: [{ id: ObjectId, accepted: String }],

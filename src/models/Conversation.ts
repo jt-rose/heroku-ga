@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ObjectId } from "./ObjectId";
+import { ObjectId } from "./ObjectId.js";
 
 interface IMessage {
   text: string;
@@ -8,7 +8,7 @@ interface IMessage {
   date: Date;
 }
 
-const messageSchema = new mongoose.Schema<IMessage>({
+export const messageSchema = new mongoose.Schema<IMessage>({
   text: { type: String, required: true },
   from: { type: ObjectId, required: true },
   to: { type: ObjectId, required: true },
@@ -23,9 +23,9 @@ interface IConversation {
   dateOfLastMessage: Date;
 }
 
-const conversationSchema = new mongoose.Schema<IConversation>({
+export const conversationSchema = new mongoose.Schema<IConversation>({
   speakers: [{ type: ObjectId, required: true }],
-  messages: [{ type: Message, required: true }],
+  messages: [{ type: messageSchema, required: true }],
   dateOfLastMessage: { type: Date, required: true },
 });
 

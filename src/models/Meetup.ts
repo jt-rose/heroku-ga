@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ObjectId } from "./ObjectId";
+import { ObjectId } from "./ObjectId.js";
 
 interface IMeetup {
   creator: typeof ObjectId;
@@ -11,7 +11,7 @@ interface IMeetup {
   cancelled: boolean;
 }
 
-const meetupSchema = new mongoose.Schema<IMeetup>({
+export const meetupSchema = new mongoose.Schema<IMeetup>({
   creator: { type: ObjectId, required: true },
   description: String,
   invitees: [{ id: ObjectId, accepted: String }],

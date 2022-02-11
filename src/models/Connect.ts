@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { ObjectId } from "./ObjectId";
+import { ObjectId } from "./ObjectId.js";
 
 interface IConnect {
   from: typeof ObjectId; // mongo id - string?
@@ -10,7 +10,7 @@ interface IConnect {
   inviteAccepted: boolean;
 }
 
-const connectSchema = new mongoose.Schema<IConnect>({
+export const connectSchema = new mongoose.Schema<IConnect>({
   from: { type: ObjectId, required: true },
   to: { type: ObjectId, required: true },
   date: { type: Date, required: true },

@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
-import { Connect } from "./Connect";
-import { Conversation } from "./Conversation";
-import { Meetup } from "./Meetup";
+import { Connect, connectSchema } from "./Connect.js";
+import { Conversation, conversationSchema } from "./Conversation.js";
+import { Meetup, meetupSchema } from "./Meetup.js";
 
-interface IUser {
+export interface IUser {
   // _id - mongo
   username: string;
   password: string;
@@ -36,9 +36,9 @@ const userSchema = new mongoose.Schema<IUser>({
   // to limit mongo's excessive data duplication, we will only
   // store recently updated fields, manage these as changes are made
   // and limit pulling data on the full data set unless needed
-  updatedConnects: [Connect],
-  updatedConversations: [Conversation],
-  updatedMeetups: [Meetup],
+  updatedConnects: [connectSchema],
+  updatedConversations: [conversationSchema],
+  updatedMeetups: [meetupSchema],
 });
 
 export const User = mongoose.model("User", userSchema);
