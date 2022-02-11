@@ -20,6 +20,7 @@ import { __PROD__ } from "./constants/PROD.js";
 const main = async () => {
   await dotenv.config();
   const app = express();
+  app.set("trust proxy", 1);
   const db = mongoose.connection;
   //___________________
   //Port
