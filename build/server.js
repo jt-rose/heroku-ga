@@ -41,10 +41,14 @@ import express from "express";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import session from "express-session";
+import Redis from "ioredis";
+import connectRedis from "connect-redis";
 import { router as authRouter } from "./controllers/auth.js";
 import { router as userRouter } from "./controllers/user.js";
+import { __PROD__ } from "./constants/PROD.js";
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
-    var app, db, PORT, MONGODB_URI;
+    var app, db, PORT, MONGODB_URI, RedisStore, redisURL, redis;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0: return [4 /*yield*/, dotenv.config()];
@@ -60,6 +64,14 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 db.on("error", function (err) { return console.log(err.message + " is Mongod not running?"); });
                 db.on("connected", function () { return console.log("mongo connected: ", MONGODB_URI); });
                 db.on("disconnected", function () { return console.log("mongo disconnected"); });
+                RedisStore = connectRedis(session);
+                redisURL = process.env.REDIS_TLS_URL;
+                if (redisURL) {
+                    redis = new Redis(redisURL);
+                }
+                else {
+                    redis = new Redis(); // auto connect if running on localhost
+                }
                 //___________________
                 //Middleware
                 //___________________
@@ -70,6 +82,31 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 app.use(express.json()); // returns middleware that only parses JSON - may or may not need it depending on your project
                 //use method override
                 app.use(methodOverride("_method")); // allow POST, PUT and DELETE from a form
+                // set up sessions
+                app.use(session({
+                    name: "cid",
+                    store: new RedisStore({
+                        client: redis,
+                        disableTouch: true,
+                    }),
+                    cookie: {
+                        maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+                        httpOnly: true,
+                        sameSite: "lax",
+                        secure: __PROD__,
+                        domain: __PROD__ ? "https://joybee.herokuapp.com" : undefined, // add domain when in prod
+                    },
+                    secret: process.env.COOKIE_SECRET,
+                    resave: false,
+                    saveUninitialized: false,
+                }));
+                // test redis
+                return [4 /*yield*/, redis
+                        .ping()
+                        .then(function (pong) { return console.log(pong + "! Redis has been connected"); })];
+            case 2:
+                // test redis
+                _a.sent();
                 //___________________
                 // Routes
                 //___________________

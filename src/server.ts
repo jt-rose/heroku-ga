@@ -5,8 +5,12 @@ import express from "express";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import session from "express-session";
+import Redis from "ioredis";
+import connectRedis from "connect-redis";
 import { router as authRouter } from "./controllers/auth.js";
 import { router as userRouter } from "./controllers/user.js";
+import { __PROD__ } from "./constants/PROD.js";
 
 const main = async () => {
   await dotenv.config();
@@ -25,12 +29,24 @@ const main = async () => {
   const MONGODB_URI = process.env.MONGODB_URI;
 
   // Connect to Mongo
-  mongoose.connect(MONGODB_URI as string);
+  await mongoose.connect(MONGODB_URI as string);
 
   // Error / success
   db.on("error", (err) => console.log(err.message + " is Mongod not running?"));
   db.on("connected", () => console.log("mongo connected: ", MONGODB_URI));
   db.on("disconnected", () => console.log("mongo disconnected"));
+
+  /* -------------------------------------------------------------------------- */
+  /*                              connect to Redis                              */
+  /* -------------------------------------------------------------------------- */
+  const RedisStore = connectRedis(session);
+  const redisURL = process.env.REDIS_TLS_URL;
+  let redis: Redis.Redis;
+  if (redisURL) {
+    redis = new Redis(redisURL);
+  } else {
+    redis = new Redis(); // auto connect if running on localhost
+  }
 
   //___________________
   //Middleware
@@ -45,6 +61,32 @@ const main = async () => {
 
   //use method override
   app.use(methodOverride("_method")); // allow POST, PUT and DELETE from a form
+
+  // set up sessions
+  app.use(
+    session({
+      name: "cid",
+      store: new RedisStore({
+        client: redis,
+        disableTouch: true,
+      }),
+      cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
+        httpOnly: true,
+        sameSite: "lax",
+        secure: __PROD__, // disable for dev in localhost
+        domain: __PROD__ ? "https://joybee.herokuapp.com" : undefined, // add domain when in prod
+      },
+      secret: process.env.COOKIE_SECRET as string,
+      resave: false,
+      saveUninitialized: false,
+    })
+  );
+
+  // test redis
+  await redis
+    .ping()
+    .then((pong) => console.log(pong + "! Redis has been connected"));
 
   //___________________
   // Routes
