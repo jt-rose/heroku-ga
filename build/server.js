@@ -41,6 +41,8 @@ import express from "express";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import { router as authRouter } from "./controllers/auth.js";
+import { router as userRouter } from "./controllers/user.js";
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     var app, db, PORT, MONGODB_URI;
     return __generator(this, function (_a) {
@@ -73,8 +75,12 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 //___________________
                 //localhost:3000
                 app.get("/", function (_req, res) {
-                    res.send("Hello World!");
+                    res.render("index.ejs", {
+                        title: "Index",
+                    });
                 });
+                app.use("/auth", authRouter);
+                app.use("/user", userRouter);
                 //___________________
                 //Listener
                 //___________________

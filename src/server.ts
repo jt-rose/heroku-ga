@@ -5,8 +5,8 @@ import express from "express";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import { router as authRouter } from "./controllers/auth";
-import { router as userRouter } from "./controllers/user";
+import { router as authRouter } from "./controllers/auth.js";
+import { router as userRouter } from "./controllers/user.js";
 
 const main = async () => {
   await dotenv.config();
@@ -51,7 +51,9 @@ const main = async () => {
   //___________________
   //localhost:3000
   app.get("/", (_req, res) => {
-    res.send("Hello World!");
+    res.render("index.ejs", {
+      title: "Index",
+    });
   });
 
   app.use("/auth", authRouter);
