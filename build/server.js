@@ -34,9 +34,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
-//___________________
-//Dependencies
-//___________________
 import express from "express";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
@@ -119,6 +116,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 //___________________
                 //localhost:3000
                 app.get("/", function (_req, res) {
+                    _req.session.user = "me";
                     res.render("index.ejs", {
                         title: "Index",
                     });

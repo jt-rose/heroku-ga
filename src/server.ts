@@ -1,11 +1,16 @@
 //___________________
 //Dependencies
 //___________________
-import express from "express";
+declare module "express-session" {
+  interface SessionData {
+    user: string;
+  }
+}
+import express, { Request, Response } from "express";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import session from "express-session";
+import session, { Session } from "express-session";
 import Redis from "ioredis";
 import connectRedis from "connect-redis";
 import { router as authRouter } from "./controllers/auth.js";
@@ -96,7 +101,9 @@ const main = async () => {
   // Routes
   //___________________
   //localhost:3000
-  app.get("/", (_req, res) => {
+
+  app.get("/", (_req: Request, res: Response) => {
+    _req.session.user = "me";
     res.render("index.ejs", {
       title: "Index",
     });
