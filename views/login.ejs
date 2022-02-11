@@ -1,0 +1,12 @@
+<html>
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <h1>Login Page</h1>
+    <form action="/auth/login" method="post">
+      username / email: <input type="text" name="usernameOrEmail" /> password
+      <input type="password" name="password" />
+      <button type="submit">Login</button>
+    </form>
+  </body>
+</html>

@@ -3,5 +3,8 @@
   <body>
     <%- include('./partials/header.ejs') %>
     <h1>Index Page</h1>
+    <form action="/auth/logout?_method=DELETE" method="post">
+      <button type="submit">Logout</button>
+    </form>
   </body>
 </html>

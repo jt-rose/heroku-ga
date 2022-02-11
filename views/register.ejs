@@ -1,0 +1,38 @@
+<html>
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <h1>Register Page</h1>
+    <form action="" method="post">
+      Username: <input type="text" name="username" /> Password:
+      <input type="text" name="password" /> Email:
+      <input type="text" name="email" /> Country:
+      <input type="text" name="country" /> cityOrState:
+      <input type="text" name="cityOrState" /> aboutMeText:<input
+        type="text"
+        name="aboutMeText"
+      />
+      languages: <input type="text" name="languages" /> hobbies:
+      <input type="text" name="hobbies" />
+      <button type="submit">Sign Up</button>
+    </form>
+  </body>
+</html>
+
+<!-- username: { type: String, required: true },
+  password: { type: String, required: true },
+  email: { type: String, required: true },
+  // img
+  country: { type: String, required: true },
+  cityOrState: { type: String, required: true },
+  aboutMeText: { type: String, required: true },
+  joinedOn: { type: Date, required: true },
+  active: { type: Boolean, required: true },
+  languages: [{ type: String, required: true }],
+  hobbies: [{ type: String, required: true }],
+  // to limit mongo's excessive data duplication, we will only
+  // store recently updated fields, manage these as changes are made
+  // and limit pulling data on the full data set unless needed
+  updatedConnects: [Connect],
+  updatedConversations: [Conversation],
+  updatedMeetups: [Meetup], -->
