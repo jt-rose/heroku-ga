@@ -59,7 +59,10 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 PORT = process.env.PORT || 3003;
                 MONGODB_URI = process.env.MONGODB_URI;
                 // Connect to Mongo
-                mongoose.connect(MONGODB_URI);
+                return [4 /*yield*/, mongoose.connect(MONGODB_URI)];
+            case 2:
+                // Connect to Mongo
+                _a.sent();
                 // Error / success
                 db.on("error", function (err) { return console.log(err.message + " is Mongod not running?"); });
                 db.on("connected", function () { return console.log("mongo connected: ", MONGODB_URI); });
@@ -67,7 +70,11 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 RedisStore = connectRedis(session);
                 redisURL = process.env.REDIS_TLS_URL;
                 if (redisURL) {
-                    redis = new Redis(redisURL);
+                    redis = new Redis(redisURL, {
+                        tls: {
+                            rejectUnauthorized: false,
+                        },
+                    });
                 }
                 else {
                     redis = new Redis(); // auto connect if running on localhost
@@ -104,7 +111,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 return [4 /*yield*/, redis
                         .ping()
                         .then(function (pong) { return console.log(pong + "! Redis has been connected"); })];
-            case 2:
+            case 3:
                 // test redis
                 _a.sent();
                 //___________________

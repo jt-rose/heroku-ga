@@ -43,7 +43,11 @@ const main = async () => {
   const redisURL = process.env.REDIS_TLS_URL;
   let redis: Redis.Redis;
   if (redisURL) {
-    redis = new Redis(redisURL);
+    redis = new Redis(redisURL, {
+      tls: {
+        rejectUnauthorized: false,
+      },
+    });
   } else {
     redis = new Redis(); // auto connect if running on localhost
   }
