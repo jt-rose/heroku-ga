@@ -4,5 +4,13 @@
     <%- include('./partials/header.ejs') %>
     <h1>Edit profile Page</h1>
     <%- include('./partials/profileForm.ejs') %>
+    <form action="/user/toggle-active?_method=PUT" method="post">
+      <button type="submit">
+        <%=`${user.active ? "deactivate" : "reactivate"}`%>
+      </button>
+    </form>
+    <form action="/user/permadelete?_method=DELETE" method="post">
+      <button type="submit">Delete Account</button>
+    </form>
   </body>
 </html>

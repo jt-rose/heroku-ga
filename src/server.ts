@@ -16,6 +16,7 @@ import connectRedis from "connect-redis";
 import { router as authRouter } from "./controllers/auth.js";
 import { router as userRouter } from "./controllers/user.js";
 import { __PROD__ } from "./constants/PROD.js";
+import { User } from "./models/User.js";
 
 const main = async () => {
   await dotenv.config();
@@ -103,10 +104,14 @@ const main = async () => {
   //___________________
   //localhost:3000
 
-  app.get("/", (_req: Request, res: Response) => {
-    console.log(_req.session.user);
+  app.get("/", async (req: Request, res: Response) => {
+    console.log(req.session.user);
+
+    const users = await User.find({ active: true }); // add limit
     res.render("index.ejs", {
       title: "Index",
+      users,
+      myAccount: req.session.user,
     });
   });
 

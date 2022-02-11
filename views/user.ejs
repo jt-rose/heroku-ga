@@ -3,6 +3,14 @@
   <body>
     <%- include('./partials/header.ejs') %>
     <h1>User Page</h1>
-    <%- include('./partials/profile.ejs') %>
+    <%- include('./partials/profile.ejs') %> <% if (myAccount) { %>
+    <a href="/user/edit-profile"
+      ><button type="submit">Edit My profile</button></a
+    >
+    <% } %> <% if (!myAccount) { %>
+    <button type="submit">Connect</button>
+    <button>Message</button>
+    <button>Invite to Meetup</button>
+    <% } %>
   </body>
 </html>

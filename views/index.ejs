@@ -3,8 +3,28 @@
   <body>
     <%- include('./partials/header.ejs') %>
     <h1>Index Page</h1>
+    <ul>
+      <% for (let i = 0; i < users.length; i++) { if (users[i].username !==
+      myAccount.username) { %>
+      <li>
+        <a href="/user/profile/<%=users[i]._id%>"><%=users[i].username%></a>
+      </li>
+      <% } } %>
+    </ul>
+    <% if (!myAccount) { %>
+    <a href="/auth/register">
+      <button>Register</button>
+    </a>
+    <br />
+    <a href="/auth/login">
+      <button>Login</button>
+    </a>
+    <% } %> <% if (myAccount) { %>
     <form action="/auth/logout?_method=DELETE" method="post">
       <button type="submit">Logout</button>
     </form>
+    <% } %> <% if (myAccount) { %>
+    <p>logged in as <%=myAccount.username%></p>
+    <% } %>
   </body>
 </html>

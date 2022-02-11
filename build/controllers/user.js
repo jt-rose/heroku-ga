@@ -56,6 +56,7 @@ router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, vo
                     res.render("user.ejs", {
                         title: "Profile",
                         user: req.session.user,
+                        myAccount: true,
                     });
                     return [2 /*return*/];
                 }
@@ -74,6 +75,7 @@ router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, vo
                 res.render("user.ejs", {
                     title: "Profile",
                     user: user,
+                    myAccount: false,
                 });
                 return [2 /*return*/];
         }
@@ -114,11 +116,64 @@ router.put("/respond-to-message/:messageid", function (req, res) {
     res.send("put form data to update conversation messages");
 });
 // at this time messages cannot be updated or deleted
-router.delete("/delete-account/:accountid", function (req, res) {
-    res.send("delete user account - be careful!");
-}); // use sparingly and make sure to cascade delete!
-// users should be encouraged to deactivate, rather than delete, their account
-// to preserve data integrity for other users
+router.put("/toggle-active", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                // user account will be deactivated, rather than outright deleted,
+                // to maintain relational data integrity and allow for reactivation later
+                // ! when getting data on users, a filter for active will need to be applied
+                if (!req.session.user) {
+                    res.redirect("/");
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, User.findByIdAndUpdate(req.session.user._id, {
+                        active: !req.session.user.active,
+                    }, { new: true })];
+            case 1:
+                user = _a.sent();
+                if (!user) {
+                    console.log("Error - search for user " +
+                        req.session.user._id +
+                        " but could not locate in database");
+                    res.redirect("/");
+                    return [2 /*return*/];
+                }
+                req.session.user = user;
+                res.redirect("/");
+                return [2 /*return*/];
+        }
+    });
+}); });
+router.delete("/permadelete", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!req.session.user) {
+                    res.redirect("/");
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, User.findByIdAndRemove(req.session.user._id)];
+            case 1:
+                user = _a.sent();
+                // ! TODO: run a cascade delete
+                if (!user) {
+                    console.log("Error - search for user " +
+                        req.session.user._id +
+                        " but could not locate in database");
+                    res.redirect("/");
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, req.session.destroy(function () { })];
+            case 2:
+                _a.sent();
+                res.redirect("/");
+                return [2 /*return*/];
+        }
+    });
+}); });
 router.delete("/delete-connect-invite/:connectid", function (req, res) {
     res.send("remove connection invite");
 });

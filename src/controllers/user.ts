@@ -17,6 +17,7 @@ router.get("/profile/:userid", async (req, res) => {
     res.render("user.ejs", {
       title: "Profile",
       user: req.session.user,
+      myAccount: true,
     });
     return;
   }
@@ -33,6 +34,7 @@ router.get("/profile/:userid", async (req, res) => {
   res.render("user.ejs", {
     title: "Profile",
     user,
+    myAccount: false,
   });
 });
 
@@ -75,11 +77,53 @@ router.put("/respond-to-message/:messageid", (req, res) => {
 });
 // at this time messages cannot be updated or deleted
 
-router.delete("/delete-account/:accountid", (req, res) => {
-  res.send("delete user account - be careful!");
-}); // use sparingly and make sure to cascade delete!
-// users should be encouraged to deactivate, rather than delete, their account
-// to preserve data integrity for other users
+router.put("/toggle-active", async (req, res) => {
+  // user account will be deactivated, rather than outright deleted,
+  // to maintain relational data integrity and allow for reactivation later
+  // ! when getting data on users, a filter for active will need to be applied
+  if (!req.session.user) {
+    res.redirect("/");
+    return;
+  }
+  const user = await User.findByIdAndUpdate(
+    req.session.user._id,
+    {
+      active: !req.session.user.active,
+    },
+    { new: true }
+  );
+  if (!user) {
+    console.log(
+      "Error - search for user " +
+        req.session.user._id +
+        " but could not locate in database"
+    );
+    res.redirect("/");
+    return;
+  }
+  req.session.user = user;
+  res.redirect("/");
+});
+
+router.delete("/permadelete", async (req, res) => {
+  if (!req.session.user) {
+    res.redirect("/");
+    return;
+  }
+  const user = await User.findByIdAndRemove(req.session.user._id);
+  // ! TODO: run a cascade delete
+  if (!user) {
+    console.log(
+      "Error - search for user " +
+        req.session.user._id +
+        " but could not locate in database"
+    );
+    res.redirect("/");
+    return;
+  }
+  await req.session.destroy(() => {});
+  res.redirect("/");
+});
 
 router.delete("/delete-connect-invite/:connectid", (req, res) => {
   res.send("remove connection invite");

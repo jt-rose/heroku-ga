@@ -52,6 +52,7 @@ import connectRedis from "connect-redis";
 import { router as authRouter } from "./controllers/auth.js";
 import { router as userRouter } from "./controllers/user.js";
 import { __PROD__ } from "./constants/PROD.js";
+import { User } from "./models/User.js";
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     var app, db, PORT, MONGODB_URI, RedisStore, redisURL, redis;
     return __generator(this, function (_a) {
@@ -124,12 +125,24 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 // Routes
                 //___________________
                 //localhost:3000
-                app.get("/", function (_req, res) {
-                    console.log(_req.session.user);
-                    res.render("index.ejs", {
-                        title: "Index",
+                app.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+                    var users;
+                    return __generator(this, function (_a) {
+                        switch (_a.label) {
+                            case 0:
+                                console.log(req.session.user);
+                                return [4 /*yield*/, User.find({ active: true })];
+                            case 1:
+                                users = _a.sent();
+                                res.render("index.ejs", {
+                                    title: "Index",
+                                    users: users,
+                                    myAccount: req.session.user,
+                                });
+                                return [2 /*return*/];
+                        }
                     });
-                });
+                }); });
                 app.use("/auth", authRouter);
                 app.use("/user", userRouter);
                 //___________________
