@@ -2,9 +2,10 @@ import mongoose from "mongoose";
 import { Connect, connectSchema } from "./Connect.js";
 import { Conversation, conversationSchema } from "./Conversation.js";
 import { Meetup, meetupSchema } from "./Meetup.js";
+import { ObjectId } from "./ObjectId.js";
 
 export interface IUser {
-  // _id - mongo
+  _id: typeof ObjectId;
   username: string;
   password: string;
   email: string;

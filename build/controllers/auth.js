@@ -162,10 +162,3 @@ router.get("/reset-password", function (req, res) {
 router.post("/reset-password", function (req, res) {
     res.send("submit form to reset password");
 });
-// these routes will be used for testing and removed later on
-router.get("/protected", function (req, res) {
-    res.send("I'm a protected route");
-});
-router.get("/unprotected", function (req, res) {
-    res.send("I'm an unprotected route");
-});
