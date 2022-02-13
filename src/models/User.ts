@@ -15,7 +15,9 @@ export interface IUser {
   aboutMeText: string;
   joinedOn: Date;
   active: boolean;
-  languages: { language: string; proficiency: string }[]; // refactor to constant later
+  nativeLanguage: string;
+  targetLanguage: string;
+  targetLanguageProficiency: "basic" | "conversational" | "fluent";
   hobbies: string[]; // refactor to constant later
   // denormalized relational data
   connections: typeof ObjectId[];
@@ -36,7 +38,9 @@ const userSchema = new mongoose.Schema<IUser>({
   aboutMeText: { type: String, required: true },
   joinedOn: { type: Date, required: true },
   active: { type: Boolean, required: true },
-  languages: [{ type: String, required: true }],
+  nativeLanguage: { type: String, required: true },
+  targetLanguage: { type: String, required: true },
+  targetLanguageProficiency: { type: String, required: true },
   hobbies: [{ type: String, required: true }],
   // to limit mongo's excessive data duplication, we will only
   // store recently updated fields, manage these as changes are made

@@ -13,7 +13,9 @@ var userSchema = new mongoose.Schema({
     aboutMeText: { type: String, required: true },
     joinedOn: { type: Date, required: true },
     active: { type: Boolean, required: true },
-    languages: [{ type: String, required: true }],
+    nativeLanguage: { type: String, required: true },
+    targetLanguage: { type: String, required: true },
+    targetLanguageProficiency: { type: String, required: true },
     hobbies: [{ type: String, required: true }],
     // to limit mongo's excessive data duplication, we will only
     // store recently updated fields, manage these as changes are made
