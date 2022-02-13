@@ -9,8 +9,16 @@
   <input type="text" name="cityOrState" value="<%=user.cityOrState %>" />
   <label for="aboutMeText">About Me</label
   ><textarea name="aboutMeText"><%=user.aboutMeText%></textarea>
-  <label for="languages">Languages</label>
-  <input type="text" name="languages" value="<%=user.languages[0] %>" />
+  <label for="nativeLanguage">Native language</label
+  ><input type="text" name="nativeLanguage" value="<%=user.nativeLanguage%>" />
+  <label for="targetLanguage">Target language</label
+  ><input type="text" name="targetLanguage" value="<%=user.targetLanguage%>" />
+  <label for="targetLanguageProficiency">Proficiency</label
+  ><input
+    type="text"
+    name="targetLanguageProficiency"
+    value="<%=user.targetLanguageProficiency%>"
+  />
   <label for="hobbies">Hobbies</label>
   <input type="text" name="hobbies" value="<%=user.hobbies[0] %>" />
   <button type="submit">Sign UpUpdate</button>
