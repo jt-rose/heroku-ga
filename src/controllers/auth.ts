@@ -78,7 +78,9 @@ router.post("/register", upload.single("img"), async (req, res) => {
       aboutMeText,
       country,
       cityOrState,
-      languages,
+      nativeLanguage,
+      targetLanguage,
+      targetLanguageProficiency,
       hobbies,
     } = req.body;
 
@@ -108,7 +110,9 @@ router.post("/register", upload.single("img"), async (req, res) => {
       country,
       cityOrState,
       aboutMeText,
-      languages: [languages],
+      nativeLanguage,
+      targetLanguage,
+      targetLanguageProficiency,
       hobbies: [hobbies],
       active: true,
       joinedOn: new Date(),
