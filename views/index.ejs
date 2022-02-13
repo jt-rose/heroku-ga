@@ -4,8 +4,8 @@
     <%- include('./partials/header.ejs') %>
     <h1>Index Page</h1>
     <ul>
-      <% for (let i = 0; i < users.length; i++) { if (users[i].username !==
-      myAccount.username) { %>
+      <% for (let i = 0; i < users.length; i++) { if (!myAccount ||
+      users[i].username !== myAccount.username) { %>
       <li>
         <a href="/user/profile/<%=users[i]._id%>"><%=users[i].username%></a>
       </li>
