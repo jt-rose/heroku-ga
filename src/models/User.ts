@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Connect, connectSchema } from "./Connect.js";
+import { Invite, inviteSchema } from "./Invite.js";
 import { Conversation, conversationSchema } from "./Conversation.js";
 import { Meetup, meetupSchema } from "./Meetup.js";
 import { ObjectId } from "./ObjectId.js";
@@ -17,9 +17,13 @@ export interface IUser {
   active: boolean;
   languages: { language: string; proficiency: string }[]; // refactor to constant later
   hobbies: string[]; // refactor to constant later
-  updatedConnects: typeof Connect[];
-  updatedConversations: typeof Conversation[];
-  updatedMeetups: typeof Meetup[];
+  // denormalized relational data
+  connections: typeof ObjectId[];
+  connectionInvites: typeof Invite[];
+  currentMeetups: typeof Meetup[];
+  unreadConversations: typeof Conversation[];
+  allConversations: typeof ObjectId[];
+  allMeetups: typeof ObjectId[];
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -37,9 +41,13 @@ const userSchema = new mongoose.Schema<IUser>({
   // to limit mongo's excessive data duplication, we will only
   // store recently updated fields, manage these as changes are made
   // and limit pulling data on the full data set unless needed
-  updatedConnects: [connectSchema],
-  updatedConversations: [conversationSchema],
-  updatedMeetups: [meetupSchema],
+
+  connections: [{ type: ObjectId, required: true }],
+  connectionInvites: [{ type: inviteSchema, required: true }],
+  currentMeetups: [{ type: meetupSchema, required: true }],
+  unreadConversations: [{ type: conversationSchema, required: true }],
+  allConversations: [{ type: ObjectId, required: true }],
+  allMeetups: [{ type: ObjectId, required: true }],
 });
 
 export const User = mongoose.model("User", userSchema);

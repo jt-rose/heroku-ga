@@ -37,10 +37,29 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import express from "express";
 import mongoose from "mongoose";
 import { User } from "../models/User.js";
+import { Invite } from "../models/Invite";
 export var router = express.Router();
-router.get("/connects", function (req, res) {
-    res.send("connects landing page");
-});
+router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var connects;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!req.session.user) {
+                    res.redirect("/auth/login");
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, Invite.find({
+                        $or: [{ from: req.session.user._id }, { to: req.session.user._id }],
+                    })];
+            case 1:
+                connects = _a.sent();
+                res.render("connects.ejs", {
+                    connects: connects,
+                });
+                return [2 /*return*/];
+        }
+    });
+}); });
 router.get("/messages", function (req, res) {
     res.send("messages landing page");
 });

@@ -8,5 +8,6 @@ export var meetupSchema = new mongoose.Schema({
     to: { type: Date, required: true },
     platform: { type: String, required: true },
     cancelled: { type: Boolean, required: true },
+    response: { type: String, required: true },
 });
 export var Meetup = mongoose.model("Meetup", meetupSchema);

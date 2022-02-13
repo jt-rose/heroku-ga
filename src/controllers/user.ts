@@ -1,10 +1,21 @@
 import express from "express";
 import mongoose from "mongoose";
 import { User } from "../models/User.js";
+import { Invite } from "../models/Invite";
 export const router = express.Router();
 
-router.get("/connects", (req, res) => {
-  res.send("connects landing page");
+router.get("/connects", async (req, res) => {
+  if (!req.session.user) {
+    res.redirect("/auth/login");
+    return;
+  }
+
+  const connects = await Invite.find({
+    $or: [{ from: req.session.user._id }, { to: req.session.user._id }],
+  });
+  res.render("connects.ejs", {
+    connects,
+  });
 });
 router.get("/messages", (req, res) => {
   res.send("messages landing page");

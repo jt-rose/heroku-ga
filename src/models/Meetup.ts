@@ -9,6 +9,7 @@ interface IMeetup {
   to: Date;
   platform: string; // constant
   cancelled: boolean;
+  response: "accepted" | "declined" | "no response";
 }
 
 export const meetupSchema = new mongoose.Schema<IMeetup>({
@@ -19,6 +20,7 @@ export const meetupSchema = new mongoose.Schema<IMeetup>({
   to: { type: Date, required: true },
   platform: { type: String, required: true },
   cancelled: { type: Boolean, required: true },
+  response: { type: String, required: true },
 });
 
 export const Meetup = mongoose.model("Meetup", meetupSchema);
