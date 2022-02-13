@@ -10,7 +10,7 @@ import express, { Request, Response } from "express";
 import methodOverride from "method-override";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import session, { Session } from "express-session";
+import session from "express-session";
 import Redis from "ioredis";
 import connectRedis from "connect-redis";
 import { router as authRouter } from "./controllers/auth.js";
@@ -20,6 +20,7 @@ import { User } from "./models/User.js";
 
 const main = async () => {
   await dotenv.config();
+
   const app = express();
   app.set("trust proxy", 1);
   const db = mongoose.connection;
