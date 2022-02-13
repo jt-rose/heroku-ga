@@ -146,6 +146,9 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                         hobbies: [hobbies],
                         active: true,
                         joinedOn: new Date(),
+                        updatedConnects: [],
+                        updatedConversations: [],
+                        updatedMeetups: [],
                     }).save()];
             case 5:
                 user = _b.sent();

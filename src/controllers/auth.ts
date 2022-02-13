@@ -112,6 +112,9 @@ router.post("/register", upload.single("img"), async (req, res) => {
       hobbies: [hobbies],
       active: true,
       joinedOn: new Date(),
+      updatedConnects: [],
+      updatedConversations: [],
+      updatedMeetups: [],
     }).save();
 
     // if err
