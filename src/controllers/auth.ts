@@ -6,7 +6,12 @@ declare module "express-session" {
 import express from "express";
 import argon2 from "argon2";
 import { User, IUser } from "../models/User.js";
+import path from "path";
+import multer from "multer";
+import { uploadFile, getFileStream } from "../utils/s3.js";
 export const router = express.Router();
+
+const upload = multer({ dest: "uploads/" });
 
 router.get("/login", (req, res) => {
   res.render("login.ejs", {
@@ -54,9 +59,18 @@ router.get("/register", (req, res) => {
     title: "Sign Up",
   });
 });
-router.post("/register", async (req, res) => {
-  // get form parameters from req.body
+router.post("/register", upload.single("img"), async (req, res) => {
   try {
+    // upload user avatar to s3 and capture img path
+    const file = req.file;
+    let img;
+    if (file) {
+      // ! add validation around img type and size
+      const result = await uploadFile(file);
+      img = result.Location;
+    }
+
+    // get form parameters from req.body
     const {
       username,
       email,
@@ -80,6 +94,7 @@ router.post("/register", async (req, res) => {
       return;
     }
     // validate data
+    // ! add later
 
     // encrypt password
     const hashedPassword = await argon2.hash(password);
@@ -89,6 +104,7 @@ router.post("/register", async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      img,
       country,
       cityOrState,
       aboutMeText,
@@ -99,6 +115,7 @@ router.post("/register", async (req, res) => {
     }).save();
 
     // if err
+    // ! add later
 
     // set cookie
     req.session.user = user;
@@ -112,6 +129,15 @@ router.post("/register", async (req, res) => {
     //   error: 'internal server error'
     // })
   }
+});
+
+router.get("/sw-image", async (req, res) => {
+  //const src = getFileStream("2679edc6b481797470e172f3ac25d663");
+  res.send(
+    '<img src="' +
+      "https://joybee.s3.amazonaws.com/2679edc6b481797470e172f3ac25d663" +
+      '" style="width: 400px" >'
+  );
 });
 router.get("/forgot-password", (req, res) => {
   res.send("forgot password form");

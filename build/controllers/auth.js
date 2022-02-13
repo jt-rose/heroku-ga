@@ -37,7 +37,10 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import express from "express";
 import argon2 from "argon2";
 import { User } from "../models/User.js";
+import multer from "multer";
+import { uploadFile } from "../utils/s3.js";
 export var router = express.Router();
+var upload = multer({ dest: "uploads/" });
 router.get("/login", function (req, res) {
     res.render("login.ejs", {
         title: "Login",
@@ -100,17 +103,26 @@ router.get("/register", function (req, res) {
         title: "Sign Up",
     });
 });
-router.post("/register", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, username, email, password, aboutMeText, country, cityOrState, languages, hobbies, userAlreadyExists, hashedPassword, user, e_1;
+router.post("/register", upload.single("img"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var file, img, result, _a, username, email, password, aboutMeText, country, cityOrState, languages, hobbies, userAlreadyExists, hashedPassword, user, e_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
-                _b.trys.push([0, 4, , 5]);
+                _b.trys.push([0, 6, , 7]);
+                file = req.file;
+                img = void 0;
+                if (!file) return [3 /*break*/, 2];
+                return [4 /*yield*/, uploadFile(file)];
+            case 1:
+                result = _b.sent();
+                img = result.Location;
+                _b.label = 2;
+            case 2:
                 _a = req.body, username = _a.username, email = _a.email, password = _a.password, aboutMeText = _a.aboutMeText, country = _a.country, cityOrState = _a.cityOrState, languages = _a.languages, hobbies = _a.hobbies;
                 return [4 /*yield*/, User.findOne({
                         $or: [{ username: username }, { email: email }],
                     })];
-            case 1:
+            case 3:
                 userAlreadyExists = _b.sent();
                 if (userAlreadyExists) {
                     res.render("/register", {
@@ -120,12 +132,13 @@ router.post("/register", function (req, res) { return __awaiter(void 0, void 0, 
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, argon2.hash(password)];
-            case 2:
+            case 4:
                 hashedPassword = _b.sent();
                 return [4 /*yield*/, new User({
                         username: username,
                         email: email,
                         password: hashedPassword,
+                        img: img,
                         country: country,
                         cityOrState: cityOrState,
                         aboutMeText: aboutMeText,
@@ -134,20 +147,30 @@ router.post("/register", function (req, res) { return __awaiter(void 0, void 0, 
                         active: true,
                         joinedOn: new Date(),
                     }).save()];
-            case 3:
+            case 5:
                 user = _b.sent();
                 // if err
+                // ! add later
                 // set cookie
                 req.session.user = user;
                 // return to homepage
                 res.redirect("/");
-                return [3 /*break*/, 5];
-            case 4:
+                return [3 /*break*/, 7];
+            case 6:
                 e_1 = _b.sent();
                 console.log(e_1);
-                return [3 /*break*/, 5];
-            case 5: return [2 /*return*/];
+                return [3 /*break*/, 7];
+            case 7: return [2 /*return*/];
         }
+    });
+}); });
+router.get("/sw-image", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    return __generator(this, function (_a) {
+        //const src = getFileStream("2679edc6b481797470e172f3ac25d663");
+        res.send('<img src="' +
+            "https://joybee.s3.amazonaws.com/2679edc6b481797470e172f3ac25d663" +
+            '" style="width: 400px" >');
+        return [2 /*return*/];
     });
 }); });
 router.get("/forgot-password", function (req, res) {
