@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Document } from "mongoose";
 import { ObjectId } from "./ObjectId.js";
 
-interface IMessage {
+interface IMessage extends Document {
   text: string;
   from: typeof ObjectId; // mongo id
   to: typeof ObjectId; // mongo id
@@ -17,7 +17,7 @@ export const messageSchema = new mongoose.Schema<IMessage>({
 
 const Message = mongoose.model("Message", messageSchema);
 
-interface IConversation {
+interface IConversation extends Document {
   speakers: typeof ObjectId[];
   messages: typeof Message[];
   dateOfLastMessage: Date;

@@ -21,10 +21,16 @@ var userSchema = new mongoose.Schema({
     // store recently updated fields, manage these as changes are made
     // and limit pulling data on the full data set unless needed
     connections: [{ type: ObjectId, required: true }],
-    connectionInvites: [{ type: inviteSchema, required: true }],
+    connectionInvites: [
+        {
+            type: inviteSchema,
+            required: true,
+        },
+    ],
     currentMeetups: [{ type: meetupSchema, required: true }],
     unreadConversations: [{ type: conversationSchema, required: true }],
     allConversations: [{ type: ObjectId, required: true }],
     allMeetups: [{ type: ObjectId, required: true }],
+    blackListed: [{ type: ObjectId, required: true }],
 });
 export var User = mongoose.model("User", userSchema);

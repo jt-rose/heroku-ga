@@ -1,7 +1,7 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { ObjectId } from "./ObjectId.js";
 
-interface InviteSchema {
+export interface InviteSchema extends Types.Subdocument {
   from: typeof ObjectId; // mongo id - string?
   to: typeof ObjectId;
 

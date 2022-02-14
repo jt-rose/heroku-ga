@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import { Invite, inviteSchema } from "./Invite.js";
+import { inviteSchema, InviteSchema } from "./Invite.js";
 import { Conversation, conversationSchema } from "./Conversation.js";
 import { Meetup, meetupSchema } from "./Meetup.js";
 import { ObjectId } from "./ObjectId.js";
@@ -21,11 +21,12 @@ export interface IUser {
   hobbies: string[]; // refactor to constant later
   // denormalized relational data
   connections: typeof ObjectId[];
-  connectionInvites: typeof Invite[];
+  connectionInvites: InviteSchema[];
   currentMeetups: typeof Meetup[];
   unreadConversations: typeof Conversation[];
   allConversations: typeof ObjectId[];
   allMeetups: typeof ObjectId[];
+  blackListed: typeof ObjectId[];
 }
 
 const userSchema = new mongoose.Schema<IUser>({
@@ -47,11 +48,18 @@ const userSchema = new mongoose.Schema<IUser>({
   // and limit pulling data on the full data set unless needed
 
   connections: [{ type: ObjectId, required: true }],
-  connectionInvites: [{ type: inviteSchema, required: true }],
+  connectionInvites: [
+    {
+      type: inviteSchema,
+      required: true,
+    },
+  ],
   currentMeetups: [{ type: meetupSchema, required: true }],
   unreadConversations: [{ type: conversationSchema, required: true }],
   allConversations: [{ type: ObjectId, required: true }],
   allMeetups: [{ type: ObjectId, required: true }],
+
+  blackListed: [{ type: ObjectId, required: true }],
 });
 
 export const User = mongoose.model("User", userSchema);
