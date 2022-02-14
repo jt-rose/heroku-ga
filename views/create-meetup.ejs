@@ -1,0 +1,42 @@
+<html>
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <h1>Create Meetups Page</h1>
+    <form action="/meetups/create" method="post">
+        <select name="invitee" id="">
+            <% for (let i = 0; i < connections.length; i++) { %>
+                <option value="<%=connections[i]._id%>"><%=connections[i].username%></option>
+           <% } %>
+        </select>
+        <textarea name="description" id="" cols="30" rows="10" placeholder="...enter a message"></textarea>
+        <select name="targetLanguage" id="target-language-select">
+            <% for (let i = 0; i < languages.length; i++) { %>
+            <option value="<%=languages[i] %>"
+                <% if (user.targetLanguage === languages[i]) { %>
+                    selected
+               <% } %>
+                ><%=languages[i] %></option>
+            <% } %>
+          </select>
+          <input type="date" name="date" id="">
+          <input type="time" name="start" id="">
+          <select name="duration" id="">
+            <option value="15">15min</option>
+            <option value="30">30min</option>
+            <option value="45">45min</option>
+            <option value="60">1 hour</option>
+            <option value="90">1.5 hours</option>
+            <option value="120">2 hours</option>
+          </select>
+          <input type="radio" name="platform" id="zoom" value="zoom">
+          <label for="zoom">Zoom</label>
+          <input type="radio" name="platform" id="skype" value="skype">
+          <label for="skype">Skype</label>
+          <input type="radio" name="platform" id="discord" value="discord">
+          <label for="discord">Discord</label>
+
+        <button type="submit">Create</button>
+    </form>
+  </body>
+</html>

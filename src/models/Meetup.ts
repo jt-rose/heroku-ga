@@ -4,9 +4,9 @@ import { ObjectId } from "./ObjectId.js";
 interface IMeetup {
   creator: typeof ObjectId;
   description: string;
-  invitees: { id: typeof ObjectId; accepted: string }[]; // ids - mongo? accepted - constant
-  from: Date;
-  to: Date;
+  invitee: typeof ObjectId; // ids - mongo? accepted - constant
+  startTime: Date;
+  endTime: Date;
   platform: string; // constant
   cancelled: boolean;
   response: "accepted" | "declined" | "no response";
@@ -15,9 +15,9 @@ interface IMeetup {
 export const meetupSchema = new mongoose.Schema<IMeetup>({
   creator: { type: ObjectId, required: true },
   description: String,
-  invitees: [{ id: ObjectId, accepted: String }],
-  from: { type: Date, required: true },
-  to: { type: Date, required: true },
+  invitee: { type: ObjectId, required: true },
+  startTime: { type: Date, required: true },
+  endTime: { type: Date, required: true },
   platform: { type: String, required: true },
   cancelled: { type: Boolean, required: true },
   response: { type: String, required: true },
