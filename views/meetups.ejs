@@ -1,0 +1,17 @@
+<html>
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <h1>Meetups Page</h1>
+    <ul>
+      <% for (let i = 0; i < meetups.length; i++) { %>
+      <li>
+        <a href="/meetups/<%=meetups[i]._id%>"
+          ><h3><%=meetups[i].name%></h3>
+          <p><%=meetups[i].description%></p></a
+        >
+      </li>
+      <% } %>
+    </ul>
+  </body>
+</html>

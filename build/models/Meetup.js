@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { ObjectId } from "./ObjectId.js";
 export var meetupSchema = new mongoose.Schema({
     creator: { type: ObjectId, required: true },
+    name: { type: String, required: true },
     description: String,
     invitee: { type: ObjectId, required: true },
     startTime: { type: Date, required: true },

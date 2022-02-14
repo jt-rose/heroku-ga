@@ -1,0 +1,39 @@
+<html>
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <h1><%=meetup.name%></h1>
+    <p><%=meetup.description%></p>
+    <% if (!myMeetup.cancelled && !alreadyDone) { %>
+    <p>Cancelled: <%=meetup.cancelled %></p>
+    <form action="/meetups/clear-cancelled-meetup?_method=DELETE" method="post">
+      <input type="text" name="meetupid" id="" value="<%=meetup._id%>" hidden />
+      <button type="submit">Clear</button>
+    </form>
+    <% } %> <% if (myMeetup && !alreadyDone) { %>
+    <form action="/meetups?_method=DELETE" method="post">
+      <input type="text" name="meetupid" id="" value="<%=meetup._id%>" hidden />
+      <input
+        type="text"
+        name="invitee"
+        id=""
+        value="<%=meetup.invitee%>"
+        hidden
+      />
+      <button type="submit">Cancel</button>
+    </form>
+    <% } %> <% if (alreadyDone) { %>
+    <form action="/meetups/clear-finished?_method=DELETE" method="post">
+      <input type="text" name="meetupid" id="" value="<%=meetup._id%>" hidden />
+      <input
+        type="text"
+        name="invitee"
+        id=""
+        value="<%=meetup.invitee%>"
+        hidden
+      />
+      <button type="submit">All done!</button>
+    </form>
+    <% } %>
+  </body>
+</html>

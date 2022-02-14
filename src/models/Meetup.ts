@@ -1,8 +1,9 @@
-import mongoose from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { ObjectId } from "./ObjectId.js";
 
-interface IMeetup {
+export interface IMeetup extends Types.Subdocument {
   creator: typeof ObjectId;
+  name: string;
   description: string;
   invitee: typeof ObjectId; // ids - mongo? accepted - constant
   startTime: Date;
@@ -14,6 +15,7 @@ interface IMeetup {
 
 export const meetupSchema = new mongoose.Schema<IMeetup>({
   creator: { type: ObjectId, required: true },
+  name: { type: String, required: true },
   description: String,
   invitee: { type: ObjectId, required: true },
   startTime: { type: Date, required: true },

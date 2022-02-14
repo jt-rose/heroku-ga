@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { inviteSchema, InviteSchema } from "./Invite.js";
 import { Conversation, conversationSchema } from "./Conversation.js";
-import { Meetup, meetupSchema } from "./Meetup.js";
+import { IMeetup, meetupSchema } from "./Meetup.js";
 import { ObjectId } from "./ObjectId.js";
 
 export interface IUser {
@@ -22,14 +22,14 @@ export interface IUser {
   // denormalized relational data
   connections: typeof ObjectId[];
   connectionInvites: InviteSchema[];
-  currentMeetups: typeof Meetup[];
+  currentMeetups: IMeetup[];
   unreadConversations: typeof Conversation[];
   allConversations: typeof ObjectId[];
   allMeetups: typeof ObjectId[];
   blackListed: typeof ObjectId[];
 }
 
-const userSchema = new mongoose.Schema<IUser>({
+export const userSchema = new mongoose.Schema<IUser>({
   username: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true },

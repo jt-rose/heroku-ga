@@ -61,7 +61,7 @@ router.get("/create", function (req, res) { return __awaiter(void 0, void 0, voi
     });
 }); });
 router.post("/create", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, description, invitee, date, start, duration, platform, startTime, endTime, newMeetup;
+    var _a, name, description, invitee, date, start, duration, platform, startTime, endTime, newMeetup;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -69,11 +69,12 @@ router.post("/create", function (req, res) { return __awaiter(void 0, void 0, vo
                     res.redirect("/auth/login");
                     return [2 /*return*/];
                 }
-                _a = req.body, description = _a.description, invitee = _a.invitee, date = _a.date, start = _a.start, duration = _a.duration, platform = _a.platform;
+                _a = req.body, name = _a.name, description = _a.description, invitee = _a.invitee, date = _a.date, start = _a.start, duration = _a.duration, platform = _a.platform;
                 startTime = new Date(date + " " + start);
                 endTime = new Date(startTime.getTime() + parseInt(duration) * 60000);
                 newMeetup = new Meetup({
                     creator: req.session.user._id,
+                    name: name,
                     description: description,
                     invitee: invitee,
                     startTime: startTime,
@@ -92,9 +93,91 @@ router.post("/create", function (req, res) { return __awaiter(void 0, void 0, vo
     });
 }); });
 // delete meetup
-router.delete("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); });
+router.delete("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, meetupid, invitee, inviteeData, i;
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                _a = req.body, meetupid = _a.meetupid, invitee = _a.invitee;
+                console.log("meeting", meetupid);
+                console.log("invitiee", invitee);
+                return [4 /*yield*/, User.findByIdAndUpdate((_b = req.session.user) === null || _b === void 0 ? void 0 : _b._id, {
+                        $pull: { currentMeetups: { _id: meetupid } },
+                    })];
+            case 1:
+                _c.sent();
+                console.log("so far so good");
+                return [4 /*yield*/, User.findByIdAndUpdate(invitee)];
+            case 2:
+                inviteeData = _c.sent();
+                console.log("invitee data", inviteeData);
+                if (!inviteeData) {
+                    res.redirect("/");
+                    return [2 /*return*/];
+                }
+                for (i = 0; i < inviteeData.currentMeetups.length; i++) {
+                    if (String(inviteeData.currentMeetups[i]._id) === String(meetupid)) {
+                        inviteeData.currentMeetups[i].cancelled = true;
+                    }
+                }
+                console.log("updated", inviteeData);
+                return [4 /*yield*/, inviteeData.save()];
+            case 3:
+                _c.sent();
+                res.redirect("/");
+                return [2 /*return*/];
+        }
+    });
+}); });
+router.delete("/clear-cancelled-meetup", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var meetupid;
+    return __generator(this, function (_a) {
+        switch (_a.label) {
+            case 0:
+                if (!req.session.user) {
+                    res.redirect("/auth/login");
+                    return [2 /*return*/];
+                }
+                meetupid = req.body.meetupid;
+                return [4 /*yield*/, User.findByIdAndUpdate(req.session.user._id, {
+                        $pull: {
+                            currentMeetups: {
+                                _id: meetupid,
+                            },
+                        },
+                    })];
+            case 1:
+                _a.sent();
+                res.redirect("/");
+                return [2 /*return*/];
+        }
+    });
+}); });
+router.delete("/clear-finished", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, meetupid, invitee;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                if (!req.session.user) {
+                    res.redirect("/auth/login");
+                    return [2 /*return*/];
+                }
+                _a = req.body, meetupid = _a.meetupid, invitee = _a.invitee;
+                return [4 /*yield*/, User.updateMany({ _id: { $in: [req.session.user._id, invitee] } }, {
+                        $pull: {
+                            currentMeetups: {
+                                _id: meetupid,
+                            },
+                        },
+                    })];
+            case 1:
+                _b.sent();
+                res.redirect("/");
+                return [2 /*return*/];
+        }
+    });
+}); });
 // edit meetup
 router.get("/edit/:meetupid", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     return [2 /*return*/];
@@ -106,7 +189,38 @@ router.put("/edit", function (req, res) { return __awaiter(void 0, void 0, void 
 router.put("/respond", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     return [2 /*return*/];
 }); }); });
+// read individual meetup
+router.get("/:meetupid", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var meetupid, currentMeetups, meetup, alreadyDone;
+    var _a, _b;
+    return __generator(this, function (_c) {
+        meetupid = req.params.meetupid;
+        currentMeetups = (_a = req.session.user) === null || _a === void 0 ? void 0 : _a.currentMeetups;
+        meetup = currentMeetups === null || currentMeetups === void 0 ? void 0 : currentMeetups.find(function (meet) { return String(meet._id) === String(meetupid); });
+        if (!meetup) {
+            res.redirect("/");
+            return [2 /*return*/];
+        }
+        alreadyDone = new Date() > meetup.endTime;
+        res.render("meetup.ejs", {
+            title: "Meetup",
+            meetup: meetup,
+            myMeetup: String((_b = req.session.user) === null || _b === void 0 ? void 0 : _b._id) === String(meetup === null || meetup === void 0 ? void 0 : meetup.creator),
+            alreadyDone: alreadyDone,
+        });
+        return [2 /*return*/];
+    });
+}); });
 // read meetups
-router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); });
+router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var meetups;
+    var _a;
+    return __generator(this, function (_b) {
+        meetups = (_a = req.session.user) === null || _a === void 0 ? void 0 : _a.currentMeetups;
+        res.render("meetups.ejs", {
+            title: "Meetups",
+            meetups: meetups,
+        });
+        return [2 /*return*/];
+    });
+}); });

@@ -9,6 +9,7 @@
                 <option value="<%=connections[i]._id%>"><%=connections[i].username%></option>
            <% } %>
         </select>
+        <input type="text" name="name" id="">
         <textarea name="description" id="" cols="30" rows="10" placeholder="...enter a message"></textarea>
         <select name="targetLanguage" id="target-language-select">
             <% for (let i = 0; i < languages.length; i++) { %>

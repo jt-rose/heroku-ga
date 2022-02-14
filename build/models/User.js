@@ -3,7 +3,7 @@ import { inviteSchema } from "./Invite.js";
 import { conversationSchema } from "./Conversation.js";
 import { meetupSchema } from "./Meetup.js";
 import { ObjectId } from "./ObjectId.js";
-var userSchema = new mongoose.Schema({
+export var userSchema = new mongoose.Schema({
     username: { type: String, required: true },
     password: { type: String, required: true },
     email: { type: String, required: true },
