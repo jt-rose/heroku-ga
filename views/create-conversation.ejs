@@ -1,0 +1,32 @@
+<html>
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <h1>Create Conversation Page</h1>
+    <form action="/conversations/post" method="post">
+      <textarea
+        name="message"
+        id=""
+        cols="30"
+        rows="10"
+        placeholder="...write your message"
+      ></textarea>
+      <input type="text" name="from" id="" value="<%=me._id%>" hidden />
+      <input type="text" name="to" id="" value="<%=recipient._id%>" hidden />
+      <input
+        type="text"
+        name="convoId"
+        id=""
+        value="<%=previousConversation._id%>"
+        hidden
+      />
+      <button type="submit">Message</button>
+    </form>
+    <h3>Old messages</h3>
+    <ul>
+      <% for (let i = 0; i < previousConversation.messages.length; i++) { %>
+      <li><%=previousConversation.messages[i].message%></li>
+      <% } %>
+    </ul>
+  </body>
+</html>
