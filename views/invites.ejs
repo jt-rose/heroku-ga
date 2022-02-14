@@ -18,9 +18,23 @@
           <input type="text" name="inviteAccepted" id="" value="true" hidden />
           <input
             type="text"
+            name="message"
+            id=""
+            value="<%=invitesToMe[i].message%>"
+            hidden
+          />
+          <input
+            type="text"
             name="newConnectionId"
             id=""
             value="<%=invitesToMe[i].from%>"
+            hidden
+          />
+          <input
+            type="text"
+            name="date"
+            id=""
+            value="<%=invitesToMe[i].date%>"
             hidden
           />
           <button type="submit">Accept</button>

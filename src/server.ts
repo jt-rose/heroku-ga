@@ -17,6 +17,7 @@ import { router as authRouter } from "./controllers/auth.js";
 import { router as userRouter } from "./controllers/user.js";
 import { router as invitesRouter } from "./controllers/invites.js";
 import { router as meetupsRouter } from "./controllers/meetups.js";
+import { router as conversationsRouter } from "./controllers/conversations.js";
 import { __PROD__ } from "./constants/PROD.js";
 import { User } from "./models/User.js";
 import { isAuth } from "./utils/isAuth.js";
@@ -125,6 +126,7 @@ const main = async () => {
   app.use("/user", userRouter);
   app.use("/invites", invitesRouter);
   app.use("/meetups", meetupsRouter);
+  app.use("/conversations", conversationsRouter);
 
   //___________________
   //Listener

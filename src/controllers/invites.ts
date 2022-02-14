@@ -4,6 +4,7 @@ import { Invite } from "../models/Invite.js";
 import { isAuth } from "../utils/isAuth.js";
 import { languages } from "../constants/languages.js";
 import { ObjectID } from "mongodb";
+import { Conversation, Message } from "../models/Conversation.js";
 
 export const router = express.Router();
 
@@ -60,13 +61,42 @@ router.put("/response", async (req, res) => {
     res.redirect("/auth/login");
     return;
   }
-  const { inviteId, inviteAccepted, newConnectionId } = req.body;
+  const { inviteId, message, date, inviteAccepted, newConnectionId } = req.body;
+  console.log("date", date);
+  console.log(new Date(date));
   if (inviteAccepted === "true") {
+    // store the invite message to start the conversation history
+    const firstMessage = new Message({
+      from: newConnectionId,
+      to: req.session.user._id,
+      message,
+      date: new Date(date),
+    });
+
+    const confirmationMessage = new Message({
+      from: req.session.user._id,
+      to: newConnectionId,
+      message: `${req.session.user.username} has accepted the invite!`,
+      date: new Date(),
+    });
+
+    // create an empty conversation object
+    const newConversation = new Conversation({
+      speakers: [req.session.user._id, newConnectionId],
+      messages: [firstMessage, confirmationMessage],
+    });
+
+    // store conversation in separate collection
+    await newConversation.save();
+
     // add user ids to each other's connections array
     const updatedUser = await User.findByIdAndUpdate(
       req.session.user?._id,
       {
-        $push: { connections: newConnectionId },
+        $push: {
+          connections: newConnectionId,
+          allConversations: newConversation._id,
+        },
         $pull: { connectionInvites: { _id: inviteId } },
       },
       { new: true }
@@ -78,7 +108,11 @@ router.put("/response", async (req, res) => {
 
     // update other user
     await User.findByIdAndUpdate(newConnectionId, {
-      $push: { connections: req.session.user._id },
+      $push: {
+        connections: req.session.user._id,
+        allConversations: newConversation._id,
+        unreadMessages: confirmationMessage,
+      },
       $pull: { connectionInvites: { _id: inviteId } },
     });
     res.redirect("/");
@@ -146,7 +180,7 @@ router.get("/", async (req, res) => {
   const invitesToMe = user.connectionInvites.filter(
     (invite) => String(invite.to) === String(req.session.user?._id)
   );
-
+  console.log("invites", invitesToMe);
   // display with ejs
   res.render("invites.ejs", {
     title: "Invites",

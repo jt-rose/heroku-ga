@@ -38,6 +38,7 @@ import express from "express";
 import { User } from "../models/User.js";
 import { Invite } from "../models/Invite.js";
 import { languages } from "../constants/languages.js";
+import { Conversation, Message } from "../models/Conversation.js";
 export var router = express.Router();
 router.get("/create/:userid", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var userid, invitee;
@@ -98,7 +99,7 @@ router.post("/create", function (req, res) { return __awaiter(void 0, void 0, vo
 }); });
 // respond with accept or reject
 router.put("/response", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, inviteId, inviteAccepted, newConnectionId, updatedUser, updatedUser;
+    var _a, inviteId, message, date, inviteAccepted, newConnectionId, firstMessage, confirmationMessage, newConversation, updatedUser, updatedUser;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -107,13 +108,39 @@ router.put("/response", function (req, res) { return __awaiter(void 0, void 0, v
                     res.redirect("/auth/login");
                     return [2 /*return*/];
                 }
-                _a = req.body, inviteId = _a.inviteId, inviteAccepted = _a.inviteAccepted, newConnectionId = _a.newConnectionId;
-                if (!(inviteAccepted === "true")) return [3 /*break*/, 3];
+                _a = req.body, inviteId = _a.inviteId, message = _a.message, date = _a.date, inviteAccepted = _a.inviteAccepted, newConnectionId = _a.newConnectionId;
+                console.log("date", date);
+                console.log(new Date(date));
+                if (!(inviteAccepted === "true")) return [3 /*break*/, 4];
+                firstMessage = new Message({
+                    from: newConnectionId,
+                    to: req.session.user._id,
+                    message: message,
+                    date: new Date(date),
+                });
+                confirmationMessage = new Message({
+                    from: req.session.user._id,
+                    to: newConnectionId,
+                    message: "".concat(req.session.user.username, " has accepted the invite!"),
+                    date: new Date(),
+                });
+                newConversation = new Conversation({
+                    speakers: [req.session.user._id, newConnectionId],
+                    messages: [firstMessage, confirmationMessage],
+                });
+                // store conversation in separate collection
+                return [4 /*yield*/, newConversation.save()];
+            case 1:
+                // store conversation in separate collection
+                _c.sent();
                 return [4 /*yield*/, User.findByIdAndUpdate((_b = req.session.user) === null || _b === void 0 ? void 0 : _b._id, {
-                        $push: { connections: newConnectionId },
+                        $push: {
+                            connections: newConnectionId,
+                            allConversations: newConversation._id,
+                        },
                         $pull: { connectionInvites: { _id: inviteId } },
                     }, { new: true })];
-            case 1:
+            case 2:
                 updatedUser = _c.sent();
                 if (!updatedUser) {
                     res.redirect("/");
@@ -121,19 +148,23 @@ router.put("/response", function (req, res) { return __awaiter(void 0, void 0, v
                 }
                 // update other user
                 return [4 /*yield*/, User.findByIdAndUpdate(newConnectionId, {
-                        $push: { connections: req.session.user._id },
+                        $push: {
+                            connections: req.session.user._id,
+                            allConversations: newConversation._id,
+                            unreadMessages: confirmationMessage,
+                        },
                         $pull: { connectionInvites: { _id: inviteId } },
                     })];
-            case 2:
+            case 3:
                 // update other user
                 _c.sent();
                 res.redirect("/");
-                return [3 /*break*/, 6];
-            case 3: return [4 /*yield*/, User.findByIdAndUpdate(req.session.user._id, {
+                return [3 /*break*/, 7];
+            case 4: return [4 /*yield*/, User.findByIdAndUpdate(req.session.user._id, {
                     $pull: { connectionInvites: { _id: inviteId } },
                     $push: { blackListed: newConnectionId },
                 }, { new: true })];
-            case 4:
+            case 5:
                 updatedUser = _c.sent();
                 if (!updatedUser) {
                     res.redirect("/");
@@ -143,11 +174,11 @@ router.put("/response", function (req, res) { return __awaiter(void 0, void 0, v
                         $pull: { connectionInvites: { _id: inviteId } },
                         $push: { blackListed: newConnectionId },
                     })];
-            case 5:
+            case 6:
                 _c.sent();
                 res.redirect("/");
-                _c.label = 6;
-            case 6: return [2 /*return*/];
+                _c.label = 7;
+            case 7: return [2 /*return*/];
         }
     });
 }); });
@@ -192,6 +223,7 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 }
                 invitesFromMe = user.connectionInvites.filter(function (invite) { var _a; return String(invite.from) === String((_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id); });
                 invitesToMe = user.connectionInvites.filter(function (invite) { var _a; return String(invite.to) === String((_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id); });
+                console.log("invites", invitesToMe);
                 // display with ejs
                 res.render("invites.ejs", {
                     title: "Invites",

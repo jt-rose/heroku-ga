@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { inviteSchema, InviteSchema } from "./Invite.js";
-import { Conversation, conversationSchema } from "./Conversation.js";
+import { IMessage, messageSchema } from "./Conversation.js";
 import { IMeetup, meetupSchema } from "./Meetup.js";
 import { ObjectId } from "./ObjectId.js";
 
@@ -23,7 +23,7 @@ export interface IUser {
   connections: typeof ObjectId[];
   connectionInvites: InviteSchema[];
   currentMeetups: IMeetup[];
-  unreadConversations: typeof Conversation[];
+  unreadMessages: IMessage[];
   allConversations: typeof ObjectId[];
   allMeetups: typeof ObjectId[];
   blackListed: typeof ObjectId[];
@@ -55,7 +55,7 @@ export const userSchema = new mongoose.Schema<IUser>({
     },
   ],
   currentMeetups: [{ type: meetupSchema, required: true }],
-  unreadConversations: [{ type: conversationSchema, required: true }],
+  unreadMessages: [{ type: messageSchema, required: true }],
   allConversations: [{ type: ObjectId, required: true }],
   allMeetups: [{ type: ObjectId, required: true }],
 

@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import { inviteSchema } from "./Invite.js";
-import { conversationSchema } from "./Conversation.js";
+import { messageSchema } from "./Conversation.js";
 import { meetupSchema } from "./Meetup.js";
 import { ObjectId } from "./ObjectId.js";
 export var userSchema = new mongoose.Schema({
@@ -28,7 +28,7 @@ export var userSchema = new mongoose.Schema({
         },
     ],
     currentMeetups: [{ type: meetupSchema, required: true }],
-    unreadConversations: [{ type: conversationSchema, required: true }],
+    unreadMessages: [{ type: messageSchema, required: true }],
     allConversations: [{ type: ObjectId, required: true }],
     allMeetups: [{ type: ObjectId, required: true }],
     blackListed: [{ type: ObjectId, required: true }],
