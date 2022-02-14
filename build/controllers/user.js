@@ -62,12 +62,6 @@ router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, v
         }
     });
 }); });
-router.get("/messages", function (req, res) {
-    res.send("messages landing page");
-});
-router.get("/meetups", function (req, res) {
-    res.send("meetups landing page");
-});
 router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user;
     return __generator(this, function (_a) {
@@ -102,16 +96,6 @@ router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, vo
         }
     });
 }); });
-// may need to create invidivual routes for the connect, message, and meetup forms
-router.post("/create-user", function (req, res) {
-    res.send("post create-user form data");
-});
-router.post("/create-message/:recipient", function (req, res) {
-    res.send("post form data for sending a new message to another user");
-});
-router.post("/create-meetup/", function (req, res) {
-    res.send(" post form data for creating a new meetup");
-});
 router.get("/edit-profile", function (req, res) {
     var user = req.session.user;
     if (!user) {
@@ -125,18 +109,6 @@ router.get("/edit-profile", function (req, res) {
         languages: languages,
         proficiencyLevels: proficiencyLevels,
     });
-});
-router.post("/create-connection-invite/:recipient", function (req, res) {
-    res.send("post form data for sending a new connection to another user");
-});
-router.put("/update-profile/:userid", function (req, res) {
-    res.send("put form data for updating user profile");
-});
-router.put("/update-meetup/:meetupid", function (req, res) {
-    res.send("put form data to update meetup");
-});
-router.put("/respond-to-message/:messageid", function (req, res) {
-    res.send("put form data to update conversation messages");
 });
 // at this time messages cannot be updated or deleted
 router.put("/toggle-active", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -197,10 +169,3 @@ router.delete("/permadelete", function (req, res) { return __awaiter(void 0, voi
         }
     });
 }); });
-router.delete("/delete-connect-invite/:connectid", function (req, res) {
-    res.send("remove connection invite");
-});
-router.delete("/delete-meetup/:meetupid", function (req, res) {
-    res.send("delete meetup - alert invitees");
-});
-// alert invitees who have responded upon deleting a meetup

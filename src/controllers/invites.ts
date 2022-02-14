@@ -12,12 +12,8 @@ router.get("/create/:userid", async (req, res) => {
     res.redirect("/auth/login");
     return;
   }
-  console.log("Am I the right rought?");
   const { userid } = req.params;
-  console.log("params", req.params);
-  console.log(userid);
   const invitee = await User.findById(userid);
-  console.log(invitee);
   res.render("create-invite.ejs", {
     title: "Create Invite",
     invitee,
@@ -54,8 +50,7 @@ router.post("/create", async (req, res) => {
     res.redirect("/auth/login");
     return;
   }
-  // update session cache
-  req.session.user = me;
+
   res.redirect("/");
 });
 
@@ -80,8 +75,7 @@ router.put("/response", async (req, res) => {
       res.redirect("/");
       return;
     }
-    // reset cache
-    req.session.user = updatedUser;
+
     // update other user
     await User.findByIdAndUpdate(newConnectionId, {
       $push: { connections: req.session.user._id },
@@ -103,8 +97,7 @@ router.put("/response", async (req, res) => {
       res.redirect("/");
       return;
     }
-    // reset cache
-    req.session.user = updatedUser;
+
     await User.findByIdAndUpdate(newConnectionId, {
       $pull: { connectionInvites: { _id: inviteId } },
       $push: { blackListed: newConnectionId },
@@ -126,13 +119,6 @@ router.delete("/", async (req, res) => {
     { $pull: { connectionInvites: { _id: inviteId } } }
   );
 
-  // reset the session cache
-  const me = await User.findById(req.session.user._id);
-  if (!me) {
-    res.redirect("/auth/login");
-    return;
-  }
-  req.session.user = me;
   res.redirect("/");
 });
 
@@ -153,23 +139,13 @@ router.get("/", async (req, res) => {
     res.redirect("/auth/login");
     return;
   }
-  // may as well update the cookie
-  req.session.user = user;
+
   const invitesFromMe = user.connectionInvites.filter(
     (invite) => String(invite.from) === String(req.session.user?._id)
   );
   const invitesToMe = user.connectionInvites.filter(
     (invite) => String(invite.to) === String(req.session.user?._id)
   );
-
-  console.log("myid", req.session.user._id);
-  console.log(
-    "matching",
-    String(req.session.user._id) === String("62069525d2e382ece94d470b")
-  );
-  console.log("invites", user.connectionInvites);
-  console.log("fromme", invitesFromMe);
-  console.log("tome", invitesToMe);
 
   // display with ejs
   res.render("invites.ejs", {

@@ -48,14 +48,10 @@ router.get("/create/:userid", function (req, res) { return __awaiter(void 0, voi
                     res.redirect("/auth/login");
                     return [2 /*return*/];
                 }
-                console.log("Am I the right rought?");
                 userid = req.params.userid;
-                console.log("params", req.params);
-                console.log(userid);
                 return [4 /*yield*/, User.findById(userid)];
             case 1:
                 invitee = _a.sent();
-                console.log(invitee);
                 res.render("create-invite.ejs", {
                     title: "Create Invite",
                     invitee: invitee,
@@ -95,8 +91,6 @@ router.post("/create", function (req, res) { return __awaiter(void 0, void 0, vo
                     res.redirect("/auth/login");
                     return [2 /*return*/];
                 }
-                // update session cache
-                req.session.user = me;
                 res.redirect("/");
                 return [2 /*return*/];
         }
@@ -125,8 +119,6 @@ router.put("/response", function (req, res) { return __awaiter(void 0, void 0, v
                     res.redirect("/");
                     return [2 /*return*/];
                 }
-                // reset cache
-                req.session.user = updatedUser;
                 // update other user
                 return [4 /*yield*/, User.findByIdAndUpdate(newConnectionId, {
                         $push: { connections: req.session.user._id },
@@ -147,8 +139,6 @@ router.put("/response", function (req, res) { return __awaiter(void 0, void 0, v
                     res.redirect("/");
                     return [2 /*return*/];
                 }
-                // reset cache
-                req.session.user = updatedUser;
                 return [4 /*yield*/, User.findByIdAndUpdate(newConnectionId, {
                         $pull: { connectionInvites: { _id: inviteId } },
                         $push: { blackListed: newConnectionId },
@@ -163,7 +153,7 @@ router.put("/response", function (req, res) { return __awaiter(void 0, void 0, v
 }); });
 // rescind invite that has been sent
 router.delete("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, invitedUserId, inviteId, updatedUsers, me;
+    var _a, invitedUserId, inviteId, updatedUsers;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -176,14 +166,6 @@ router.delete("/", function (req, res) { return __awaiter(void 0, void 0, void 0
                 return [4 /*yield*/, User.updateMany({ _id: { $in: [(_b = req.session.user) === null || _b === void 0 ? void 0 : _b._id, invitedUserId] } }, { $pull: { connectionInvites: { _id: inviteId } } })];
             case 1:
                 updatedUsers = _c.sent();
-                return [4 /*yield*/, User.findById(req.session.user._id)];
-            case 2:
-                me = _c.sent();
-                if (!me) {
-                    res.redirect("/auth/login");
-                    return [2 /*return*/];
-                }
-                req.session.user = me;
                 res.redirect("/");
                 return [2 /*return*/];
         }
@@ -208,15 +190,8 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
                     res.redirect("/auth/login");
                     return [2 /*return*/];
                 }
-                // may as well update the cookie
-                req.session.user = user;
                 invitesFromMe = user.connectionInvites.filter(function (invite) { var _a; return String(invite.from) === String((_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id); });
                 invitesToMe = user.connectionInvites.filter(function (invite) { var _a; return String(invite.to) === String((_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id); });
-                console.log("myid", req.session.user._id);
-                console.log("matching", String(req.session.user._id) === String("62069525d2e382ece94d470b"));
-                console.log("invites", user.connectionInvites);
-                console.log("fromme", invitesFromMe);
-                console.log("tome", invitesToMe);
                 // display with ejs
                 res.render("invites.ejs", {
                     title: "Invites",

@@ -78,7 +78,7 @@ router.post("/login", function (req, res) { return __awaiter(void 0, void 0, voi
                     // });
                     return [2 /*return*/];
                 }
-                // set cookie is username and password match
+                // set cookie if username and password match
                 req.session.user = foundUser;
                 // redirect to home page
                 res.redirect("/");

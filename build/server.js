@@ -55,6 +55,7 @@ import { router as invitesRouter } from "./controllers/invites.js";
 import { router as meetupsRouter } from "./controllers/meetups.js";
 import { __PROD__ } from "./constants/PROD.js";
 import { User } from "./models/User.js";
+import { isAuth } from "./utils/isAuth.js";
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     var app, db, PORT, MONGODB_URI, RedisStore, redisURL, redis;
     return __generator(this, function (_a) {
@@ -123,6 +124,8 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
             case 3:
                 // test redis
                 _a.sent();
+                // set up app to refresh user data on each page
+                app.use(isAuth);
                 //___________________
                 // Routes
                 //___________________

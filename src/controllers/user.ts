@@ -19,12 +19,7 @@ router.get("/connects", async (req, res) => {
     connects,
   });
 });
-router.get("/messages", (req, res) => {
-  res.send("messages landing page");
-});
-router.get("/meetups", (req, res) => {
-  res.send("meetups landing page");
-});
+
 router.get("/profile/:userid", async (req, res) => {
   if (req.session.user && `${req.session.user._id}` === req.params.userid) {
     res.render("user.ejs", {
@@ -51,18 +46,6 @@ router.get("/profile/:userid", async (req, res) => {
   });
 });
 
-// may need to create invidivual routes for the connect, message, and meetup forms
-
-router.post("/create-user", (req, res) => {
-  res.send("post create-user form data");
-});
-router.post("/create-message/:recipient", (req, res) => {
-  res.send("post form data for sending a new message to another user");
-});
-router.post("/create-meetup/", (req, res) => {
-  res.send(" post form data for creating a new meetup");
-});
-
 router.get("/edit-profile", (req, res) => {
   const user = req.session.user;
   if (!user) {
@@ -77,19 +60,7 @@ router.get("/edit-profile", (req, res) => {
     proficiencyLevels,
   });
 });
-router.post("/create-connection-invite/:recipient", (req, res) => {
-  res.send("post form data for sending a new connection to another user");
-});
 
-router.put("/update-profile/:userid", (req, res) => {
-  res.send("put form data for updating user profile");
-});
-router.put("/update-meetup/:meetupid", (req, res) => {
-  res.send("put form data to update meetup");
-});
-router.put("/respond-to-message/:messageid", (req, res) => {
-  res.send("put form data to update conversation messages");
-});
 // at this time messages cannot be updated or deleted
 
 router.put("/toggle-active", async (req, res) => {
@@ -139,11 +110,3 @@ router.delete("/permadelete", async (req, res) => {
   await req.session.destroy(() => {});
   res.redirect("/");
 });
-
-router.delete("/delete-connect-invite/:connectid", (req, res) => {
-  res.send("remove connection invite");
-});
-router.delete("/delete-meetup/:meetupid", (req, res) => {
-  res.send("delete meetup - alert invitees");
-});
-// alert invitees who have responded upon deleting a meetup

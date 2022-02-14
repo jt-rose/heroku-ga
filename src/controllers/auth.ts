@@ -1,8 +1,3 @@
-declare module "express-session" {
-  interface SessionData {
-    user: IUser;
-  }
-}
 import express from "express";
 import argon2 from "argon2";
 import { User, IUser } from "../models/User.js";
@@ -45,12 +40,13 @@ router.post("/login", async (req, res) => {
     // });
     return;
   }
-  // set cookie is username and password match
+  // set cookie if username and password match
   req.session.user = foundUser;
 
   // redirect to home page
   res.redirect("/");
 });
+
 router.delete("/logout", async (req, res) => {
   // add error handling?
   await req.session.destroy(() => {});

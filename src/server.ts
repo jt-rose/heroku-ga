@@ -19,6 +19,7 @@ import { router as invitesRouter } from "./controllers/invites.js";
 import { router as meetupsRouter } from "./controllers/meetups.js";
 import { __PROD__ } from "./constants/PROD.js";
 import { User } from "./models/User.js";
+import { isAuth } from "./utils/isAuth.js";
 
 const main = async () => {
   await dotenv.config();
@@ -102,6 +103,8 @@ const main = async () => {
     .ping()
     .then((pong) => console.log(pong + "! Redis has been connected"));
 
+  // set up app to refresh user data on each page
+  app.use(isAuth);
   //___________________
   // Routes
   //___________________
