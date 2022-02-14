@@ -61,7 +61,50 @@ router.get("/edit-profile", (req, res) => {
   });
 });
 
-// at this time messages cannot be updated or deleted
+router.put("/edit-profile", async (req, res) => {
+  const user = req.session.user;
+  if (!user) {
+    // flash message
+    res.redirect("/auth/login");
+    return;
+  }
+
+  const {
+    username,
+    email,
+    country,
+    cityOrState,
+    aboutMeText,
+    nativeLanguage,
+    targetLanguage,
+    targetLanguageProficiency,
+  } = req.body;
+  //confirm that email and username are available
+
+  const sameUsers = await User.find({ $or: [{ username }, { email }] });
+  console.log(sameUsers);
+  if (
+    sameUsers.length &&
+    sameUsers.some((u) => String(u._id) !== String(user._id))
+  ) {
+    console.log("email or username already taken");
+    // ! add flash message warning and reroute
+    res.redirect("/user/edit-profile");
+    return;
+  }
+  await User.findByIdAndUpdate(user._id, {
+    username,
+    email,
+    country,
+    cityOrState,
+    aboutMeText,
+    nativeLanguage,
+    targetLanguage,
+    targetLanguageProficiency,
+  });
+
+  res.redirect("/");
+});
 
 router.put("/toggle-active", async (req, res) => {
   // user account will be deactivated, rather than outright deleted,

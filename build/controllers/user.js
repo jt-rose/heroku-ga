@@ -110,7 +110,46 @@ router.get("/edit-profile", function (req, res) {
         proficiencyLevels: proficiencyLevels,
     });
 });
-// at this time messages cannot be updated or deleted
+router.put("/edit-profile", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, _a, username, email, country, cityOrState, aboutMeText, nativeLanguage, targetLanguage, targetLanguageProficiency, sameUsers;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                user = req.session.user;
+                if (!user) {
+                    // flash message
+                    res.redirect("/auth/login");
+                    return [2 /*return*/];
+                }
+                _a = req.body, username = _a.username, email = _a.email, country = _a.country, cityOrState = _a.cityOrState, aboutMeText = _a.aboutMeText, nativeLanguage = _a.nativeLanguage, targetLanguage = _a.targetLanguage, targetLanguageProficiency = _a.targetLanguageProficiency;
+                return [4 /*yield*/, User.find({ $or: [{ username: username }, { email: email }] })];
+            case 1:
+                sameUsers = _b.sent();
+                console.log(sameUsers);
+                if (sameUsers.length &&
+                    sameUsers.some(function (u) { return String(u._id) !== String(user._id); })) {
+                    console.log("email or username already taken");
+                    // ! add flash message warning and reroute
+                    res.redirect("/user/edit-profile");
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, User.findByIdAndUpdate(user._id, {
+                        username: username,
+                        email: email,
+                        country: country,
+                        cityOrState: cityOrState,
+                        aboutMeText: aboutMeText,
+                        nativeLanguage: nativeLanguage,
+                        targetLanguage: targetLanguage,
+                        targetLanguageProficiency: targetLanguageProficiency,
+                    })];
+            case 2:
+                _b.sent();
+                res.redirect("/");
+                return [2 /*return*/];
+        }
+    });
+}); });
 router.put("/toggle-active", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var user;
     return __generator(this, function (_a) {
