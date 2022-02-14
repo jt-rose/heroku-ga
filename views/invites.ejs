@@ -1,0 +1,71 @@
+<html>
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <h1>Invites Page</h1>
+    <ul>
+      <% for (let i = 0; i < invitesToMe.length; i++) { %>
+      <li>
+        From: <%=invitesToMe[i].from%> Message: <%=invitesToMe[i].message%>
+        <form action="/invites/response?_method=PUT" method="post">
+          <input
+            type="text"
+            name="inviteId"
+            id=""
+            value="<%=invitesToMe[i]._id%>"
+            hidden
+          />
+          <input type="text" name="inviteAccepted" id="" value="true" hidden />
+          <input
+            type="text"
+            name="newConnectionId"
+            id=""
+            value="<%=invitesToMe[i].from%>"
+            hidden
+          />
+          <button type="submit">Accept</button>
+        </form>
+
+        <form action="/invites/response?_method=PUT" method="post">
+          <input
+            type="text"
+            name="inviteId"
+            id=""
+            value="<%=invitesToMe[i]._id%>"
+            hidden
+          />
+          <input type="text" name="inviteAccepted" id="" value="false" hidden />
+          <input
+            type="text"
+            name="newConnectionId"
+            id=""
+            value="<%=invitesToMe[i].from%>"
+            hidden
+          />
+          <button type="submit">Decline</button>
+        </form>
+      </li>
+      <% } %>
+    </ul>
+    <br />
+    <ul>
+      <% for (let i = 0; i < invitesFromMe.length; i++) { %>
+      <li>
+        To: <%=invitesFromMe[i].to%> Message: <%=invitesFromMe[i].message%>
+        State: Some status
+      </li>
+      <form action="/invites?_method=DELETE" method="post">
+        <input type="text" name="inviteId" id=""
+        value="<%=invitesFromMe[i]._id%>"" hidden>
+        <input
+          type="text"
+          name="invitedUserId"
+          value="<%=invitesFromMe[i].to%>"
+          hidden
+        />
+        <button type="submit">Rescind Invite</button>
+      </form>
+      <% } %>
+    </ul>
+  </body>
+</html>

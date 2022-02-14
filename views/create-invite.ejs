@@ -1,0 +1,21 @@
+<html>
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <h1>Create Invites Page</h1>
+    <form action="/invites/create" method="post">
+        <textarea name="message" id="" cols="30" rows="10" placeholder="...enter a message"></textarea>
+        <select name="targetLanguage" id="target-language-select">
+            <% for (let i = 0; i < languages.length; i++) { %>
+            <option value="<%=languages[i] %>"
+                <% if (user.targetLanguage === languages[i]) { %>
+                    selected
+               <% } %>
+                ><%=languages[i] %></option>
+            <% } %>
+          </select>
+        <input type="text" name="invitee" id="" value="<%=invitee._id%>" hidden>
+        <button type="submit">Connect</button>
+    </form>
+  </body>
+</html>
