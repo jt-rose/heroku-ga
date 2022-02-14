@@ -8,7 +8,10 @@
       ><button type="submit">Edit My profile</button></a
     >
     <% } %> <% if (!myAccount) { %>
-    <button type="submit">Connect</button>
+    <a href="/invites/create/<%=user._id%>"
+      ><button type="submit">Connect</button></a
+    >
+
     <button>Message</button>
     <button>Invite to Meetup</button>
     <% } %>
