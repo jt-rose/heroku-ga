@@ -108,7 +108,7 @@ router.get("/register", function (req, res) {
     });
 });
 router.post("/register", upload.single("img"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var file, img, result, _a, username, email, password, aboutMeText, country, cityOrState, nativeLanguage, targetLanguage, targetLanguageProficiency, hobbies, userAlreadyExists, hashedPassword, user, e_1;
+    var file, img, result, _a, username, email, password, aboutMeText, country, cityOrState, nativeLanguage, targetLanguage, targetLanguageProficiency, userAlreadyExists, hashedPassword, user, e_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -122,7 +122,7 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                 img = result.Location;
                 _b.label = 2;
             case 2:
-                _a = req.body, username = _a.username, email = _a.email, password = _a.password, aboutMeText = _a.aboutMeText, country = _a.country, cityOrState = _a.cityOrState, nativeLanguage = _a.nativeLanguage, targetLanguage = _a.targetLanguage, targetLanguageProficiency = _a.targetLanguageProficiency, hobbies = _a.hobbies;
+                _a = req.body, username = _a.username, email = _a.email, password = _a.password, aboutMeText = _a.aboutMeText, country = _a.country, cityOrState = _a.cityOrState, nativeLanguage = _a.nativeLanguage, targetLanguage = _a.targetLanguage, targetLanguageProficiency = _a.targetLanguageProficiency;
                 return [4 /*yield*/, User.findOne({
                         $or: [{ username: username }, { email: email }],
                     })];
@@ -149,7 +149,6 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                         nativeLanguage: nativeLanguage,
                         targetLanguage: targetLanguage,
                         targetLanguageProficiency: targetLanguageProficiency,
-                        hobbies: [hobbies],
                         active: true,
                         joinedOn: new Date(),
                         updatedConnects: [],

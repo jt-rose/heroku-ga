@@ -18,7 +18,6 @@ export interface IUser {
   nativeLanguage: string;
   targetLanguage: string;
   targetLanguageProficiency: "basic" | "conversational" | "fluent";
-  hobbies: string[]; // refactor to constant later
   // denormalized relational data
   connections: typeof ObjectId[];
   connectionInvites: InviteSchema[];
@@ -42,10 +41,6 @@ export const userSchema = new mongoose.Schema<IUser>({
   nativeLanguage: { type: String, required: true },
   targetLanguage: { type: String, required: true },
   targetLanguageProficiency: { type: String, required: true },
-  hobbies: [{ type: String, required: true }],
-  // to limit mongo's excessive data duplication, we will only
-  // store recently updated fields, manage these as changes are made
-  // and limit pulling data on the full data set unless needed
 
   connections: [{ type: ObjectId, required: true }],
   connectionInvites: [

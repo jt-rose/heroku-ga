@@ -81,7 +81,6 @@ router.post("/register", upload.single("img"), async (req, res) => {
       nativeLanguage,
       targetLanguage,
       targetLanguageProficiency,
-      hobbies,
     } = req.body;
 
     // confirm no such username / email already present
@@ -113,7 +112,6 @@ router.post("/register", upload.single("img"), async (req, res) => {
       nativeLanguage,
       targetLanguage,
       targetLanguageProficiency,
-      hobbies: [hobbies],
       active: true,
       joinedOn: new Date(),
       updatedConnects: [],
