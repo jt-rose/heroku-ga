@@ -9,6 +9,8 @@ import { User, IUser } from "../models/User.js";
 import path from "path";
 import multer from "multer";
 import { uploadFile, getFileStream } from "../utils/s3.js";
+import { languages } from "../constants/languages.js";
+import { proficiencyLevels } from "../constants/proficiency.js";
 export const router = express.Router();
 
 const upload = multer({ dest: "uploads/" });
@@ -57,6 +59,8 @@ router.delete("/logout", async (req, res) => {
 router.get("/register", (req, res) => {
   res.render("register.ejs", {
     title: "Sign Up",
+    languages,
+    proficiencyLevels,
   });
 });
 router.post("/register", upload.single("img"), async (req, res) => {
@@ -138,14 +142,6 @@ router.post("/register", upload.single("img"), async (req, res) => {
   }
 });
 
-router.get("/sw-image", async (req, res) => {
-  //const src = getFileStream("2679edc6b481797470e172f3ac25d663");
-  res.send(
-    '<img src="' +
-      "https://joybee.s3.amazonaws.com/2679edc6b481797470e172f3ac25d663" +
-      '" style="width: 400px" >'
-  );
-});
 router.get("/forgot-password", (req, res) => {
   res.send("forgot password form");
 });

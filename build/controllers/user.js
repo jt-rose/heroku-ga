@@ -37,7 +37,9 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import express from "express";
 import mongoose from "mongoose";
 import { User } from "../models/User.js";
-import { Invite } from "../models/Invite";
+import { Invite } from "../models/Invite.js";
+import { languages } from "../constants/languages.js";
+import { proficiencyLevels } from "../constants/proficiency.js";
 export var router = express.Router();
 router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var connects;
@@ -120,6 +122,8 @@ router.get("/edit-profile", function (req, res) {
     res.render("edit-profile.ejs", {
         title: "Edit Profile",
         user: user,
+        languages: languages,
+        proficiencyLevels: proficiencyLevels,
     });
 });
 router.post("/create-connection-invite/:recipient", function (req, res) {

@@ -1,7 +1,9 @@
 import express from "express";
 import mongoose from "mongoose";
 import { User } from "../models/User.js";
-import { Invite } from "../models/Invite";
+import { Invite } from "../models/Invite.js";
+import { languages } from "../constants/languages.js";
+import { proficiencyLevels } from "../constants/proficiency.js";
 export const router = express.Router();
 
 router.get("/connects", async (req, res) => {
@@ -71,6 +73,8 @@ router.get("/edit-profile", (req, res) => {
   res.render("edit-profile.ejs", {
     title: "Edit Profile",
     user,
+    languages,
+    proficiencyLevels,
   });
 });
 router.post("/create-connection-invite/:recipient", (req, res) => {

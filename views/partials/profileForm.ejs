@@ -9,16 +9,38 @@
   <input type="text" name="cityOrState" value="<%=user.cityOrState %>" />
   <label for="aboutMeText">About Me</label
   ><textarea name="aboutMeText"><%=user.aboutMeText%></textarea>
-  <label for="nativeLanguage">Native language</label
-  ><input type="text" name="nativeLanguage" value="<%=user.nativeLanguage%>" />
-  <label for="targetLanguage">Target language</label
-  ><input type="text" name="targetLanguage" value="<%=user.targetLanguage%>" />
-  <label for="targetLanguageProficiency">Proficiency</label
-  ><input
-    type="text"
-    name="targetLanguageProficiency"
-    value="<%=user.targetLanguageProficiency%>"
-  />
+  <label for="nativeLanguage">Native language</label>
+  <select name="nativeLanguage" id="native-language-select">
+    <% for (let i = 0; i < languages.length; i++) { %>
+    <option value="<%=languages[i] %>"
+        <% if (languages[i] === user.nativeLanguage) { %>
+            selected
+            <% } %>
+        ><%=languages[i] %></option>
+    <% } %>
+  </select>
+  <label for="targetLanguage">Target language</label>
+  <select name="targetLanguage" id="target-language-select">
+    <% for (let i = 0; i < languages.length; i++) { %>
+    <option value="<%=languages[i] %>"
+        <% if (languages[i] === user.targetLanguage) { %>
+            selected
+            <% } %>
+        ><%=languages[i] %></option>
+    <% } %>
+  </select>
+  <label for="targetLanguageProficiency">Proficiency</label>
+  <select name="targetLanguageProficiency" id="proficiency-select">
+    <% for (let i = 0; i < proficiencyLevels.length; i++) { %>
+    <option value="<%=proficiencyLevels[i] %>" 
+        <% if (proficiencyLevels[i] === user.targetLanguageProficiency) { %>
+            selected
+            <% } %>
+            >
+      <%=proficiencyLevels[i] %>
+    </option>
+    <% } %>
+  </select>
   <label for="hobbies">Hobbies</label>
   <input type="text" name="hobbies" value="<%=user.hobbies[0] %>" />
   <button type="submit">Sign UpUpdate</button>

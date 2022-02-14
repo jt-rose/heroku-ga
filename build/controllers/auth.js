@@ -39,6 +39,8 @@ import argon2 from "argon2";
 import { User } from "../models/User.js";
 import multer from "multer";
 import { uploadFile } from "../utils/s3.js";
+import { languages } from "../constants/languages.js";
+import { proficiencyLevels } from "../constants/proficiency.js";
 export var router = express.Router();
 var upload = multer({ dest: "uploads/" });
 router.get("/login", function (req, res) {
@@ -101,6 +103,8 @@ router.delete("/logout", function (req, res) { return __awaiter(void 0, void 0, 
 router.get("/register", function (req, res) {
     res.render("register.ejs", {
         title: "Sign Up",
+        languages: languages,
+        proficiencyLevels: proficiencyLevels,
     });
 });
 router.post("/register", upload.single("img"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -167,15 +171,6 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                 return [3 /*break*/, 7];
             case 7: return [2 /*return*/];
         }
-    });
-}); });
-router.get("/sw-image", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    return __generator(this, function (_a) {
-        //const src = getFileStream("2679edc6b481797470e172f3ac25d663");
-        res.send('<img src="' +
-            "https://joybee.s3.amazonaws.com/2679edc6b481797470e172f3ac25d663" +
-            '" style="width: 400px" >');
-        return [2 /*return*/];
     });
 }); });
 router.get("/forgot-password", function (req, res) {

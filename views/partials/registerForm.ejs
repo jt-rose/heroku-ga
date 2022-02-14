@@ -17,12 +17,26 @@
   <input type="text" name="cityOrState" />
   <label for="aboutMetext">About me</label>
   <textarea name="aboutMeText"></textarea>
-  <label for="nativeLanguage">Native language</label
-  ><input type="text" name="nativeLanguage" />
-  <label for="targetLanguage">Target language</label
-  ><input type="text" name="targetLanguage" />
-  <label for="targetLanguageProficiency">Proficiency</label
-  ><input type="text" name="targetLanguageProficiency" />
+  <label for="nativeLanguage">Native language</label>
+  <select name="nativeLanguage" id="native-language-select">
+    <% for (let i = 0; i < languages.length; i++) { %>
+    <option value="<%=languages[i] %>"><%=languages[i] %></option>
+    <% } %>
+  </select>
+  <label for="targetLanguage">Target language</label>
+  <select name="targetLanguage" id="target-language-select">
+    <% for (let i = 0; i < languages.length; i++) { %>
+    <option value="<%=languages[i] %>"><%=languages[i] %></option>
+    <% } %>
+  </select>
+  <label for="targetLanguageProficiency">Proficiency</label>
+  <select name="targetLanguageProficiency" id="proficiency-select">
+    <% for (let i = 0; i < proficiencyLevels.length; i++) { %>
+    <option value="<%=proficiencyLevels[i] %>">
+      <%=proficiencyLevels[i] %>
+    </option>
+    <% } %>
+  </select>
   <label for="username">hobbies</label>
   <input type="text" name="hobbies" />
   <button type="submit">Sign Up</button>
