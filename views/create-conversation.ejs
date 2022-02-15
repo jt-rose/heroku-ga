@@ -2,31 +2,52 @@
   <%- include('./partials/head.ejs') %>
   <body>
     <%- include('./partials/header.ejs') %>
-    <h1>Create Conversation Page</h1>
-    <form action="/conversations/post" method="post">
-      <textarea
-        name="message"
-        id=""
-        cols="30"
-        rows="10"
-        placeholder="...write your message"
-      ></textarea>
-      <input type="text" name="from" id="" value="<%=me._id%>" hidden />
-      <input type="text" name="to" id="" value="<%=recipient._id%>" hidden />
-      <input
-        type="text"
-        name="convoId"
-        id=""
-        value="<%=previousConversation._id%>"
-        hidden
-      />
-      <button type="submit">Message</button>
-    </form>
-    <h3>Old messages</h3>
-    <ul>
-      <% for (let i = 0; i < previousConversation.messages.length; i++) { %>
-      <li><%=previousConversation.messages[i].message%></li>
-      <% } %>
-    </ul>
+    <div class="container is-fluid">
+      <div class="level">
+        <div class="level-item">
+          <h1 class="title">Create Conversation Page</h1>
+        </div>
+      </div>
+      <form action="/conversations/post" method="post">
+        <textarea
+          name="message"
+          id=""
+          rows="6"
+          placeholder="...write your message"
+          class="textarea"
+        ></textarea>
+        <input type="text" name="from" id="" value="<%=me._id%>" hidden />
+        <input type="text" name="to" id="" value="<%=recipient._id%>" hidden />
+        <input
+          type="text"
+          name="convoId"
+          id=""
+          value="<%=previousConversation._id%>"
+          hidden
+        />
+        <div class="level">
+          <div class="level-left"></div>
+          <div class="level-right">
+            <div class="level">
+              <div class="level-item">
+                <button
+                  type="submit"
+                  class="button is-primary is-rounded"
+                  id="create-message-btn"
+                >
+                  Message
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+      <h3>Old messages</h3>
+      <ul>
+        <% for (let i = 0; i < previousConversation.messages.length; i++) { %>
+        <li><%=previousConversation.messages[i].message%></li>
+        <% } %>
+      </ul>
+    </div>
   </body>
 </html>
