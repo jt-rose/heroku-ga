@@ -68,33 +68,44 @@
 
   <label for="aboutMetext" class="label">About me</label>
   <textarea name="aboutMeText" class="textarea" rows="6"></textarea>
-  <label for="nativeLanguage" class="label">Native language</label>
-  <div class="select is-rounded">
-    <select name="nativeLanguage" id="native-language-select">
-      <% for (let i = 0; i < languages.length; i++) { %>
-      <option value="<%=languages[i] %>"><%=languages[i] %></option>
-      <% } %>
-    </select>
+
+  <div class="columns">
+    <div class="column">
+      <label for="nativeLanguage" class="label">Native language</label>
+      <div class="select is-rounded">
+        <select name="nativeLanguage" id="native-language-select">
+          <% for (let i = 0; i < languages.length; i++) { %>
+          <option value="<%=languages[i] %>"><%=languages[i] %></option>
+          <% } %>
+        </select>
+      </div>
+    </div>
+
+    <div class="column">
+      <label for="targetLanguage" class="label">Target language</label>
+      <div class="select is-rounded">
+        <select name="targetLanguage" id="target-language-select">
+          <% for (let i = 0; i < languages.length; i++) { %>
+          <option value="<%=languages[i] %>"><%=languages[i] %></option>
+          <% } %>
+        </select>
+      </div>
+    </div>
+
+    <div class="column">
+      <label for="targetLanguageProficiency" class="label">Proficiency</label>
+      <div class="select is-rounded">
+        <select name="targetLanguageProficiency" id="proficiency-select">
+          <% for (let i = 0; i < proficiencyLevels.length; i++) { %>
+          <option value="<%=proficiencyLevels[i] %>">
+            <%=proficiencyLevels[i] %>
+          </option>
+          <% } %>
+        </select>
+      </div>
+    </div>
   </div>
-  <label for="targetLanguage" class="label">Target language</label>
-  <div class="select is-rounded">
-    <select name="targetLanguage" id="target-language-select">
-      <% for (let i = 0; i < languages.length; i++) { %>
-      <option value="<%=languages[i] %>"><%=languages[i] %></option>
-      <% } %>
-    </select>
-  </div>
-  <label for="targetLanguageProficiency" class="label">Proficiency</label>
-  <div class="select is-rounded">
-    <select name="targetLanguageProficiency" id="proficiency-select">
-      <% for (let i = 0; i < proficiencyLevels.length; i++) { %>
-      <option value="<%=proficiencyLevels[i] %>">
-        <%=proficiencyLevels[i] %>
-      </option>
-      <% } %>
-    </select>
-  </div>
-  <button type="submit" class="button is-primary">Sign Up</button>
+  <button type="submit" class="button is-primary is-large">Sign Up</button>
 </form>
 <script>
   const fileInput = document.querySelector("#file-js input[type=file]");
