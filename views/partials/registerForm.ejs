@@ -4,13 +4,45 @@
 
 <form action="/auth/register" enctype="multipart/form-data" method="post">
   <label for="username">Username</label>
-  <input type="text" name="username" class="input is-rounded" />
+  <div class="field">
+    <p class="control has-icons-left">
+      <input type="text" name="username" class="input is-rounded" />
+      <span class="icon is-small is-left">
+        <i class="fa-solid fa-user"></i>
+      </span>
+    </p>
+  </div>
+
   <label for="password">Password</label>
-  <input type="password" name="password" class="input is-rounded" />
-  <label for="img">Self Portrait</label>
-  <input type="file" name="img" class="input is-rounded" />
+  <div class="field">
+    <p class="control has-icons-left">
+      <input type="password" name="password" class="input is-rounded" />
+      <span class="icon is-small is-left">
+        <i class="fa-solid fa-lock"></i>
+      </span>
+    </p>
+  </div>
+
+  <label for="img">Avatar</label>
+  <div class="field">
+    <p class="control has-icons-left">
+      <input type="file" name="img" class="input is-rounded" />
+      <span class="icon is-small is-left">
+        <i class="fa-solid fa-camera"></i>
+      </span>
+    </p>
+  </div>
+
   <label for="email">Email</label>
-  <input type="text" name="email" class="input is-rounded" />
+
+  <div class="field">
+    <p class="control has-icons-left">
+      <input type="text" name="email" class="input is-rounded" />
+      <span class="icon is-small is-left">
+        <i class="fa-solid fa-at"></i>
+      </span>
+    </p>
+  </div>
 
   <label for="counry">Country</label>
   <div class="field">
@@ -22,8 +54,16 @@
     </p>
   </div>
 
-  <label for="cityOrState">State / Province</label>
-  <input type="text" name="cityOrState" class="input is-rounded" />
+  <label for="cityOrState">City / Region</label>
+  <div class="field">
+    <p class="control has-icons-left">
+      <input type="text" name="cityOrState" class="input is-rounded" />
+      <span class="icon is-small is-left">
+        <i class="fa-solid fa-city"></i>
+      </span>
+    </p>
+  </div>
+
   <label for="aboutMetext">About me</label>
   <textarea name="aboutMeText" class="textarea"></textarea>
   <label for="nativeLanguage">Native language</label>
