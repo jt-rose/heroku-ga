@@ -1,45 +1,155 @@
-<form action="/user/edit-profile?_method=PUT" method="post">
-  <label for="username">Username</label>
-  <input type="text" name="username" value="<%=user.username %>" />
-  <label for="email">Email</label>
-  <input type="text" name="email" value="<%=user.email %>" />
-  <label for="country">Country</label>
-  <input type="text" name="country" value="<%=user.country %>" />
-  <label for="cityOrState">State / Province</label>
-  <input type="text" name="cityOrState" value="<%=user.cityOrState %>" />
-  <label for="aboutMeText">About Me</label
-  ><textarea name="aboutMeText"><%=user.aboutMeText%></textarea>
-  <label for="nativeLanguage">Native language</label>
-  <select name="nativeLanguage" id="native-language-select">
-    <% for (let i = 0; i < languages.length; i++) { %>
-    <option value="<%=languages[i] %>"
-        <% if (languages[i] === user.nativeLanguage) { %>
-            selected
-            <% } %>
-        ><%=languages[i] %></option>
-    <% } %>
-  </select>
-  <label for="targetLanguage">Target language</label>
-  <select name="targetLanguage" id="target-language-select">
-    <% for (let i = 0; i < languages.length; i++) { %>
-    <option value="<%=languages[i] %>"
-        <% if (languages[i] === user.targetLanguage) { %>
-            selected
-            <% } %>
-        ><%=languages[i] %></option>
-    <% } %>
-  </select>
-  <label for="targetLanguageProficiency">Proficiency</label>
-  <select name="targetLanguageProficiency" id="proficiency-select">
-    <% for (let i = 0; i < proficiencyLevels.length; i++) { %>
-    <option value="<%=proficiencyLevels[i] %>" 
-        <% if (proficiencyLevels[i] === user.targetLanguageProficiency) { %>
-            selected
-            <% } %>
-            >
-      <%=proficiencyLevels[i] %>
-    </option>
-    <% } %>
-  </select>
-  <button type="submit">Update</button>
-</form>
+<div class="level">
+  <div class="level-item">
+    <figure class="image is-128x128">
+      <img id="preview" class="is-rounded" src="<%=user.img%>" />
+    </figure>
+  </div>
+</div>
+
+<div class="level">
+  <div class="level-item has-text-centered">
+    <form action="/user/edit-profile?_method=PUT" enctype="multipart/form-data" method="post">
+      <label for="username" class="label">Username</label>
+      <div class="field">
+        <p class="control has-icons-left">
+          <input type="text" name="username" class="input is-rounded" value="<%=user.username %>"/>
+          <span class="icon is-small is-left">
+            <i class="fa-solid fa-user"></i>
+          </span>
+        </p>
+      </div>
+
+      <!-- <label for="password" class="label">Password</label>
+      <div class="field">
+        <p class="control has-icons-left">
+          <input type="password" name="password" class="input is-rounded" />
+          <span class="icon is-small is-left">
+            <i class="fa-solid fa-lock"></i>
+          </span>
+        </p>
+      </div> -->
+
+      <div class="level" id="img-upload-container">
+        <div class="level-item">
+          <div id="file-js" class="file has-name">
+            <label class="file-label">
+              <input class="file-input" type="file" name="img" />
+              <span class="file-cta">
+                <span class="file-icon">
+                  <i class="fa-solid fa-camera"></i>
+                </span>
+                <span class="file-label"> Choose a photo… </span>
+              </span>
+              <span class="file-name"> No file uploaded </span>
+            </label>
+          </div>
+        </div>
+      </div>
+      <p id="photo-size-warning">
+        for best results please use a JPEG/ PNG with a 1x1 aspect ratio
+      </p>
+
+      <label for="email" class="label">Email</label>
+      <div class="field">
+        <p class="control has-icons-left">
+          <input type="text" name="email" class="input is-rounded" value="<%=user.email %>"/>
+          <span class="icon is-small is-left">
+            <i class="fa-solid fa-at"></i>
+          </span>
+        </p>
+      </div>
+
+      <label for="counry" class="label">Country</label>
+      <div class="field">
+        <p class="control has-icons-left">
+          <input type="text" name="country" class="input is-rounded" value="<%=user.country %>"/>
+          <span class="icon is-small is-left">
+            <i class="fa-solid fa-earth-americas"></i>
+          </span>
+        </p>
+      </div>
+
+      <label for="cityOrState" class="label">City / Region</label>
+      <div class="field">
+        <p class="control has-icons-left">
+          <input type="text" name="cityOrState" class="input is-rounded" value="<%=user.cityOrState %>"/>
+          <span class="icon is-small is-left">
+            <i class="fa-solid fa-city"></i>
+          </span>
+        </p>
+      </div>
+
+      <label for="aboutMetext" class="label">About me</label>
+      <textarea name="aboutMeText" class="textarea" rows="6"><%=user.aboutMeText%></textarea>
+
+      <div class="columns">
+        <div class="column">
+          <label for="nativeLanguage" class="label">Native language</label>
+          <div class="select is-rounded">
+            <select name="nativeLanguage" id="native-language-select">
+              <% for (let i = 0; i < languages.length; i++) { %>
+                <option value="<%=languages[i] %>"
+                  <% if (languages[i] === user.nativeLanguage) { %>
+                      selected
+                      <% } %>
+                  ><%=languages[i] %></option>
+              <% } %>
+            </select>
+          </div>
+        </div>
+
+        <div class="column">
+          <label for="targetLanguage" class="label">Target language</label>
+          <div class="select is-rounded">
+            <select name="targetLanguage" id="target-language-select">
+              <% for (let i = 0; i < languages.length; i++) { %>
+                <option value="<%=languages[i] %>"
+                    <% if (languages[i] === user.targetLanguage) { %>
+                        selected
+                        <% } %>
+                    ><%=languages[i] %></option>
+                <% } %>
+            </select>
+          </div>
+        </div>
+
+        <div class="column">
+          <label for="targetLanguageProficiency" class="label"
+            >Proficiency</label
+          >
+          <div class="select is-rounded">
+            <select name="targetLanguageProficiency" id="proficiency-select">
+              <% for (let i = 0; i < proficiencyLevels.length; i++) { %>
+                <option value="<%=proficiencyLevels[i] %>" 
+                    <% if (proficiencyLevels[i] === user.targetLanguageProficiency) { %>
+                        selected
+                        <% } %>
+                        >
+                  <%=proficiencyLevels[i] %>
+                </option>
+                <% } %>
+            </select>
+          </div>
+        </div>
+      </div>
+      <div class="level">
+        <div class="level-item">
+          <button type="submit" class="button is-primary is-large">
+            Update
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<script>
+  const fileInput = document.querySelector("#file-js input[type=file]");
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector("#file-js .file-name");
+      const imgPreview = (document.querySelector("#preview").src =
+        URL.createObjectURL(fileInput.files[0]));
+      fileName.textContent = fileInput.files[0].name;
+    }
+  };
+</script>

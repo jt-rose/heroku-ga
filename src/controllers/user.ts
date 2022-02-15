@@ -4,6 +4,9 @@ import { User } from "../models/User.js";
 import { Invite } from "../models/Invite.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
+import multer from "multer";
+import { uploadFile } from "../utils/s3.js";
+const upload = multer({ dest: "uploads/" });
 export const router = express.Router();
 
 router.get("/connects", async (req, res) => {
@@ -61,7 +64,7 @@ router.get("/edit-profile", (req, res) => {
   });
 });
 
-router.put("/edit-profile", async (req, res) => {
+router.put("/edit-profile", upload.single("img"), async (req, res) => {
   const user = req.session.user;
   if (!user) {
     // flash message
@@ -69,6 +72,14 @@ router.put("/edit-profile", async (req, res) => {
     return;
   }
 
+  // upload user avatar to s3 and capture img path
+  const file = req.file;
+  let img;
+  if (file) {
+    // ! add validation around img type and size
+    const result = await uploadFile(file);
+    img = result.Location;
+  }
   const {
     username,
     email,
@@ -92,15 +103,19 @@ router.put("/edit-profile", async (req, res) => {
     res.redirect("/user/edit-profile");
     return;
   }
+
   await User.findByIdAndUpdate(user._id, {
-    username,
-    email,
-    country,
-    cityOrState,
-    aboutMeText,
-    nativeLanguage,
-    targetLanguage,
-    targetLanguageProficiency,
+    $set: {
+      username,
+      img,
+      email,
+      country,
+      cityOrState,
+      aboutMeText,
+      nativeLanguage,
+      targetLanguage,
+      targetLanguageProficiency,
+    },
   });
 
   res.redirect("/");

@@ -40,6 +40,9 @@ import { User } from "../models/User.js";
 import { Invite } from "../models/Invite.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
+import multer from "multer";
+import { uploadFile } from "../utils/s3.js";
+var upload = multer({ dest: "uploads/" });
 export var router = express.Router();
 router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var connects;
@@ -110,8 +113,8 @@ router.get("/edit-profile", function (req, res) {
         proficiencyLevels: proficiencyLevels,
     });
 });
-router.put("/edit-profile", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, _a, username, email, country, cityOrState, aboutMeText, nativeLanguage, targetLanguage, targetLanguageProficiency, sameUsers;
+router.put("/edit-profile", upload.single("img"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var user, file, img, result, _a, username, email, country, cityOrState, aboutMeText, nativeLanguage, targetLanguage, targetLanguageProficiency, sameUsers;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -121,9 +124,17 @@ router.put("/edit-profile", function (req, res) { return __awaiter(void 0, void 
                     res.redirect("/auth/login");
                     return [2 /*return*/];
                 }
+                file = req.file;
+                if (!file) return [3 /*break*/, 2];
+                return [4 /*yield*/, uploadFile(file)];
+            case 1:
+                result = _b.sent();
+                img = result.Location;
+                _b.label = 2;
+            case 2:
                 _a = req.body, username = _a.username, email = _a.email, country = _a.country, cityOrState = _a.cityOrState, aboutMeText = _a.aboutMeText, nativeLanguage = _a.nativeLanguage, targetLanguage = _a.targetLanguage, targetLanguageProficiency = _a.targetLanguageProficiency;
                 return [4 /*yield*/, User.find({ $or: [{ username: username }, { email: email }] })];
-            case 1:
+            case 3:
                 sameUsers = _b.sent();
                 console.log(sameUsers);
                 if (sameUsers.length &&
@@ -134,16 +145,19 @@ router.put("/edit-profile", function (req, res) { return __awaiter(void 0, void 
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, User.findByIdAndUpdate(user._id, {
-                        username: username,
-                        email: email,
-                        country: country,
-                        cityOrState: cityOrState,
-                        aboutMeText: aboutMeText,
-                        nativeLanguage: nativeLanguage,
-                        targetLanguage: targetLanguage,
-                        targetLanguageProficiency: targetLanguageProficiency,
+                        $set: {
+                            username: username,
+                            img: img,
+                            email: email,
+                            country: country,
+                            cityOrState: cityOrState,
+                            aboutMeText: aboutMeText,
+                            nativeLanguage: nativeLanguage,
+                            targetLanguage: targetLanguage,
+                            targetLanguageProficiency: targetLanguageProficiency,
+                        },
                     })];
-            case 2:
+            case 4:
                 _b.sent();
                 res.redirect("/");
                 return [2 /*return*/];
