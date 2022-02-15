@@ -23,16 +23,18 @@
     </p>
   </div>
 
-  <label for="img">Avatar</label>
-  <div class="field">
-    <p class="control has-icons-left">
-      <input type="file" name="img" class="input is-rounded" />
-      <span class="icon is-small is-left">
-        <i class="fa-solid fa-camera"></i>
+  <div id="file-js" class="file has-name">
+    <label class="file-label">
+      <input class="file-input" type="file" name="img" />
+      <span class="file-cta">
+        <span class="file-icon">
+          <i class="fa-solid fa-camera"></i>
+        </span>
+        <span class="file-label"> Choose a photo… </span>
       </span>
-    </p>
+      <span class="file-name"> No file uploaded </span>
+    </label>
   </div>
-
   <label for="email">Email</label>
 
   <div class="field">
@@ -65,7 +67,7 @@
   </div>
 
   <label for="aboutMetext">About me</label>
-  <textarea name="aboutMeText" class="textarea"></textarea>
+  <textarea name="aboutMeText" class="textarea" rows="6"></textarea>
   <label for="nativeLanguage">Native language</label>
   <div class="select is-rounded">
     <select name="nativeLanguage" id="native-language-select">
@@ -95,3 +97,12 @@
   <button type="submit" class="button">Sign Up</button>
   <script></script>
 </form>
+<script>
+  const fileInput = document.querySelector("#file-js input[type=file]");
+  fileInput.onchange = () => {
+    if (fileInput.files.length > 0) {
+      const fileName = document.querySelector("#file-js .file-name");
+      fileName.textContent = fileInput.files[0].name;
+    }
+  };
+</script>
