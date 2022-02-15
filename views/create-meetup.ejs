@@ -2,43 +2,127 @@
   <%- include('./partials/head.ejs') %>
   <body>
     <%- include('./partials/header.ejs') %>
-    <h1>Create Meetups Page</h1>
-    <form action="/meetups/create" method="post">
-      <select name="invitee" id="">
-        <% for (let i = 0; i < connections.length; i++) { %>
-        <option value="<%=connections[i]._id%>">
-          <%=connections[i].username%>
-        </option>
-        <% } %>
-      </select>
-      <input type="text" name="name" id="" />
-      <textarea
-        name="description"
-        id=""
-        cols="30"
-        rows="10"
-        placeholder="...enter a message"
-      ></textarea>
-      <input type="date" name="date" id="" />
-      <input type="time" name="start" id="" />
-      <select name="duration" id="">
-        <option value="15">15min</option>
-        <option value="30">30min</option>
-        <option value="45">45min</option>
-        <option value="60">1 hour</option>
-        <option value="90">1.5 hours</option>
-        <option value="120">2 hours</option>
-      </select>
-      <input type="radio" name="platform" id="zoom" value="zoom" checked />
-      <label for="zoom">Zoom</label>
-      <input type="radio" name="platform" id="skype" value="skype" />
-      <label for="skype">Skype</label>
-      <input type="radio" name="platform" id="discord" value="discord" />
-      <label for="discord">Discord</label>
-      <input type="radio" name="platform" id="other" value="other" />
-      <label for="other">Other</label>
+    <div class="container is-fluid">
+      <div class="level">
+        <div class="level-item">
+          <h1 class="title">Create Meetups Page</h1>
+        </div>
+      </div>
 
-      <button type="submit">Create</button>
-    </form>
+      <% if (!connections.length) { %>
+      <p class="no-connects-warning">
+        You need to make some connections before you can schedule meetups!
+      </p>
+      <p class="no-connects-warning">
+        Our <a href="/search">search page</a> can help you connect with other
+        language learners
+      </p>
+      <% } else { %>
+      <div class="container is-fluid">
+        <div class="level">
+          <div class="level-item has-text-centered" id="create-meetup-form">
+            <form action="/meetups/create" method="post">
+              <label for="invitee" class="label">Invitee</label>
+              <div class="select is-rounded">
+                <select name="invitee" id="">
+                  <% for (let i = 0; i < connections.length; i++) { %>
+                  <option value="<%=connections[i]._id%>">
+                    <%=connections[i].username%>
+                  </option>
+                  <% } %>
+                </select>
+              </div>
+
+              <label for="name" class="label">Meetup Name</label>
+              <input type="text" name="name" class="input is-rounded" />
+
+              <label for="description" class="label">Description</label>
+              <textarea
+                name="description"
+                id=""
+                rows="6"
+                placeholder="...enter a message"
+                class="textarea"
+                rows="6"
+              ></textarea>
+              <div class="columns">
+                <div class="column">
+                  <label for="date" class="label">Date</label>
+                  <input type="date" name="date" class="input is-rounded" />
+                </div>
+
+                <div class="column">
+                  <label for="start" class="label">Start Time</label>
+                  <input type="time" name="start" class="input is-rounded" />
+                </div>
+
+                <div class="column">
+                  <label for="duration" class="label">Length</label>
+                  <div class="select is-rounded">
+                    <select name="duration" id="">
+                      <option value="15">15min</option>
+                      <option value="30">30min</option>
+                      <option value="45">45min</option>
+                      <option value="60">1 hour</option>
+                      <option value="90">1.5 hours</option>
+                      <option value="120">2 hours</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="control">
+                <label for="zoom" class="radio">
+                  <input
+                    type="radio"
+                    name="platform"
+                    id="zoom"
+                    value="zoom"
+                    checked
+                  />
+                  Zoom</label
+                >
+
+                <label for="skype" class="radio">
+                  <input
+                    type="radio"
+                    name="platform"
+                    id="skype"
+                    value="skype"
+                  />
+                  Skype</label
+                >
+
+                <label for="discord" class="radio">
+                  <input
+                    type="radio"
+                    name="platform"
+                    id="discord"
+                    value="discord"
+                  />
+                  Discord</label
+                >
+
+                <label for="other" class="radio">
+                  <input
+                    type="radio"
+                    name="platform"
+                    id="other"
+                    value="other"
+                    checked
+                  />
+                  Other</label
+                >
+              </div>
+
+              <button type="submit" class="button is-primary is-large">
+                Create
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <% } %>
+    </div>
   </body>
 </html>

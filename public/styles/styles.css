@@ -20,3 +20,12 @@
 #img-upload-container {
   padding-top: 1.5rem;
 }
+
+.no-connects-warning {
+  text-align: center;
+  padding-bottom: 1.4rem;
+}
+
+#create-meetup-form * {
+  margin-bottom: 1.5rem;
+}
