@@ -29,7 +29,7 @@
         </p>
       </div>
 
-      <div class="level">
+      <div class="level" id="img-upload-container">
         <div class="level-item">
           <div id="file-js" class="file has-name">
             <label class="file-label">
@@ -45,8 +45,11 @@
           </div>
         </div>
       </div>
-      <label for="email" class="label">Email</label>
+      <p id="photo-size-warning">
+        for best results please use a photo with a 1x1 aspect ratio
+      </p>
 
+      <label for="email" class="label">Email</label>
       <div class="field">
         <p class="control has-icons-left">
           <input type="text" name="email" class="input is-rounded" />
@@ -132,6 +135,8 @@
   fileInput.onchange = () => {
     if (fileInput.files.length > 0) {
       const fileName = document.querySelector("#file-js .file-name");
+      const imgPreview = (document.querySelector("#preview").src =
+        URL.createObjectURL(fileInput.files[0]));
       fileName.textContent = fileInput.files[0].name;
     }
   };

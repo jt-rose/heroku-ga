@@ -7,3 +7,16 @@
 #clear-updates-btn {
   color: hsl(348, 100%, 61%);
 }
+
+#preview {
+  height: 128px;
+}
+
+#photo-size-warning {
+  color: hsl(348, 100%, 61%);
+  padding-bottom: 2rem;
+}
+
+#img-upload-container {
+  padding-top: 1.5rem;
+}
