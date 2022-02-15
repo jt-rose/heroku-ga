@@ -92,7 +92,7 @@ router.post("/create", function (req, res) { return __awaiter(void 0, void 0, vo
 }); });
 // delete meetup
 router.delete("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, meetupid, invitee, inviteeData, i;
+    var _a, meetupid, invitee;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -103,21 +103,12 @@ router.delete("/", function (req, res) { return __awaiter(void 0, void 0, void 0
                     })];
             case 1:
                 _c.sent();
-                return [4 /*yield*/, User.findByIdAndUpdate(invitee)];
+                return [4 /*yield*/, User.updateOne({ _id: invitee, "currentMeetups._id": meetupid }, {
+                        $set: {
+                            "currentMeetups.$.cancelled": true,
+                        },
+                    })];
             case 2:
-                inviteeData = _c.sent();
-                if (!inviteeData) {
-                    res.redirect("/");
-                    return [2 /*return*/];
-                }
-                for (i = 0; i < inviteeData.currentMeetups.length; i++) {
-                    if (String(inviteeData.currentMeetups[i]._id) === String(meetupid)) {
-                        inviteeData.currentMeetups[i].cancelled = true;
-                    }
-                }
-                console.log("updated", inviteeData);
-                return [4 /*yield*/, inviteeData.save()];
-            case 3:
                 _c.sent();
                 res.redirect("/");
                 return [2 /*return*/];
@@ -209,9 +200,47 @@ router.get("/edit/:meetupid", function (req, res) { return __awaiter(void 0, voi
         }
     });
 }); });
-router.put("/edit", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); });
+router.put("/edit", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, name, description, invitee, date, start, duration, platform, meetupid, startTime, endTime, newMeetup;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                if (!req.session.user) {
+                    res.redirect("/auth/login");
+                    return [2 /*return*/];
+                }
+                _a = req.body, name = _a.name, description = _a.description, invitee = _a.invitee, date = _a.date, start = _a.start, duration = _a.duration, platform = _a.platform, meetupid = _a.meetupid;
+                startTime = new Date(date + " " + start);
+                endTime = new Date(startTime.getTime() + parseInt(duration) * 60000);
+                newMeetup = new Meetup({
+                    creator: req.session.user._id,
+                    name: name,
+                    description: description,
+                    invitee: invitee,
+                    startTime: startTime,
+                    endTime: endTime,
+                    platform: platform,
+                    cancelled: false,
+                    response: "MEETUP CHANGED",
+                });
+                console.log("edited meetup", newMeetup);
+                return [4 /*yield*/, User.updateMany({ _id: { $in: [req.session.user._id, invitee] } }, {
+                        $pull: {
+                            currentMeetups: { _id: meetupid },
+                        },
+                    })];
+            case 1:
+                _b.sent();
+                return [4 /*yield*/, User.updateMany({ _id: { $in: [req.session.user._id, invitee] } }, {
+                        $push: { currentMeetups: newMeetup },
+                    })];
+            case 2:
+                _b.sent();
+                res.redirect("/");
+                return [2 /*return*/];
+        }
+    });
+}); });
 // respond to meetup
 router.put("/respond", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     return [2 /*return*/];

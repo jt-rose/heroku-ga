@@ -51,18 +51,14 @@ router.delete("/", async (req, res) => {
   await User.findByIdAndUpdate(req.session.user?._id, {
     $pull: { currentMeetups: { _id: meetupid } },
   });
-  const inviteeData = await User.findByIdAndUpdate(invitee);
-  if (!inviteeData) {
-    res.redirect("/");
-    return;
-  }
-  for (let i = 0; i < inviteeData.currentMeetups.length; i++) {
-    if (String(inviteeData.currentMeetups[i]._id) === String(meetupid)) {
-      inviteeData.currentMeetups[i].cancelled = true;
+  await User.updateOne(
+    { _id: invitee, "currentMeetups._id": meetupid },
+    {
+      $set: {
+        "currentMeetups.$.cancelled": true,
+      },
     }
-  }
-  console.log("updated", inviteeData);
-  await inviteeData.save();
+  );
   res.redirect("/");
 });
 
@@ -134,7 +130,52 @@ router.get("/edit/:meetupid", async (req, res) => {
   });
 });
 
-router.put("/edit", async (req, res) => {});
+router.put("/edit", async (req, res) => {
+  if (!req.session.user) {
+    res.redirect("/auth/login");
+    return;
+  }
+  const {
+    name,
+    description,
+    invitee,
+    date,
+    start,
+    duration,
+    platform,
+    meetupid,
+  } = req.body;
+  const startTime = new Date(date + " " + start);
+  const endTime = new Date(startTime.getTime() + parseInt(duration) * 60000);
+
+  const newMeetup = new Meetup({
+    creator: req.session.user._id,
+    name,
+    description,
+    invitee,
+    startTime,
+    endTime,
+    platform,
+    cancelled: false,
+    response: "MEETUP CHANGED",
+  });
+  console.log("edited meetup", newMeetup);
+  await User.updateMany(
+    { _id: { $in: [req.session.user._id, invitee] } },
+    {
+      $pull: {
+        currentMeetups: { _id: meetupid },
+      },
+    }
+  );
+  await User.updateMany(
+    { _id: { $in: [req.session.user._id, invitee] } },
+    {
+      $push: { currentMeetups: newMeetup },
+    }
+  );
+  res.redirect("/");
+});
 
 // respond to meetup
 router.put("/respond", async (req, res) => {});
