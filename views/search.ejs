@@ -2,9 +2,16 @@
   <%- include('./partials/head.ejs') %>
   <body>
     <%- include('./partials/header.ejs') %>
-    <h1>Search Page</h1>
+    <div class="container is-fluid">
+    <div class="level">
+      <div class="level-item">
+    <h1 class="title">Search Page</h1>
+    </div>
+    </div>
     <form action="/search" method="post">
-      <label for="language">Language</label>
+      <div class="columns"><div class="column has-text-centered">
+      <label for="language" class="label">Language</label>
+      <div class="select is-rounded">
       <select name="language" id="language">
         <option value="BLANK">-- select --</option>
         <% for (let i = 0; i < languages.length; i++) { %>
@@ -14,7 +21,11 @@
             ><%=languages[i] %></option>
         <% } %>
       </select>
-      <label for="proficiency">Proficiency</label>
+    </div>
+    </div>
+    <div class="column has-text-centered">
+      <label for="proficiency" class="label">Proficiency</label>
+      <div class="select is-rounded">
       <select name="proficiency" id="proficiency">
         <option value="BLANK">-- select --</option>
         <% for (let i = 0; i < proficiencyLevels.length; i++) { %>
@@ -27,7 +38,11 @@
         </option>
         <% } %>
       </select>
-      <label for="country">Country</label>
+    </div>
+    </div>
+    <div class="column has-text-centered">
+      <label for="country" class="label">Country</label>
+      <div class="select is-rounded">
       <select name="country" id="country">
         <option value="BLANK">-- select --</option>
         <% for (let i = 0; i < countries.length; i++) { %>
@@ -38,7 +53,14 @@
             ><%=countries[i] %></option>
         <% } %>
       </select>
-      <button type="submit">Search</button>
+      </div>
+      </div>
+      
+    </div>
+    <div class="level">
+      <div class="level-item">
+    <button type="submit" class="button is-primary">Search</button>
+  </div></div>
     </form>
     <ul>
       <% for (let i = 0; i < users.length; i++) { %>
@@ -48,5 +70,6 @@
     <% if (!users.length) { %>
         <p>Search returned no results</p>
         <% } %>
+      </div>
   </body>
 </html>
