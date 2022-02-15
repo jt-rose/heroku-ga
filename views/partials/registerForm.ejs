@@ -1,9 +1,9 @@
-<input type="file" id="file-input" />
-<p id="status">Please select a file</p>
-<img id="preview" src="/avatars/default.jpeg" />
+<figure class="image is-128x128">
+  <img id="preview" class="is-rounded" src="/avatars/default.jpeg" />
+</figure>
 
 <form action="/auth/register" enctype="multipart/form-data" method="post">
-  <label for="username">Username</label>
+  <label for="username" class="label">Username</label>
   <div class="field">
     <p class="control has-icons-left">
       <input type="text" name="username" class="input is-rounded" />
@@ -13,7 +13,7 @@
     </p>
   </div>
 
-  <label for="password">Password</label>
+  <label for="password" class="label">Password</label>
   <div class="field">
     <p class="control has-icons-left">
       <input type="password" name="password" class="input is-rounded" />
@@ -35,7 +35,7 @@
       <span class="file-name"> No file uploaded </span>
     </label>
   </div>
-  <label for="email">Email</label>
+  <label for="email" class="label">Email</label>
 
   <div class="field">
     <p class="control has-icons-left">
@@ -46,7 +46,7 @@
     </p>
   </div>
 
-  <label for="counry">Country</label>
+  <label for="counry" class="label">Country</label>
   <div class="field">
     <p class="control has-icons-left">
       <input type="text" name="country" class="input is-rounded" />
@@ -56,7 +56,7 @@
     </p>
   </div>
 
-  <label for="cityOrState">City / Region</label>
+  <label for="cityOrState" class="label">City / Region</label>
   <div class="field">
     <p class="control has-icons-left">
       <input type="text" name="cityOrState" class="input is-rounded" />
@@ -66,9 +66,9 @@
     </p>
   </div>
 
-  <label for="aboutMetext">About me</label>
+  <label for="aboutMetext" class="label">About me</label>
   <textarea name="aboutMeText" class="textarea" rows="6"></textarea>
-  <label for="nativeLanguage">Native language</label>
+  <label for="nativeLanguage" class="label">Native language</label>
   <div class="select is-rounded">
     <select name="nativeLanguage" id="native-language-select">
       <% for (let i = 0; i < languages.length; i++) { %>
@@ -76,7 +76,7 @@
       <% } %>
     </select>
   </div>
-  <label for="targetLanguage">Target language</label>
+  <label for="targetLanguage" class="label">Target language</label>
   <div class="select is-rounded">
     <select name="targetLanguage" id="target-language-select">
       <% for (let i = 0; i < languages.length; i++) { %>
@@ -84,7 +84,7 @@
       <% } %>
     </select>
   </div>
-  <label for="targetLanguageProficiency">Proficiency</label>
+  <label for="targetLanguageProficiency" class="label">Proficiency</label>
   <div class="select is-rounded">
     <select name="targetLanguageProficiency" id="proficiency-select">
       <% for (let i = 0; i < proficiencyLevels.length; i++) { %>
@@ -94,8 +94,7 @@
       <% } %>
     </select>
   </div>
-  <button type="submit" class="button">Sign Up</button>
-  <script></script>
+  <button type="submit" class="button is-primary">Sign Up</button>
 </form>
 <script>
   const fileInput = document.querySelector("#file-js input[type=file]");
