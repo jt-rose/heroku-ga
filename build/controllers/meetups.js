@@ -336,7 +336,7 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
     var meetups;
     var _a;
     return __generator(this, function (_b) {
-        meetups = (_a = req.session.user) === null || _a === void 0 ? void 0 : _a.currentMeetups;
+        meetups = ((_a = req.session.user) === null || _a === void 0 ? void 0 : _a.currentMeetups) || [];
         res.render("meetups.ejs", {
             title: "Meetups",
             meetups: meetups,

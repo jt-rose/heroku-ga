@@ -250,7 +250,7 @@ router.get("/:meetupid", async (req, res) => {
 
 // read meetups
 router.get("/", async (req, res) => {
-  const meetups = req.session.user?.currentMeetups;
+  const meetups = req.session.user?.currentMeetups || [];
   res.render("meetups.ejs", {
     title: "Meetups",
     meetups,
