@@ -2,104 +2,189 @@
   <%- include('./partials/head.ejs') %>
   <body>
     <%- include('./partials/header.ejs') %>
-    <h1>Edit Meetup Page</h1>
-    <form action="/meetups/edit?_method=PUT" method="post">
-        <select name="invitee" id="">
-            <% for (let i = 0; i < connections.length; i++) { %>
-                <option value="<%=connections[i]._id%>"
+    <div class="container is-fluid">
+      <div class="level">
+        <div class="level-item">
+          <h1 class="title">Edit Meetup Page</h1>
+        </div>
+      </div>
+
+      <% if (!connections.length) { %>
+      <p class="no-connects-warning">
+        You need to make some connections before you can schedule meetups!
+      </p>
+      <p class="no-connects-warning">
+        Our <a href="/search">search page</a> can help you connect with other
+        language learners
+      </p>
+      <% } else { %>
+      <div class="container is-fluid">
+        <div class="level">
+          <div class="level-item has-text-centered" id="create-meetup-form">
+            <form action="/meetups/edit?_method=PUT" method="post">
+              <label for="invitee" class="label">Invitee</label>
+              <div class="select is-rounded">
+                <select name="invitee" id="">
+                  <% for (let i = 0; i < connections.length; i++) { %>
+                  <option value="<%=connections[i]._id%>"
                     <% if (String(meetup.invitee) === String(connections[i]._id)) { %>
+                      selected
+                 <% } %>
+                 >
+                    <%=connections[i].username%>
+                  </option>
+                  <% } %>
+                </select>
+              </div>
+
+              <input type="text" name="meetupid" id="" value="<%=meetup._id%>" hidden>
+              <label for="name" class="label">Meetup Name</label>
+              <input type="text" name="name" class="input is-rounded" value="<%=meetup.name%>"/>
+
+              <label for="description" class="label">Description</label>
+              <textarea
+                name="description"
+                id=""
+                rows="6"
+                placeholder="...enter a message"
+                class="textarea"
+                rows="6"
+              ><%=meetup.description%></textarea>
+              <div class="columns">
+                <div class="column">
+                  <label for="date" class="label">Date</label>
+                  <input type="date" name="date" class="input is-rounded" id="date" data-date="<%=date%>"/>
+                </div>
+
+                <div class="column">
+                  <label for="start" class="label">Start Time</label>
+                  <input type="time" name="start" class="input is-rounded" id="time" data-date="<%=date%>"/>
+                </div>
+
+                <div class="column">
+                  <label for="duration" class="label">Length</label>
+                  <div class="select is-rounded">
+                    <select name="duration" id="">
+                      <option value="15"
+                      <% if (duration === 15) { %>
                         selected
                    <% } %>
-                    
-                    ><%=connections[i].username%></option>
-           <% } %>
-        </select>
-        <input type="text" name="name" id="" value="<%=meetup.name%>">
-        <input type="text" name="meetupid" id="" value="<%=meetup._id%>" hidden>
-        <textarea name="description" id="" cols="30" rows="10" placeholder="...enter a message"><%=meetup.description%></textarea>
-          <input type="date" name="date" id="date" data-date="<%=date%>">
-          <input type="time" name="start" id="time" data-date="<%=date%>">
-          <select name="duration" id="">
-            <option value="15"
-            <% if (duration === 15) { %>
-                selected
-           <% } %>
-            >15min</option>
-            <option value="30"
-            <% if (duration === 30) { %>
-                selected
-           <% } %>
-            >30min</option>
-            <option value="45"
-            <% if (duration === 45) { %>
-                selected
-           <% } %>
-            >45min</option>
-            <option value="60"
-            <% if (duration === 60) { %>
-                selected
-           <% } %>
-            >1 hour</option>
-            <option value="90"
-            <% if (duration === 90) { %>
-                selected
-           <% } %>
-            >1.5 hours</option>
-            <option value="120"
-            <% if (duration === 120) { %>
-                selected
-           <% } %>
-            >2 hours</option>
-          </select>
-          <input type="radio" name="platform" id="zoom" value="zoom"
-          <% if (meetup.platform === 'zoom') { %>
-            checked
-       <% } %>
-          >
-          <label for="zoom">Zoom</label>
-          <input type="radio" name="platform" id="skype" value="skype"
-          <% if (meetup.platform === 'skype') { %>
-            checked
-       <% } %>
-          >
-          <label for="skype">Skype</label>
-          <input type="radio" name="platform" id="discord" value="discord"
-          <% if (meetup.platform === 'discord') { %>
-            checked
-       <% } %>
-          >
-          <label for="discord">Discord</label>
-          <input type="radio" name="platform" id="other" value="other"
-          <% if (meetup.platform === 'other') { %>
-            checked
-       <% } %>
-          >
-          <label for="other">Other</label>
+                      >15min</option>
+                      <option value="30"
+                      <% if (duration === 30) { %>
+                        selected
+                   <% } %>
+                      >30min</option>
+                      <option value="45"
+                      <% if (duration === 45) { %>
+                        selected
+                   <% } %>
+                      >45min</option>
+                      <option value="60"
+                      <% if (duration === 60) { %>
+                        selected
+                   <% } %>
+                      >1 hour</option>
+                      <option value="90"
+                      <% if (duration === 90) { %>
+                        selected
+                   <% } %>
+                      >1.5 hours</option>
+                      <option value="120"
+                      <% if (duration === 120) { %>
+                        selected
+                   <% } %>
+                      >2 hours</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
 
-        <button type="submit">Update</button>
-    </form>
+              <div class="control">
+                <label for="zoom" class="radio">
+                  <input
+                    type="radio"
+                    name="platform"
+                    id="zoom"
+                    value="zoom"
+                    <% if (meetup.platform === 'zoom') { %>
+                      checked
+                 <% } %>
+                  />
+                  Zoom</label
+                >
+
+                <label for="skype" class="radio">
+                  <input
+                    type="radio"
+                    name="platform"
+                    id="skype"
+                    value="skype"
+                    <% if (meetup.platform === 'skype') { %>
+                      checked
+                 <% } %>
+                  />
+                  Skype</label
+                >
+
+                <label for="discord" class="radio">
+                  <input
+                    type="radio"
+                    name="platform"
+                    id="discord"
+                    value="discord"
+                    <% if (meetup.platform === 'discord') { %>
+                      checked
+                 <% } %>
+                  />
+                  Discord</label
+                >
+
+                <label for="other" class="radio">
+                  <input
+                    type="radio"
+                    name="platform"
+                    id="other"
+                    value="other"
+                    <% if (meetup.platform === 'other') { %>
+                      checked
+                 <% } %>
+                  />
+                  Other</label
+                >
+              </div>
+
+              <button type="submit" class="button is-primary is-large">
+                Update
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+      <% } %>
+    </div>
     <script>
-        window.addEventListener('DOMContentLoaded', () => {
-            const datePicker = document.querySelector('#date')
-            const timePicker = document.querySelector('#time')
-            const utcDate = timePicker.dataset.date
+      window.addEventListener('DOMContentLoaded', () => {
+          const datePicker = document.querySelector('#date')
+          const timePicker = document.querySelector('#time')
+          const utcDate = timePicker.dataset.date
 
-            let month = String(new Date(utcDate).getMonth() + 1);
-  month = month.length === 2 ? month : "0" + month;
-  const year = String(new Date(utcDate).getFullYear());
-  let day = String(new Date(utcDate).getDate() + 1);
-  day = day.length === 2 ? day : "0" + day;
+          let month = String(new Date(utcDate).getMonth() + 1);
+month = month.length === 2 ? month : "0" + month;
+const year = String(new Date(utcDate).getFullYear());
+let day = String(new Date(utcDate).getDate() + 1);
+day = day.length === 2 ? day : "0" + day;
 
-  const date = `${year}-${month}-${day}`;
-  datePicker.value = date
-            let localHour = String(new Date(utcDate).getHours())
-            localHour = localHour.length === 2 ? localHour : "0" + localhour;
-            let localMinutes = String(new Date(utcDate).getMinutes())
-            localMinutes = localMinutes.length === 2 ? localMinutes : "0" + localMinutes;
-            const localTime = `${localHour}:${localMinutes}:00`
-            timePicker.value = localTime
+const date = `${year}-${month}-${day}`;
+datePicker.value = date
+          let localHour = String(new Date(utcDate).getHours())
+          localHour = localHour.length === 2 ? localHour : "0" + localhour;
+          let localMinutes = String(new Date(utcDate).getMinutes())
+          localMinutes = localMinutes.length === 2 ? localMinutes : "0" + localMinutes;
+          const localTime = `${localHour}:${localMinutes}:00`
+          timePicker.value = localTime
 
-        })
-    </script>
+      })
+  </script>
   </body>
 </html>
