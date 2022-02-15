@@ -35,7 +35,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import express from "express";
-import { languages } from "../constants/languages.js";
 import { User } from "../models/User.js";
 import { Meetup } from "../models/Meetup.js";
 export var router = express.Router();
@@ -54,7 +53,6 @@ router.get("/create", function (req, res) { return __awaiter(void 0, void 0, voi
                     title: "Create Meetup",
                     user: req.session.user,
                     connections: connections,
-                    languages: languages,
                 });
                 return [2 /*return*/];
         }
@@ -100,18 +98,14 @@ router.delete("/", function (req, res) { return __awaiter(void 0, void 0, void 0
         switch (_c.label) {
             case 0:
                 _a = req.body, meetupid = _a.meetupid, invitee = _a.invitee;
-                console.log("meeting", meetupid);
-                console.log("invitiee", invitee);
                 return [4 /*yield*/, User.findByIdAndUpdate((_b = req.session.user) === null || _b === void 0 ? void 0 : _b._id, {
                         $pull: { currentMeetups: { _id: meetupid } },
                     })];
             case 1:
                 _c.sent();
-                console.log("so far so good");
                 return [4 /*yield*/, User.findByIdAndUpdate(invitee)];
             case 2:
                 inviteeData = _c.sent();
-                console.log("invitee data", inviteeData);
                 if (!inviteeData) {
                     res.redirect("/");
                     return [2 /*return*/];
@@ -179,9 +173,42 @@ router.delete("/clear-finished", function (req, res) { return __awaiter(void 0, 
     });
 }); });
 // edit meetup
-router.get("/edit/:meetupid", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); });
+router.get("/edit/:meetupid", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var meetupid, meetup, duration, fmtDuration, connections;
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
+            case 0:
+                meetupid = req.params.meetupid;
+                console.log("mmetup id ", meetupid);
+                meetup = (_a = req.session.user) === null || _a === void 0 ? void 0 : _a.currentMeetups.find(function (meet) { return String(meet._id) === String(meetupid); });
+                console.log("meetup", meetup);
+                if (!meetup) {
+                    res.redirect("/");
+                    return [2 /*return*/];
+                }
+                duration = meetup.endTime.getTime() - meetup.startTime.getTime();
+                fmtDuration = duration / 60000;
+                if (!meetup) {
+                    res.redirect("/");
+                    return [2 /*return*/];
+                }
+                return [4 /*yield*/, User.find({
+                        _id: { $in: (_b = req.session.user) === null || _b === void 0 ? void 0 : _b.connections },
+                    })];
+            case 1:
+                connections = _c.sent();
+                res.render("edit-meetup.ejs", {
+                    title: "Edit Meetup",
+                    meetup: meetup,
+                    connections: connections,
+                    duration: fmtDuration,
+                    date: meetup.startTime,
+                });
+                return [2 /*return*/];
+        }
+    });
+}); });
 router.put("/edit", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
     return [2 /*return*/];
 }); }); });

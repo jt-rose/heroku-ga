@@ -11,6 +11,10 @@
       <button type="submit">Clear</button>
     </form>
     <% } %> <% if (myMeetup && !alreadyDone) { %>
+    <a href="/meetups/edit/<%=meetup._id%>"
+      ><button type="submit">Update</button></a
+    >
+
     <form action="/meetups?_method=DELETE" method="post">
       <input type="text" name="meetupid" id="" value="<%=meetup._id%>" hidden />
       <input

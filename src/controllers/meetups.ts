@@ -1,6 +1,5 @@
 import express from "express";
-import { languages } from "../constants/languages.js";
-import { IUser, User, userSchema } from "../models/User.js";
+import { User } from "../models/User.js";
 import { Meetup } from "../models/Meetup.js";
 
 export const router = express.Router();
@@ -14,7 +13,6 @@ router.get("/create", async (req, res) => {
     title: "Create Meetup",
     user: req.session.user,
     connections,
-    languages,
   });
 });
 
@@ -50,14 +48,10 @@ router.post("/create", async (req, res) => {
 // delete meetup
 router.delete("/", async (req, res) => {
   const { meetupid, invitee } = req.body;
-  console.log("meeting", meetupid);
-  console.log("invitiee", invitee);
   await User.findByIdAndUpdate(req.session.user?._id, {
     $pull: { currentMeetups: { _id: meetupid } },
   });
-  console.log("so far so good");
   const inviteeData = await User.findByIdAndUpdate(invitee);
-  console.log("invitee data", inviteeData);
   if (!inviteeData) {
     res.redirect("/");
     return;
@@ -108,7 +102,37 @@ router.delete("/clear-finished", async (req, res) => {
 });
 
 // edit meetup
-router.get("/edit/:meetupid", async (req, res) => {});
+router.get("/edit/:meetupid", async (req, res) => {
+  const { meetupid } = req.params;
+  console.log("mmetup id ", meetupid);
+  const meetup = req.session.user?.currentMeetups.find(
+    (meet) => String(meet._id) === String(meetupid)
+  );
+  console.log("meetup", meetup);
+  if (!meetup) {
+    res.redirect("/");
+    return;
+  }
+
+  const duration = meetup.endTime.getTime() - meetup.startTime.getTime();
+  const fmtDuration = duration / 60000;
+
+  if (!meetup) {
+    res.redirect("/");
+    return;
+  }
+
+  const connections = await User.find({
+    _id: { $in: req.session.user?.connections },
+  });
+  res.render("edit-meetup.ejs", {
+    title: "Edit Meetup",
+    meetup,
+    connections,
+    duration: fmtDuration,
+    date: meetup.startTime,
+  });
+});
 
 router.put("/edit", async (req, res) => {});
 
