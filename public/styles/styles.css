@@ -38,3 +38,33 @@
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
 }
+
+/* override list styling from bulma */
+#message-container {
+  list-style: none;
+}
+
+#message-container li {
+  border-radius: 25px;
+  padding: 0.6rem;
+  margin: 0.6rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  max-width: 500px;
+  color: #fff;
+  font-weight: bold;
+}
+
+.message-spacer {
+  width: 25%;
+}
+
+.from-me {
+  background-color: cadetblue;
+  text-align: right;
+}
+
+.from-you {
+  background-color: aqua;
+  text-align: left;
+}

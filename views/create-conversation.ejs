@@ -42,12 +42,28 @@
           </div>
         </div>
       </form>
-      <h3>Old messages</h3>
-      <ul>
-        <% for (let i = 0; i < previousConversation.messages.length; i++) { %>
-        <li><%=previousConversation.messages[i].message%></li>
-        <% } %>
-      </ul>
+      <div class="level">
+        <div class="level-item">
+          <h3 class="subtitle">Old messages</h3>
+        </div>
+      </div>
+      <div class="content">
+        <ul id="message-container">
+          <% for (let i = 0; i < previousConversation.messages.length; i++) { %>
+          <% if (String(previousConversation.messages[i].from) ===
+          String(me._id)) { %>
+
+          <li class="conversation-message from-me">
+            <%=previousConversation.messages[i].message%>
+          </li>
+
+          <% } else { %>
+          <li class="conversation-message from-you">
+            <%=previousConversation.messages[i].message%>
+          </li>
+          <% } %> <% } %>
+        </ul>
+      </div>
     </div>
   </body>
 </html>
