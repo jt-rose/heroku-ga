@@ -44,25 +44,29 @@
       </form>
       <div class="level">
         <div class="level-item">
-          <h3 class="subtitle">Old messages</h3>
+          <h3 class="title is-4" id="old-messages-title">Old messages</h3>
         </div>
       </div>
-      <div class="content">
-        <ul id="message-container">
-          <% for (let i = 0; i < previousConversation.messages.length; i++) { %>
-          <% if (String(previousConversation.messages[i].from) ===
-          String(me._id)) { %>
+      <div class="level">
+        <div class="level-item">
+          <ul id="message-container" class="content">
+            <% for (let i = 0; i < previousConversation.messages.length; i++) {
+            %> <% if (String(previousConversation.messages[i].from) ===
+            String(me._id)) { %>
 
-          <li class="conversation-message from-me">
-            <%=previousConversation.messages[i].message%>
-          </li>
+            <li class="conversation-message from-me">
+              <div class="message-spacer"></div>
+              <p><%=previousConversation.messages[i].message%></p>
+            </li>
 
-          <% } else { %>
-          <li class="conversation-message from-you">
-            <%=previousConversation.messages[i].message%>
-          </li>
-          <% } %> <% } %>
-        </ul>
+            <% } else { %>
+            <li class="conversation-message from-you">
+              <p><%=previousConversation.messages[i].message%></p>
+              <div class="message-spacer"></div>
+            </li>
+            <% } %> <% } %>
+          </ul>
+        </div>
       </div>
     </div>
   </body>
