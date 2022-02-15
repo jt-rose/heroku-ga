@@ -2,9 +2,22 @@
   <%- include('./partials/head.ejs') %>
   <body>
     <%- include('./partials/header.ejs') %>
-    <h1>Create Invites Page</h1>
+    <div class="container is-fluid">
+    <div class="level">
+      <div class="level-item">
+    <h1 class="title">Create Invites Page</h1>
+  </div>
+</div>
     <form action="/invites/create" method="post">
-        <textarea name="message" id="" cols="30" rows="10" placeholder="...enter a message"></textarea>
+        <textarea name="message" id="invite-textarea" rows="6" placeholder="...enter a message" class="textarea"></textarea>
+        
+        <div class="level">
+          <div class="level-item">
+            <label for="targetLanguage" class="label">Language</label>
+            </div>
+            </div>
+            <div class="level">
+              <div class="level-item"><div class="select is-rounded">
         <select name="targetLanguage" id="target-language-select">
             <% for (let i = 0; i < languages.length; i++) { %>
             <option value="<%=languages[i] %>"
@@ -14,8 +27,15 @@
                 ><%=languages[i] %></option>
             <% } %>
           </select>
+        </div>
+        </div>
+        </div>
         <input type="text" name="invitee" id="" value="<%=invitee._id%>" hidden>
-        <button type="submit">Connect</button>
+        <div class="level">
+          <div class="level-item">
+        <button type="submit" class="button is-rounded is-primary is-large">Connect</button>
+        </div></div>
     </form>
+  </div>
   </body>
 </html>

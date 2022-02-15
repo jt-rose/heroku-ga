@@ -29,3 +29,7 @@
 #create-meetup-form * {
   margin-bottom: 1.5rem;
 }
+
+#invite-textarea {
+  margin-bottom: 1.5rem;
+}
