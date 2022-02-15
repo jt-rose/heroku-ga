@@ -1,0 +1,52 @@
+<html>
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <h1>Search Page</h1>
+    <form action="/search" method="post">
+      <label for="language">Language</label>
+      <select name="language" id="language">
+        <option value="BLANK">-- select --</option>
+        <% for (let i = 0; i < languages.length; i++) { %>
+        <option value="<%=languages[i] %>" <% if (language === languages[i]) { %>
+            selected
+            <% } %>
+            ><%=languages[i] %></option>
+        <% } %>
+      </select>
+      <label for="proficiency">Proficiency</label>
+      <select name="proficiency" id="proficiency">
+        <option value="BLANK">-- select --</option>
+        <% for (let i = 0; i < proficiencyLevels.length; i++) { %>
+        <option value="<%=proficiencyLevels[i] %>" 
+            <% if (proficiency === proficiencyLevels[i]) { %>
+                selected
+                <% } %>
+            >
+          <%=proficiencyLevels[i] %>
+        </option>
+        <% } %>
+      </select>
+      <label for="country">Country</label>
+      <select name="country" id="country">
+        <option value="BLANK">-- select --</option>
+        <% for (let i = 0; i < countries.length; i++) { %>
+        <option value="<%=countries[i] %>"
+            <% if (country === countries[i]) { %>
+                selected
+                <% } %>
+            ><%=countries[i] %></option>
+        <% } %>
+      </select>
+      <button type="submit">Search</button>
+    </form>
+    <ul>
+      <% for (let i = 0; i < users.length; i++) { %>
+      <a href="/user/profile/<%=users[i]._id%>"><%=users[i].username%></a>
+      <% } %>
+    </ul>
+    <% if (!users.length) { %>
+        <p>Search returned no results</p>
+        <% } %>
+  </body>
+</html>
