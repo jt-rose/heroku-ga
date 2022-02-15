@@ -38,6 +38,19 @@
       />
       <button type="submit">All done!</button>
     </form>
+    <% } %> <% if (!myMeetup) { %>
+    <form action="/meetups/response?_method=PUT" method="post">
+      <input type="text" name="meetupid" value="<%=meetup._id%>" hidden />
+      <input type="text" name="creater" value="<%=meetup.creator%>" hidden />
+      <input type="text" name="rsvp" value="true" hidden />
+      <button type="submit">RSVP</button>
+    </form>
+    <form action="/meetups/response?_method=PUT" method="post">
+      <input type="text" name="meetupid" value="<%=meetup._id%>" hidden />
+      <input type="text" name="creater" value="<%=meetup.creator%>" hidden />
+      <input type="text" name="rsvp" value="false" hidden />
+      <button type="submit">Decline</button>
+    </form>
     <% } %>
   </body>
 </html>

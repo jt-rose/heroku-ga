@@ -178,7 +178,55 @@ router.put("/edit", async (req, res) => {
 });
 
 // respond to meetup
-router.put("/respond", async (req, res) => {});
+router.put("/response", async (req, res) => {
+  if (!req.session.user) {
+    res.redirect("/auth/login");
+    return;
+  }
+  const { rsvp, meetupid, creator } = req.body;
+  if (rsvp === "true") {
+    await User.updateMany(
+      {
+        //_id: { $in: [req.session.user._id, creator] },
+        "currentMeetups._id": meetupid,
+      },
+      {
+        $set: {
+          "currentMeetups.$.response": "accepted",
+        },
+      }
+    );
+  } else {
+    // template:
+    // await User.updateOne(
+    //     { _id: invitee, "currentMeetups._id": meetupid },
+    //     {
+    //       $set: {
+    //         "currentMeetups.$.cancelled": true,
+    //       },
+    //     }
+    //   );
+    await User.updateMany(
+      {
+        //_id: { $in: [req.session.user._id, creator] },
+        "currentMeetups._id": meetupid,
+      },
+      {
+        $set: {
+          "currentMeetups.$.response": "declined",
+        },
+      }
+    );
+    await User.findByIdAndUpdate(req.session.user._id, {
+      $pull: {
+        currentMeetups: {
+          _id: meetupid,
+        },
+      },
+    });
+  }
+  res.redirect("/");
+});
 
 // read individual meetup
 router.get("/:meetupid", async (req, res) => {

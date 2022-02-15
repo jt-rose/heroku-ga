@@ -242,9 +242,73 @@ router.put("/edit", function (req, res) { return __awaiter(void 0, void 0, void 
     });
 }); });
 // respond to meetup
-router.put("/respond", function (req, res) { return __awaiter(void 0, void 0, void 0, function () { return __generator(this, function (_a) {
-    return [2 /*return*/];
-}); }); });
+router.put("/response", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var _a, rsvp, meetupid, creator;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
+            case 0:
+                if (!req.session.user) {
+                    res.redirect("/auth/login");
+                    return [2 /*return*/];
+                }
+                _a = req.body, rsvp = _a.rsvp, meetupid = _a.meetupid, creator = _a.creator;
+                if (!(rsvp === "true")) return [3 /*break*/, 2];
+                return [4 /*yield*/, User.updateMany({
+                        //_id: { $in: [req.session.user._id, creator] },
+                        "currentMeetups._id": meetupid,
+                    }, {
+                        $set: {
+                            "currentMeetups.$.response": "accepted",
+                        },
+                    })];
+            case 1:
+                _b.sent();
+                return [3 /*break*/, 5];
+            case 2: 
+            // template:
+            // await User.updateOne(
+            //     { _id: invitee, "currentMeetups._id": meetupid },
+            //     {
+            //       $set: {
+            //         "currentMeetups.$.cancelled": true,
+            //       },
+            //     }
+            //   );
+            return [4 /*yield*/, User.updateMany({
+                    //_id: { $in: [req.session.user._id, creator] },
+                    "currentMeetups._id": meetupid,
+                }, {
+                    $set: {
+                        "currentMeetups.$.response": "declined",
+                    },
+                })];
+            case 3:
+                // template:
+                // await User.updateOne(
+                //     { _id: invitee, "currentMeetups._id": meetupid },
+                //     {
+                //       $set: {
+                //         "currentMeetups.$.cancelled": true,
+                //       },
+                //     }
+                //   );
+                _b.sent();
+                return [4 /*yield*/, User.findByIdAndUpdate(req.session.user._id, {
+                        $pull: {
+                            currentMeetups: {
+                                _id: meetupid,
+                            },
+                        },
+                    })];
+            case 4:
+                _b.sent();
+                _b.label = 5;
+            case 5:
+                res.redirect("/");
+                return [2 /*return*/];
+        }
+    });
+}); });
 // read individual meetup
 router.get("/:meetupid", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var meetupid, currentMeetups, meetup, alreadyDone;
