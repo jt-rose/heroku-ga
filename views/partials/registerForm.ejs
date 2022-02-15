@@ -4,39 +4,54 @@
 
 <form action="/auth/register" enctype="multipart/form-data" method="post">
   <label for="username">Username</label>
-  <input type="text" name="username" />
+  <input type="text" name="username" class="input is-rounded" />
   <label for="password">Password</label>
-  <input type="password" name="password" />
+  <input type="password" name="password" class="input is-rounded" />
   <label for="img">Self Portrait</label>
-  <input type="file" name="img" />
+  <input type="file" name="img" class="input is-rounded" />
   <label for="email">Email</label>
-  <input type="text" name="email" />
+  <input type="text" name="email" class="input is-rounded" />
+
   <label for="counry">Country</label>
-  <input type="text" name="country" />
+  <div class="field">
+    <p class="control has-icons-left">
+      <input type="text" name="country" class="input is-rounded" />
+      <span class="icon is-small is-left">
+        <i class="fa-solid fa-earth-americas"></i>
+      </span>
+    </p>
+  </div>
+
   <label for="cityOrState">State / Province</label>
-  <input type="text" name="cityOrState" />
+  <input type="text" name="cityOrState" class="input is-rounded" />
   <label for="aboutMetext">About me</label>
-  <textarea name="aboutMeText"></textarea>
+  <textarea name="aboutMeText" class="textarea"></textarea>
   <label for="nativeLanguage">Native language</label>
-  <select name="nativeLanguage" id="native-language-select">
-    <% for (let i = 0; i < languages.length; i++) { %>
-    <option value="<%=languages[i] %>"><%=languages[i] %></option>
-    <% } %>
-  </select>
+  <div class="select is-rounded">
+    <select name="nativeLanguage" id="native-language-select">
+      <% for (let i = 0; i < languages.length; i++) { %>
+      <option value="<%=languages[i] %>"><%=languages[i] %></option>
+      <% } %>
+    </select>
+  </div>
   <label for="targetLanguage">Target language</label>
-  <select name="targetLanguage" id="target-language-select">
-    <% for (let i = 0; i < languages.length; i++) { %>
-    <option value="<%=languages[i] %>"><%=languages[i] %></option>
-    <% } %>
-  </select>
+  <div class="select is-rounded">
+    <select name="targetLanguage" id="target-language-select">
+      <% for (let i = 0; i < languages.length; i++) { %>
+      <option value="<%=languages[i] %>"><%=languages[i] %></option>
+      <% } %>
+    </select>
+  </div>
   <label for="targetLanguageProficiency">Proficiency</label>
-  <select name="targetLanguageProficiency" id="proficiency-select">
-    <% for (let i = 0; i < proficiencyLevels.length; i++) { %>
-    <option value="<%=proficiencyLevels[i] %>">
-      <%=proficiencyLevels[i] %>
-    </option>
-    <% } %>
-  </select>
+  <div class="select is-rounded">
+    <select name="targetLanguageProficiency" id="proficiency-select">
+      <% for (let i = 0; i < proficiencyLevels.length; i++) { %>
+      <option value="<%=proficiencyLevels[i] %>">
+        <%=proficiencyLevels[i] %>
+      </option>
+      <% } %>
+    </select>
+  </div>
   <button type="submit" class="button">Sign Up</button>
   <script></script>
 </form>
