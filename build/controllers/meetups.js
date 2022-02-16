@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import express from "express";
 import { User } from "../models/User.js";
 import { Meetup } from "../models/Meetup.js";
+import { formatTime } from "../utils/formatTime.js";
 export var router = express.Router();
 // create meetup
 router.get("/create", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -341,16 +342,27 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
         }
         meetups = req.session.user.currentMeetups || [];
         // map out who created each meetup
-        // const meetupsWithOwners = meetups.map((meet) =>
-        //   String(meet.creator) === String(req.session.user?._id)
-        //     ? { ...meet, createdByMe: true }
-        //     : { ...meet, createdByMe: false }
-        // );
         meetups.forEach(function (meet) {
             var _a;
             return String(meet.creator) === String((_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id)
                 ? (meet.createdByMe = true)
                 : (meet.createdByMe = false);
+        });
+        // map out the dates to display in ejs
+        meetups.forEach(function (meet) {
+            meet.month = meet.startTime.getMonth() + 1;
+            meet.day = meet.startTime.getDate();
+            // let startingHour = meet.startTime.getHours();
+            // let startingAMPM = "AM";
+            // if (startingHour === 0) {
+            //   startingHour = 12;
+            // }
+            // if (startingHour > 12) {
+            //   startingHour = startingHour - 12;
+            //   startingAMPM = "PM";
+            // }
+            meet.timeframe =
+                formatTime(meet.startTime) + " - " + formatTime(meet.endTime);
         });
         console.log(meetups[0]);
         activeMeetups = meetups.filter(function (meet) { return !meet.cancelled; });

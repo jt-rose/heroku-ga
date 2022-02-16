@@ -1,6 +1,7 @@
 import express from "express";
 import { User } from "../models/User.js";
 import { IMeetup, Meetup } from "../models/Meetup.js";
+import { formatTime } from "../utils/formatTime.js";
 
 export const router = express.Router();
 
@@ -257,20 +258,36 @@ router.get("/", async (req, res) => {
 
   interface MeetupWithOwner extends IMeetup {
     createdByMe?: boolean;
+    month?: number;
+    day?: number;
+    timeframe?: string; // string type to include :30  and AM PM data
   }
   const meetups: MeetupWithOwner[] = req.session.user.currentMeetups || [];
 
   // map out who created each meetup
-  // const meetupsWithOwners = meetups.map((meet) =>
-  //   String(meet.creator) === String(req.session.user?._id)
-  //     ? { ...meet, createdByMe: true }
-  //     : { ...meet, createdByMe: false }
-  // );
   meetups.forEach((meet) =>
     String(meet.creator) === String(req.session.user?._id)
       ? (meet.createdByMe = true)
       : (meet.createdByMe = false)
   );
+
+  // map out the dates to display in ejs
+  meetups.forEach((meet) => {
+    meet.month = meet.startTime.getMonth() + 1;
+    meet.day = meet.startTime.getDate();
+
+    // let startingHour = meet.startTime.getHours();
+    // let startingAMPM = "AM";
+    // if (startingHour === 0) {
+    //   startingHour = 12;
+    // }
+    // if (startingHour > 12) {
+    //   startingHour = startingHour - 12;
+    //   startingAMPM = "PM";
+    // }
+    meet.timeframe =
+      formatTime(meet.startTime) + " - " + formatTime(meet.endTime);
+  });
 
   console.log(meetups[0]);
   const activeMeetups = meetups.filter((meet) => !meet.cancelled);

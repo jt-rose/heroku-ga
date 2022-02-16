@@ -25,7 +25,12 @@
                   <p class="title is-3"><%=activeMeetups[i].name%></p>
                   <p class="subtitle"><%=activeMeetups[i].description%></p>
                   <p>
-                    <strong> 12/11</strong> | <strong>4 - 5 PM</strong> |
+                    <strong>
+                      <%=activeMeetups[i].month%>/<%=activeMeetups[i].day%></strong
+                    >
+                    |
+                    <strong><%=activeMeetups[i].timeframe%> </strong>
+                    |
                     <strong><%=activeMeetups[i].platform%></strong>
                   </p>
                 </div>
@@ -79,7 +84,6 @@
       <ul class="content">
         <% for (let i = 0; i < cancelledMeetups.length; i++) { %>
         <li>
-          <
           <div class="card">
             <div class="card-content">
               <div class="media meetup-card-top-content">
