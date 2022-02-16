@@ -83,3 +83,11 @@
   background-color: #00e6c3;
   text-align: left;
 }
+
+.meetup-card-top-content {
+  flex-wrap: wrap;
+}
+
+.meetup-content {
+  min-width: 300px;
+}

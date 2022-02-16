@@ -1,6 +1,6 @@
 import express from "express";
 import { User } from "../models/User.js";
-import { Meetup } from "../models/Meetup.js";
+import { IMeetup, Meetup } from "../models/Meetup.js";
 
 export const router = express.Router();
 
@@ -250,9 +250,37 @@ router.get("/:meetupid", async (req, res) => {
 
 // read meetups
 router.get("/", async (req, res) => {
-  const meetups = req.session.user?.currentMeetups || [];
+  if (!req.session.user) {
+    res.redirect("/auth/login");
+    return;
+  }
+
+  interface MeetupWithOwner extends IMeetup {
+    createdByMe?: boolean;
+  }
+  const meetups: MeetupWithOwner[] = req.session.user.currentMeetups || [];
+
+  // map out who created each meetup
+  // const meetupsWithOwners = meetups.map((meet) =>
+  //   String(meet.creator) === String(req.session.user?._id)
+  //     ? { ...meet, createdByMe: true }
+  //     : { ...meet, createdByMe: false }
+  // );
+  meetups.forEach((meet) =>
+    String(meet.creator) === String(req.session.user?._id)
+      ? (meet.createdByMe = true)
+      : (meet.createdByMe = false)
+  );
+
+  console.log(meetups[0]);
+  const activeMeetups = meetups.filter((meet) => !meet.cancelled);
+  const cancelledMeetups = meetups.filter((meet) => meet.cancelled);
+  const hasMeetups = meetups.length > 0;
+
   res.render("meetups.ejs", {
     title: "Meetups",
-    meetups,
+    activeMeetups,
+    cancelledMeetups,
+    hasMeetups,
   });
 });

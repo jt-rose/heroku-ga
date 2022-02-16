@@ -333,13 +333,34 @@ router.get("/:meetupid", function (req, res) { return __awaiter(void 0, void 0, 
 }); });
 // read meetups
 router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var meetups;
-    var _a;
-    return __generator(this, function (_b) {
-        meetups = ((_a = req.session.user) === null || _a === void 0 ? void 0 : _a.currentMeetups) || [];
+    var meetups, activeMeetups, cancelledMeetups, hasMeetups;
+    return __generator(this, function (_a) {
+        if (!req.session.user) {
+            res.redirect("/auth/login");
+            return [2 /*return*/];
+        }
+        meetups = req.session.user.currentMeetups || [];
+        // map out who created each meetup
+        // const meetupsWithOwners = meetups.map((meet) =>
+        //   String(meet.creator) === String(req.session.user?._id)
+        //     ? { ...meet, createdByMe: true }
+        //     : { ...meet, createdByMe: false }
+        // );
+        meetups.forEach(function (meet) {
+            var _a;
+            return String(meet.creator) === String((_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id)
+                ? (meet.createdByMe = true)
+                : (meet.createdByMe = false);
+        });
+        console.log(meetups[0]);
+        activeMeetups = meetups.filter(function (meet) { return !meet.cancelled; });
+        cancelledMeetups = meetups.filter(function (meet) { return meet.cancelled; });
+        hasMeetups = meetups.length > 0;
         res.render("meetups.ejs", {
             title: "Meetups",
-            meetups: meetups,
+            activeMeetups: activeMeetups,
+            cancelledMeetups: cancelledMeetups,
+            hasMeetups: hasMeetups,
         });
         return [2 /*return*/];
     });

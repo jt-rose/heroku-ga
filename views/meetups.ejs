@@ -2,20 +2,160 @@
   <%- include('./partials/head.ejs') %>
   <body>
     <%- include('./partials/header.ejs') %>
-    <h1 class="title">Meetups Page</h1>
-    <ul>
-      <% for (let i = 0; i < meetups.length; i++) { %>
-      <li>
-        <a href="/meetups/<%=meetups[i]._id%>"
-          ><h3><%=meetups[i].name%></h3>
-          <p><%=meetups[i].description%></p></a
-        >
-      </li>
-      <% } %>
-    </ul>
-    <% if (!meetups.length) { %>
-    <p>No Meetups current scheduled!</p>
-    <% } %>
-    <a href="/meetups/create"><button>Create</button></a>
+    <div class="container is-fluid">
+      <% if (activeMeetups.length) { %>
+      <h2 class="title is-2">Active Meetups</h2>
+      <ul class="content">
+        <% for (let i = 0; i < activeMeetups.length; i++) { %>
+        <li>
+          <div class="card">
+            <div class="card-content">
+              <div class="media meetup-card-top-content">
+                <div class="media-left">
+                  <figure class="image is-128x128">
+                    <img
+                      src="https://bulma.io/images/placeholders/96x96.png"
+                      alt="Placeholder image"
+                      class="is-rounded"
+                    />
+                  </figure>
+                  <p class="title is-4">Sakurazan<span> √</span></p>
+                </div>
+                <div class="meetup-content">
+                  <p class="title is-3"><%=activeMeetups[i].name%></p>
+                  <p class="subtitle"><%=activeMeetups[i].description%></p>
+                  <p>
+                    <strong> 12/11</strong> | <strong>4 - 5 PM</strong> |
+                    <strong><%=activeMeetups[i].platform%></strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <footer class="card-footer">
+              <% if (activeMeetups[i].createdByMe) { %>
+              <a href="#" class="card-footer-item">Update</a>
+              <a href="#" class="card-footer-item">Cancel / Clear</a>
+              <% } else { %>
+              <form action="/meetups/response?_method=PUT" method="post">
+                <input
+                  type="text"
+                  name="meetupid"
+                  value="<%=activeMeetups[i]._id%>"
+                  hidden
+                />
+                <input
+                  type="text"
+                  name="creater"
+                  value="<%=activeMeetups[i].creator%>"
+                  hidden
+                />
+                <input type="text" name="rsvp" value="true" hidden />
+                <button type="submit">RSVP</button>
+              </form>
+              <form action="/meetups/response?_method=PUT" method="post">
+                <input
+                  type="text"
+                  name="meetupid"
+                  value="<%=activeMeetups[i]._id%>"
+                  hidden
+                />
+                <input
+                  type="text"
+                  name="creater"
+                  value="<%=activeMeetups[i].creator%>"
+                  hidden
+                />
+                <input type="text" name="rsvp" value="false" hidden />
+                <button type="submit" class="card-footer-item">Decline</button>
+              </form>
+              <% } %>
+            </footer>
+          </div>
+        </li>
+        <% } %>
+      </ul>
+      <% } %> <% if (cancelledMeetups.length) { %>
+      <h2 class="title is-2">Cancelled Meetups</h2>
+      <ul class="content">
+        <% for (let i = 0; i < cancelledMeetups.length; i++) { %>
+        <li>
+          <
+          <div class="card">
+            <div class="card-content">
+              <div class="media meetup-card-top-content">
+                <div class="media-left">
+                  <figure class="image is-128x128">
+                    <img
+                      src="https://bulma.io/images/placeholders/96x96.png"
+                      alt="Placeholder image"
+                      class="is-rounded"
+                    />
+                  </figure>
+                  <p class="title is-4">Sakurazan<span> √</span></p>
+                </div>
+                <div class="meetup-content">
+                  <p class="title is-3"><%=cancelledMeetups[i].name%></p>
+                  <p class="subtitle"><%=cancelledMeetups[i].description%></p>
+                  <p>
+                    <strong> 12/11</strong> | <strong>4 - 5 PM</strong> |
+                    <strong><%=cancelledMeetups[i].platform%></strong>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <footer class="card-footer">
+              <% if (cancelledMeetups[i].createdByMe) { %>
+              <a href="#" class="card-footer-item">Update</a>
+              <a href="#" class="card-footer-item">Cancel / Clear</a>
+              <% } else { %>
+              <form action="/meetups/response?_method=PUT" method="post">
+                <input
+                  type="text"
+                  name="meetupid"
+                  value="<%=cancelledMeetups[i]._id%>"
+                  hidden
+                />
+                <input
+                  type="text"
+                  name="creater"
+                  value="<%=cancelledMeetups[i].creator%>"
+                  hidden
+                />
+                <input type="text" name="rsvp" value="true" hidden />
+                <button type="submit">RSVP</button>
+              </form>
+              <form action="/meetups/response?_method=PUT" method="post">
+                <input
+                  type="text"
+                  name="meetupid"
+                  value="<%=cancelledMeetups[i]._id%>"
+                  hidden
+                />
+                <input
+                  type="text"
+                  name="creater"
+                  value="<%=cancelledMeetups[i].creator%>"
+                  hidden
+                />
+                <input type="text" name="rsvp" value="false" hidden />
+                <button type="submit" class="card-footer-item">Decline</button>
+              </form>
+              <% } %>
+            </footer>
+          </div>
+        </li>
+        <% } %> <% } %> <% if (!hasMeetups) { %>
+        <p>No Meetups current scheduled!</p>
+        <% } %>
+      </ul>
+      <a href="/meetups/create"
+        ><button class="button is-primary is-rounded">Create</button></a
+      >
+    </div>
   </body>
 </html>
+
+<!-- creator: typeof ObjectId; name: string; description: string; invitee: typeof
+ObjectId; // ids - mongo? accepted - constant startTime: Date; endTime: Date;
+platform: string; // constant cancelled: boolean; response: "accepted" |
+"declined" | "no response"; -->
