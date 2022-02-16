@@ -334,46 +334,63 @@ router.get("/:meetupid", function (req, res) { return __awaiter(void 0, void 0, 
 }); });
 // read meetups
 router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var meetups, activeMeetups, cancelledMeetups, hasMeetups;
+    var meetups, meetupPartnerIds, meetupPartners, activeMeetups, cancelledMeetups, hasMeetups;
     return __generator(this, function (_a) {
-        if (!req.session.user) {
-            res.redirect("/auth/login");
-            return [2 /*return*/];
+        switch (_a.label) {
+            case 0:
+                if (!req.session.user) {
+                    res.redirect("/auth/login");
+                    return [2 /*return*/];
+                }
+                meetups = req.session.user.currentMeetups || [];
+                // map out who created each meetup
+                meetups.forEach(function (meet) {
+                    var _a;
+                    return String(meet.creator) === String((_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id)
+                        ? (meet.createdByMe = true)
+                        : (meet.createdByMe = false);
+                });
+                // map out the dates to display in ejs
+                meetups.forEach(function (meet) {
+                    meet.month = meet.startTime.getMonth() + 1;
+                    meet.day = meet.startTime.getDate();
+                    meet.timeframe =
+                        formatTime(meet.startTime) + " - " + formatTime(meet.endTime);
+                });
+                meetupPartnerIds = [];
+                meetups.forEach(function (meet) {
+                    var partnerId = meet.createdByMe ? meet.invitee : meet.creator;
+                    meetupPartnerIds.push(partnerId);
+                });
+                console.log("parterIds", meetupPartnerIds);
+                return [4 /*yield*/, User.find({ _id: { $in: meetupPartnerIds } })];
+            case 1:
+                meetupPartners = _a.sent();
+                console.log(meetupPartners);
+                meetups.forEach(function (meet) {
+                    if (meet.createdByMe) {
+                        var partner = meetupPartners.find(function (p) { return String(p._id) === String(meet.invitee); });
+                        if (!partner) {
+                            meet.partnerImg = "/avatars.default.jpeg";
+                            meet.partnerUsername = "Not Found";
+                        }
+                        else {
+                            meet.partnerImg = partner === null || partner === void 0 ? void 0 : partner.img;
+                            meet.partnerUsername = partner === null || partner === void 0 ? void 0 : partner.username;
+                        }
+                    }
+                });
+                console.log("meetups", meetups);
+                activeMeetups = meetups.filter(function (meet) { return !meet.cancelled; });
+                cancelledMeetups = meetups.filter(function (meet) { return meet.cancelled; });
+                hasMeetups = meetups.length > 0;
+                res.render("meetups.ejs", {
+                    title: "Meetups",
+                    activeMeetups: activeMeetups,
+                    cancelledMeetups: cancelledMeetups,
+                    hasMeetups: hasMeetups,
+                });
+                return [2 /*return*/];
         }
-        meetups = req.session.user.currentMeetups || [];
-        // map out who created each meetup
-        meetups.forEach(function (meet) {
-            var _a;
-            return String(meet.creator) === String((_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id)
-                ? (meet.createdByMe = true)
-                : (meet.createdByMe = false);
-        });
-        // map out the dates to display in ejs
-        meetups.forEach(function (meet) {
-            meet.month = meet.startTime.getMonth() + 1;
-            meet.day = meet.startTime.getDate();
-            // let startingHour = meet.startTime.getHours();
-            // let startingAMPM = "AM";
-            // if (startingHour === 0) {
-            //   startingHour = 12;
-            // }
-            // if (startingHour > 12) {
-            //   startingHour = startingHour - 12;
-            //   startingAMPM = "PM";
-            // }
-            meet.timeframe =
-                formatTime(meet.startTime) + " - " + formatTime(meet.endTime);
-        });
-        console.log(meetups[0]);
-        activeMeetups = meetups.filter(function (meet) { return !meet.cancelled; });
-        cancelledMeetups = meetups.filter(function (meet) { return meet.cancelled; });
-        hasMeetups = meetups.length > 0;
-        res.render("meetups.ejs", {
-            title: "Meetups",
-            activeMeetups: activeMeetups,
-            cancelledMeetups: cancelledMeetups,
-            hasMeetups: hasMeetups,
-        });
-        return [2 /*return*/];
     });
 }); });

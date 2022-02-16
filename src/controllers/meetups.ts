@@ -2,6 +2,7 @@ import express from "express";
 import { User } from "../models/User.js";
 import { IMeetup, Meetup } from "../models/Meetup.js";
 import { formatTime } from "../utils/formatTime.js";
+import { ObjectId } from "../models/ObjectId.js";
 
 export const router = express.Router();
 
@@ -256,13 +257,7 @@ router.get("/", async (req, res) => {
     return;
   }
 
-  interface MeetupWithOwner extends IMeetup {
-    createdByMe?: boolean;
-    month?: number;
-    day?: number;
-    timeframe?: string; // string type to include :30  and AM PM data
-  }
-  const meetups: MeetupWithOwner[] = req.session.user.currentMeetups || [];
+  const meetups = req.session.user.currentMeetups || [];
 
   // map out who created each meetup
   meetups.forEach((meet) =>
@@ -276,20 +271,35 @@ router.get("/", async (req, res) => {
     meet.month = meet.startTime.getMonth() + 1;
     meet.day = meet.startTime.getDate();
 
-    // let startingHour = meet.startTime.getHours();
-    // let startingAMPM = "AM";
-    // if (startingHour === 0) {
-    //   startingHour = 12;
-    // }
-    // if (startingHour > 12) {
-    //   startingHour = startingHour - 12;
-    //   startingAMPM = "PM";
-    // }
     meet.timeframe =
       formatTime(meet.startTime) + " - " + formatTime(meet.endTime);
   });
 
-  console.log(meetups[0]);
+  let meetupPartnerIds: typeof ObjectId[] = [];
+  meetups.forEach((meet) => {
+    const partnerId = meet.createdByMe ? meet.invitee : meet.creator;
+    meetupPartnerIds.push(partnerId);
+  });
+  console.log("parterIds", meetupPartnerIds);
+  const meetupPartners = await User.find({ _id: { $in: meetupPartnerIds } });
+  console.log(meetupPartners);
+  meetups.forEach((meet) => {
+    if (meet.createdByMe) {
+      const partner = meetupPartners.find(
+        (p) => String(p._id) === String(meet.invitee)
+      );
+      if (!partner) {
+        meet.partnerImg = "/avatars.default.jpeg";
+        meet.partnerUsername = "Not Found";
+      } else {
+        meet.partnerImg = partner?.img;
+        meet.partnerUsername = partner?.username;
+      }
+    }
+  });
+
+  console.log("meetups", meetups);
+
   const activeMeetups = meetups.filter((meet) => !meet.cancelled);
   const cancelledMeetups = meetups.filter((meet) => meet.cancelled);
   const hasMeetups = meetups.length > 0;

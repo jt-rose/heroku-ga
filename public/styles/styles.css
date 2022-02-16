@@ -91,3 +91,7 @@
 .meetup-content {
   min-width: 300px;
 }
+
+.card .meetup-partner-img {
+  height: 128px;
+}
