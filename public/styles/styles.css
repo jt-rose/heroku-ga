@@ -75,11 +75,11 @@
 }
 
 .from-me p {
-  background-color: cadetblue;
+  background-color: #00b398;
   text-align: right;
 }
 
 .from-you p {
-  background-color: aqua;
+  background-color: #00e6c3;
   text-align: left;
 }
