@@ -24,7 +24,17 @@
                       class="is-rounded meetup-partner-img"
                     />
                   </figure>
-                  <p class="title is-4"><%=activeMeetups[i].partnerUsername%><span> √</span></p>
+                  <div class="level"><div class="level-item">
+                  <p class="title is-4"><%=activeMeetups[i].partnerUsername%>
+                  <% if (activeMeetups[i].response === "accepted") { %>
+                    <i class="fa-solid fa-circle-check"></i>
+                    <% } else if (activeMeetups[i].response === "declined") { %>
+                      <i class="fa-solid fa-circle-xmark"></i>
+                  <% } else { %>
+                    <i class="fa-solid fa-circle-question"></i>
+                  <% } %>
+                  </p>
+                </div></div>
                 </div>
                 <div class="meetup-content">
                   <p class="title is-3"><%=activeMeetups[i].name%></p>
@@ -140,7 +150,17 @@
                       class="is-rounded"
                     />
                   </figure>
-                  <p class="title is-4">Sakurazan<span> √</span></p>
+                  <div class="level"><div class="level-item">
+                  <p class="title is-4"><%=cancelledMeetups[i].partnerUsername%>
+                    <% if (activeMeetups[i].response === "accepted") { %>
+                      <i class="fa-solid fa-circle-check"></i>
+                      <% } else if (activeMeetups[i].response === "declined") { %>
+                        <i class="fa-solid fa-circle-xmark"></i>
+                    <% } else { %>
+                      <i class="fa-solid fa-circle-question"></i>
+                    <% } %>
+                  </p>
+                </div></div>
                 </div>
                 <div class="meetup-content">
                   <p class="title is-3"><%=cancelledMeetups[i].name%></p>

@@ -371,12 +371,23 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
                     if (meet.createdByMe) {
                         var partner = meetupPartners.find(function (p) { return String(p._id) === String(meet.invitee); });
                         if (!partner) {
-                            meet.partnerImg = "/avatars.default.jpeg";
+                            meet.partnerImg = "/avatars/bee.svg";
                             meet.partnerUsername = "Not Found";
                         }
                         else {
-                            meet.partnerImg = partner === null || partner === void 0 ? void 0 : partner.img;
-                            meet.partnerUsername = partner === null || partner === void 0 ? void 0 : partner.username;
+                            meet.partnerImg = partner.img;
+                            meet.partnerUsername = partner.username;
+                        }
+                    }
+                    else {
+                        var partner = meetupPartners.find(function (p) { return String(p._id) === String(meet.creator); });
+                        if (!partner) {
+                            meet.partnerImg = "/avatars/bee.svg";
+                            meet.partnerUsername = "Not Found";
+                        }
+                        else {
+                            meet.partnerImg = partner.img;
+                            meet.partnerUsername = partner.username;
                         }
                     }
                 });

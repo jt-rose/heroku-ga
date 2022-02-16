@@ -95,3 +95,8 @@
 .card .meetup-partner-img {
   height: 128px;
 }
+
+#login-btn {
+  margin-top: 1.5rem;
+  margin-bottom: 2.5rem;
+}

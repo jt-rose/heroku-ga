@@ -159,7 +159,7 @@ router.put("/edit", async (req, res) => {
     endTime,
     platform,
     cancelled: false,
-    response: "MEETUP CHANGED",
+    response: "MEETUP_CHANGED",
   });
   console.log("edited meetup", newMeetup);
   await User.updateMany(
@@ -289,11 +289,22 @@ router.get("/", async (req, res) => {
         (p) => String(p._id) === String(meet.invitee)
       );
       if (!partner) {
-        meet.partnerImg = "/avatars.default.jpeg";
+        meet.partnerImg = "/avatars/bee.svg";
         meet.partnerUsername = "Not Found";
       } else {
-        meet.partnerImg = partner?.img;
-        meet.partnerUsername = partner?.username;
+        meet.partnerImg = partner.img;
+        meet.partnerUsername = partner.username;
+      }
+    } else {
+      const partner = meetupPartners.find(
+        (p) => String(p._id) === String(meet.creator)
+      );
+      if (!partner) {
+        meet.partnerImg = "/avatars/bee.svg";
+        meet.partnerUsername = "Not Found";
+      } else {
+        meet.partnerImg = partner.img;
+        meet.partnerUsername = partner.username;
       }
     }
   });

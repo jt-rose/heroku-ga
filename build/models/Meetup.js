@@ -10,5 +10,12 @@ export var meetupSchema = new mongoose.Schema({
     platform: { type: String, required: true },
     cancelled: { type: Boolean, required: true },
     response: { type: String, required: true },
+    // fields to override mongoose's object limits when formatting ejs page
+    createdByMe: Boolean,
+    month: Number,
+    day: Number,
+    timeframe: String,
+    partnerUsername: String,
+    partnerImg: String,
 });
 export var Meetup = mongoose.model("Meetup", meetupSchema);

@@ -2,11 +2,56 @@
   <%- include('./partials/head.ejs') %>
   <body>
     <%- include('./partials/header.ejs') %>
-    <h1>Login Page</h1>
-    <form action="/auth/login" method="post">
-      username / email: <input type="text" name="usernameOrEmail" /> password
-      <input type="password" name="password" />
-      <button type="submit">Login</button>
-    </form>
+    <div class="container is-fluid">
+      <div class="level">
+        <div class="level-item">
+          <h1 class="title">Login</h1>
+        </div>
+      </div>
+      <form action="/auth/login" method="post">
+        <div class="level">
+          <div class="level-item">
+            <label for="usernameOrEmail" class="label">username / email:</label>
+          </div>
+        </div>
+        <input type="text" name="usernameOrEmail" class="input is-rounded" />
+        <div class="level">
+          <div class="level-item">
+            <label for="password" class="label">password</label>
+          </div>
+        </div>
+        <input type="password" name="password" class="input is-rounded" />
+        <div class="level">
+          <div class="level-item">
+            <button
+              type="submit"
+              class="button is-primary is-medium is-rounded"
+              id="login-btn"
+            >
+              Login
+            </button>
+          </div>
+        </div>
+      </form>
+      <div class="level">
+        <div class="level-item">
+          <h1 class="title">Register</h1>
+        </div>
+      </div>
+      <div class="level">
+        <div class="level-item">
+          <p>New here? Please take a moment to to sign up!</p>
+        </div>
+      </div>
+      <div class="level">
+        <div class="level-item">
+          <a href="/auth/register"
+            ><button class="button is-primary is-rounded is-medium">
+              Register
+            </button></a
+          >
+        </div>
+      </div>
+    </div>
   </body>
 </html>
