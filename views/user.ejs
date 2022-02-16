@@ -2,18 +2,25 @@
   <%- include('./partials/head.ejs') %>
   <body>
     <%- include('./partials/header.ejs') %>
-    <h1>User Page</h1>
-    <%- include('./partials/profile.ejs') %> <% if (myAccount) { %>
-    <a href="/user/edit-profile"
-      ><button type="submit">Edit My profile</button></a
-    >
-    <% } %> <% if (!myAccount) { %>
-    <a href="/invites/create/<%=user._id%>"
-      ><button type="submit">Connect</button></a
-    >
-    <a href="/conversations/post/<%=user._id%>"><button>Message</button></a>
+    <div class="container is-fluid content">
+      <%- include('./partials/profile.ejs') %> <% if (myAccount) { %>
+      <a href="/user/edit-profile"
+        ><button type="submit" class="button is-primary is-rounded">
+          Edit My profile
+        </button></a
+      >
+      <% } %> <% if (!myAccount) { %>
+      <a href="/invites/create/<%=user._id%>"
+        ><button type="submit" class="button is-primary is-rounded">
+          Connect
+        </button></a
+      >
+      <a href="/conversations/post/<%=user._id%>"
+        ><button class="button is-primary is-rounded">Message</button></a
+      >
 
-    <button>Invite to Meetup</button>
-    <% } %>
+      <button class="button is-primary is-rounded">Invite to Meetup</button>
+      <% } %>
+    </div>
   </body>
 </html>
