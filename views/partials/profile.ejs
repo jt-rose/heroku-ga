@@ -13,15 +13,24 @@
       <div class="level-left" id="profile-desc-spacer"></div>
     </div>
   </div>
-  <p class="subtitle"><strong>Country: </strong><%=user.country %></p>
-  <p class="subtitle"><strong>City / Region: </strong><%=user.cityOrState %></p>
-  <p class="subtitle">
-    <strong>Native Language: </strong><%=user.nativeLanguage %>
-  </p>
-  <p class="subtitle">
-    <strong>Currently Learning: </strong><%=user.targetLanguage %>
-  </p>
-  <p class="subtitle">
-    <strong>I'd say I'm... </strong><%=user.targetLanguageProficiency %>
-  </p>
+  <div class="level">
+    <div class="level-item has-text-centered">
+      <div>
+        <p class="subtitle"><strong>Country: </strong><%=user.country %></p>
+        <p class="subtitle">
+          <strong>City / Region: </strong><%=user.cityOrState %>
+        </p>
+        <p class="subtitle">
+          <strong>Native Language: </strong><%=user.nativeLanguage %>
+        </p>
+        <p class="subtitle">
+          <strong>Currently Learning: </strong><%=user.targetLanguage %>
+        </p>
+        <p class="subtitle">
+          <strong>I'd say my level is... </strong
+          ><%=user.targetLanguageProficiency %>
+        </p>
+      </div>
+    </div>
+  </div>
 </div>

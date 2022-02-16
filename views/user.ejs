@@ -3,24 +3,30 @@
   <body>
     <%- include('./partials/header.ejs') %>
     <div class="container is-fluid content">
-      <%- include('./partials/profile.ejs') %> <% if (myAccount) { %>
-      <a href="/user/edit-profile"
-        ><button type="submit" class="button is-primary is-rounded">
-          Edit My profile
-        </button></a
-      >
-      <% } %> <% if (!myAccount) { %>
-      <a href="/invites/create/<%=user._id%>"
-        ><button type="submit" class="button is-primary is-rounded">
-          Connect
-        </button></a
-      >
-      <a href="/conversations/post/<%=user._id%>"
-        ><button class="button is-primary is-rounded">Message</button></a
-      >
+      <%- include('./partials/profile.ejs') %>
+      <div id="button-group" class="level">
+        <div class="level-item has-text-centered">
+          <% if (myAccount) { %>
 
-      <button class="button is-primary is-rounded">Invite to Meetup</button>
-      <% } %>
+          <a href="/user/edit-profile"
+            ><button type="submit" class="button is-primary is-rounded">
+              Edit My profile
+            </button></a
+          >
+          <% } %> <% if (!myAccount) { %>
+          <a href="/invites/create/<%=user._id%>"
+            ><button type="submit" class="button is-primary is-rounded">
+              Connect
+            </button></a
+          >
+          <a href="/conversations/post/<%=user._id%>"
+            ><button class="button is-primary is-rounded">Message</button></a
+          >
+
+          <button class="button is-primary is-rounded">Invite to Meetup</button>
+          <% } %>
+        </div>
+      </div>
     </div>
   </body>
 </html>
