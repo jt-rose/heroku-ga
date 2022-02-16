@@ -3,6 +3,11 @@
   <body>
     <%- include('./partials/header.ejs') %>
     <div class="container is-fluid">
+      <a href="/meetups/create"
+        ><button class="button is-primary is-rounded">
+          Create new meetup
+        </button></a
+      >
       <% if (activeMeetups.length) { %>
       <h2 class="title is-2">Active Meetups</h2>
       <ul class="content">
@@ -36,43 +41,83 @@
                 </div>
               </div>
             </div>
-            <footer class="card-footer">
+            <footer class="card-footer level">
               <% if (activeMeetups[i].createdByMe) { %>
-              <a href="#" class="card-footer-item">Update</a>
-              <a href="#" class="card-footer-item">Cancel / Clear</a>
+              <div class="level-item">
+                <a
+                  href="/meetups/edit/<%=activeMeetups[i]._id%>"
+                  class="card-footer-item"
+                  ><button class="button is-primary is-rounded">Update</button>
+                </a>
+              </div>
+              <div class="level-item">
+                <form action="/meetups?_method=DELETE" method="post">
+                  <input
+                    type="text"
+                    name="meetupid"
+                    id=""
+                    value="<%=activeMeetups[i]._id%>"
+                    hidden
+                  />
+                  <input
+                    type="text"
+                    name="invitee"
+                    id=""
+                    value="<%=activeMeetups[i].invitee%>"
+                    hidden
+                  />
+                  <div class="card-footer-item">
+                    <button type="submit" class="button is-primary is-rounded">
+                      Cancel / Clear
+                    </button>
+                  </div>
+                </form>
+              </div>
               <% } else { %>
-              <form action="/meetups/response?_method=PUT" method="post">
-                <input
-                  type="text"
-                  name="meetupid"
-                  value="<%=activeMeetups[i]._id%>"
-                  hidden
-                />
-                <input
-                  type="text"
-                  name="creater"
-                  value="<%=activeMeetups[i].creator%>"
-                  hidden
-                />
-                <input type="text" name="rsvp" value="true" hidden />
-                <button type="submit">RSVP</button>
-              </form>
-              <form action="/meetups/response?_method=PUT" method="post">
-                <input
-                  type="text"
-                  name="meetupid"
-                  value="<%=activeMeetups[i]._id%>"
-                  hidden
-                />
-                <input
-                  type="text"
-                  name="creater"
-                  value="<%=activeMeetups[i].creator%>"
-                  hidden
-                />
-                <input type="text" name="rsvp" value="false" hidden />
-                <button type="submit" class="card-footer-item">Decline</button>
-              </form>
+              <div class="level-item">
+                <form action="/meetups/response?_method=PUT" method="post">
+                  <input
+                    type="text"
+                    name="meetupid"
+                    value="<%=activeMeetups[i]._id%>"
+                    hidden
+                  />
+                  <input
+                    type="text"
+                    name="creater"
+                    value="<%=activeMeetups[i].creator%>"
+                    hidden
+                  />
+                  <input type="text" name="rsvp" value="true" hidden />
+                  <div class="card-footer-item">
+                    <button type="submit" class="button is-primary is-rounded">
+                      RSVP
+                    </button>
+                  </div>
+                </form>
+              </div>
+              <div class="level-item">
+                <form action="/meetups/response?_method=PUT" method="post">
+                  <input
+                    type="text"
+                    name="meetupid"
+                    value="<%=activeMeetups[i]._id%>"
+                    hidden
+                  />
+                  <input
+                    type="text"
+                    name="creater"
+                    value="<%=activeMeetups[i].creator%>"
+                    hidden
+                  />
+                  <input type="text" name="rsvp" value="false" hidden />
+                  <div class="card-footer-item">
+                    <button type="submit" class="button is-primary is-rounded">
+                      Decline
+                    </button>
+                  </div>
+                </form>
+              </div>
               <% } %>
             </footer>
           </div>
@@ -107,11 +152,22 @@
                 </div>
               </div>
             </div>
-            <footer class="card-footer">
+            <footer class="card-footer level">
               <% if (cancelledMeetups[i].createdByMe) { %>
-              <a href="#" class="card-footer-item">Update</a>
-              <a href="#" class="card-footer-item">Cancel / Clear</a>
-              <% } else { %>
+                <div class="level-item">
+                  <a href="#" class="card-footer-item"
+                    ><button class="button is-primary is-rounded"></button>
+                    Update</a
+                  >
+                </div>
+                <div class="level-item">
+                  <a href="#" class="card-footer-item"
+                    ><button class="button is-primary is-rounded"></button>
+                    Cancel / Clear</a
+                  >
+                </div>
+              > <% } else { %>
+<div class="level-item">
               <form action="/meetups/response?_method=PUT" method="post">
                 <input
                   type="text"
@@ -126,8 +182,14 @@
                   hidden
                 />
                 <input type="text" name="rsvp" value="true" hidden />
-                <button type="submit">RSVP</button>
+                <div class="card-footer-item">
+                <button type="submit" class="button is-primary is-rounded">
+                  RSVP
+                </button>
+              </div>
               </form>
+            </div>
+            <div class="level-item">
               <form action="/meetups/response?_method=PUT" method="post">
                 <input
                   type="text"
@@ -142,7 +204,12 @@
                   hidden
                 />
                 <input type="text" name="rsvp" value="false" hidden />
-                <button type="submit" class="card-footer-item">Decline</button>
+                <div class="card-footer-item">
+                <button type="submit" class="button is-primary is-rounded">
+                  Decline
+                </button>
+              </div>
+              </div>
               </form>
               <% } %>
             </footer>
@@ -152,9 +219,6 @@
         <p>No Meetups current scheduled!</p>
         <% } %>
       </ul>
-      <a href="/meetups/create"
-        ><button class="button is-primary is-rounded">Create</button></a
-      >
     </div>
   </body>
 </html>
