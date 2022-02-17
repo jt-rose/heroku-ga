@@ -37,11 +37,17 @@ router.get("/", async (req, res) => {
     filter[1].country = String(country);
   }
 
-  let users = await User.find({ $or: filter });
+  let users = await User.find({ active: true, $or: filter });
   // remove self from search results
   users = users.filter(
     (u) => !req.session.user || String(u._id) !== String(req.session.user?._id)
   );
+
+  // remove blacklisted users
+  const bl =
+    req.session.user?.blackListed.map((person) => String(person)) || [];
+  users = users.filter((u) => !bl.includes(String(u)));
+
   res.render("search.ejs", {
     title: "Search",
     users,
