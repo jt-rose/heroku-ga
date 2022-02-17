@@ -112,8 +112,22 @@ const main = async () => {
   //___________________
   //localhost:3000
 
+  app.use("/auth", authRouter);
+  app.use("/user", userRouter);
+  app.use("/invites", invitesRouter);
+  app.use("/meetups", meetupsRouter);
+  app.use("/conversations", conversationsRouter);
+  app.use("/search", searchRouter);
+
   app.get("/", async (req: Request, res: Response) => {
     console.log(req.session.user);
+
+    if (!req.session.user) {
+      res.render("welcome.ejs", {
+        title: "Welcome",
+      });
+      return;
+    }
 
     const users = await User.find({ active: true }); // add limit
     res.render("index.ejs", {
@@ -122,13 +136,6 @@ const main = async () => {
       myAccount: req.session.user,
     });
   });
-
-  app.use("/auth", authRouter);
-  app.use("/user", userRouter);
-  app.use("/invites", invitesRouter);
-  app.use("/meetups", meetupsRouter);
-  app.use("/conversations", conversationsRouter);
-  app.use("/search", searchRouter);
 
   //___________________
   //Listener

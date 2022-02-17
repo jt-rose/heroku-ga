@@ -2,31 +2,59 @@
   <%- include('./partials/head.ejs') %>
   <body>
     <%- include('./partials/header.ejs') %>
-    <h1>Index Page</h1>
-    <ul>
-      <% for (let i = 0; i < users.length; i++) { if (!myAccount ||
-      users[i].username !== myAccount.username) { %>
-      <li>
-        <a href="/user/profile/<%=users[i]._id%>"><%=users[i].username%></a>
-      </li>
-      <% } } %>
-    </ul>
-    <% if (!myAccount) { %>
-    <a href="/auth/register">
-      <button>Register</button>
-    </a>
-    <br />
-    <a href="/auth/login">
-      <button>Login</button>
-    </a>
-    <% } %> <% if (myAccount) { %>
-    <form action="/auth/logout?_method=DELETE" method="post">
-      <button type="submit">Logout</button>
-    </form>
-    <% } %> <% if (myAccount) { %>
-    <a href="/invites">Invites</a>
-    <a href="/meetups">Meetups</a>
-    <p>logged in as <%=myAccount.username%></p>
-    <% } %>
+    <div class="container is-fluid">
+      <h1>Upcoming Meetups</h1>
+      <ul>
+        <% for (let i = 0; i < myAccount.currentMeetups.length; i++) { %>
+        <li><a href="/meetups"><%=myAccount.currentMeetups[i].name%></a></li>
+        <% } %>
+      </ul>
+
+      <h1>New Messages</h1>
+      <ul>
+        <% for (let i = 0; i < myAccount.unreadMessages.length; i++) { %>
+        <li>
+          <a href="/conversations/<%=myAccount.unreadMessages[i].from%>"
+            ><%=myAccount.unreadMessages[i].message%></a
+          >
+        </li>
+        <% } %>
+      </ul>
+
+      <h1>New Invites</h1>
+      <ul>
+        <% for (let i = 0; i < myAccount.connectionInvites.length; i++) { %>
+        <li>
+          <a href="/invites%>"><%=myAccount.connectionInvites[i].from%></a>
+        </li>
+        <% } %>
+      </ul>
+
+      <ul>
+        <% for (let i = 0; i < users.length; i++) { if (!myAccount ||
+        users[i].username !== myAccount.username) { %>
+        <li>
+          <a href="/user/profile/<%=users[i]._id%>"><%=users[i].username%></a>
+        </li>
+        <% } } %>
+      </ul>
+      <% if (!myAccount) { %>
+      <a href="/auth/register">
+        <button>Register</button>
+      </a>
+      <br />
+      <a href="/auth/login">
+        <button>Login</button>
+      </a>
+      <% } %> <% if (myAccount) { %>
+      <form action="/auth/logout?_method=DELETE" method="post">
+        <button type="submit">Logout</button>
+      </form>
+      <% } %> <% if (myAccount) { %>
+      <a href="/invites">Invites</a>
+      <a href="/meetups">Meetups</a>
+      <p>logged in as <%=myAccount.username%></p>
+      <% } %>
+    </div>
   </body>
 </html>

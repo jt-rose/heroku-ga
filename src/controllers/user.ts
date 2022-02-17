@@ -1,6 +1,6 @@
 import express from "express";
 import mongoose from "mongoose";
-import { User } from "../models/User.js";
+import { User, IUser } from "../models/User.js";
 import { Invite } from "../models/Invite.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
@@ -29,10 +29,11 @@ router.get("/profile/:userid", async (req, res) => {
       title: "Profile",
       user: req.session.user,
       myAccount: true,
+      myConnection: false,
     });
     return;
   }
-  let user = null;
+  let user: IUser | null = null;
   if (mongoose.isValidObjectId(req.params.userid)) {
     user = await User.findById(req.params.userid);
   }
@@ -42,10 +43,18 @@ router.get("/profile/:userid", async (req, res) => {
     res.redirect("/");
     return;
   }
+
+  const myConnection =
+    req.session.user &&
+    req.session.user.connections.some(
+      (conn) => String(conn) === String(user!._id)
+    );
+
   res.render("user.ejs", {
     title: "Profile",
     user,
     myAccount: false,
+    myConnection,
   });
 });
 

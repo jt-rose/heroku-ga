@@ -222,7 +222,7 @@ router.put("/edit", function (req, res) { return __awaiter(void 0, void 0, void 
                     endTime: endTime,
                     platform: platform,
                     cancelled: false,
-                    response: "MEETUP CHANGED",
+                    response: "MEETUP_CHANGED",
                 });
                 console.log("edited meetup", newMeetup);
                 return [4 /*yield*/, User.updateMany({ _id: { $in: [req.session.user._id, invitee] } }, {

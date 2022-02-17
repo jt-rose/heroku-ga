@@ -2,15 +2,54 @@
   <%- include('./partials/head.ejs') %>
   <body>
     <%- include('./partials/header.ejs') %>
-    <h1>Edit profile Page</h1>
-    <%- include('./partials/profileForm.ejs') %>
-    <form action="/user/toggle-active?_method=PUT" method="post">
-      <button type="submit">
-        <%=`${user.active ? "deactivate" : "reactivate"}`%>
-      </button>
-    </form>
-    <form action="/user/permadelete?_method=DELETE" method="post">
-      <button type="submit">Delete Account</button>
-    </form>
+    <div class="container is-fluid has-text-centered">
+      <h1>Edit profile Page</h1>
+      <%- include('./partials/profileForm.ejs') %>
+      <br />
+      <div class="level">
+        <div class="level-item">
+          <p>to toggle your account visibility, select the below:</p>
+        </div>
+      </div>
+
+      <form action="/user/toggle-active?_method=PUT" method="post">
+        <div class="level">
+          <div class="level-item">
+            <button type="submit" class="button is-rounded is-small is-warning">
+              <%=`${user.active ? "deactivate" : "reactivate"}`%>
+            </button>
+          </div>
+        </div>
+      </form>
+      <br />
+      <div class="level">
+        <div class="level-item">
+          <p>Not recommended, as you will permanently lose all your data!</p>
+        </div>
+      </div>
+      <div class="level">
+        <div class="level-item">
+          <p>Please consider just deactivating instead</p>
+        </div>
+      </div>
+      <div class="level">
+        <div class="level-item">
+          <p>
+            That said, if you truly want to be removed from the system, you may
+            delete your account below:
+          </p>
+        </div>
+      </div>
+
+      <form action="/user/permadelete?_method=DELETE" method="post">
+        <div class="level">
+          <div class="level-item">
+            <button type="submit" class="button is-small is-rounded is-danger">
+              Delete Account
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
   </body>
 </html>

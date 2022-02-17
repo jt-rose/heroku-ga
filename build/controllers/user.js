@@ -66,7 +66,7 @@ router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user;
+    var user, myConnection;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -75,6 +75,7 @@ router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, vo
                         title: "Profile",
                         user: req.session.user,
                         myAccount: true,
+                        myConnection: false,
                     });
                     return [2 /*return*/];
                 }
@@ -90,10 +91,13 @@ router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, vo
                     res.redirect("/");
                     return [2 /*return*/];
                 }
+                myConnection = req.session.user &&
+                    req.session.user.connections.some(function (conn) { return String(conn) === String(user._id); });
                 res.render("user.ejs", {
                     title: "Profile",
                     user: user,
                     myAccount: false,
+                    myConnection: myConnection,
                 });
                 return [2 /*return*/];
         }

@@ -132,12 +132,24 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 // Routes
                 //___________________
                 //localhost:3000
+                app.use("/auth", authRouter);
+                app.use("/user", userRouter);
+                app.use("/invites", invitesRouter);
+                app.use("/meetups", meetupsRouter);
+                app.use("/conversations", conversationsRouter);
+                app.use("/search", searchRouter);
                 app.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
                     var users;
                     return __generator(this, function (_a) {
                         switch (_a.label) {
                             case 0:
                                 console.log(req.session.user);
+                                if (!req.session.user) {
+                                    res.render("welcome.ejs", {
+                                        title: "Welcome",
+                                    });
+                                    return [2 /*return*/];
+                                }
                                 return [4 /*yield*/, User.find({ active: true })];
                             case 1:
                                 users = _a.sent();
@@ -150,12 +162,6 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                         }
                     });
                 }); });
-                app.use("/auth", authRouter);
-                app.use("/user", userRouter);
-                app.use("/invites", invitesRouter);
-                app.use("/meetups", meetupsRouter);
-                app.use("/conversations", conversationsRouter);
-                app.use("/search", searchRouter);
                 //___________________
                 //Listener
                 //___________________
