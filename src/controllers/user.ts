@@ -6,6 +6,7 @@ import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
 import multer from "multer";
 import { uploadFile } from "../utils/s3.js";
+import { countries } from "../constants/countries.js";
 const upload = multer({ dest: "uploads/" });
 export const router = express.Router();
 
@@ -104,6 +105,7 @@ router.get("/edit-profile", (req, res) => {
   res.render("edit-profile.ejs", {
     title: "Edit Profile",
     user,
+    countries,
     languages,
     proficiencyLevels,
   });
