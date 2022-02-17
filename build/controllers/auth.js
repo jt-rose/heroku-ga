@@ -41,6 +41,7 @@ import multer from "multer";
 import { uploadFile } from "../utils/s3.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
+import { countries } from "../constants/countries.js";
 export var router = express.Router();
 var upload = multer({ dest: "uploads/" });
 router.get("/login", function (req, res) {
@@ -107,6 +108,7 @@ router.get("/register", function (req, res) {
         user: req.session.user,
         languages: languages,
         proficiencyLevels: proficiencyLevels,
+        countries: countries,
     });
 });
 router.post("/register", upload.single("img"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -135,6 +137,7 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                         title: "Register",
                         user: req.session.user,
                         error: "Username / Email already in use",
+                        countries: countries,
                     });
                     return [2 /*return*/];
                 }

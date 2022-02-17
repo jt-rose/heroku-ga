@@ -6,6 +6,7 @@ import multer from "multer";
 import { uploadFile, getFileStream } from "../utils/s3.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
+import { countries } from "../constants/countries.js";
 export const router = express.Router();
 
 const upload = multer({ dest: "uploads/" });
@@ -60,6 +61,7 @@ router.get("/register", (req, res) => {
     user: req.session.user,
     languages,
     proficiencyLevels,
+    countries,
   });
 });
 router.post("/register", upload.single("img"), async (req, res) => {
@@ -99,6 +101,7 @@ router.post("/register", upload.single("img"), async (req, res) => {
         title: "Register",
         user: req.session.user,
         error: "Username / Email already in use",
+        countries,
       });
       return;
     }
