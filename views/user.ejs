@@ -15,13 +15,13 @@
           >
           <% } else if (myConnection) { %>
 
-          <a href="/conversations/post/<%=otherUser._id%>"
+          <a href="/conversations/post/<%=targetUser._id%>"
             ><button class="button is-primary is-rounded">Message</button></a
           >
 
           <button class="button is-primary is-rounded">Invite to Meetup</button>
           <% } else { %>
-          <a href="/invites/create/<%=otherUser._id%>"
+          <a href="/invites/create/<%=targetUser._id%>"
             ><button type="submit" class="button is-primary is-rounded">
               Connect
             </button></a

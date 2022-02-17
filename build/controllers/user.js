@@ -69,7 +69,7 @@ router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var otherUser, myConnection;
+    var targetUser, myConnection;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -77,30 +77,30 @@ router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, vo
                     res.render("user.ejs", {
                         title: "Profile",
                         user: req.session.user,
-                        otherUser: null,
+                        targetUser: req.session.user,
                         myAccount: true,
                         myConnection: false,
                     });
                     return [2 /*return*/];
                 }
-                otherUser = null;
+                targetUser = null;
                 if (!mongoose.isValidObjectId(req.params.userid)) return [3 /*break*/, 2];
                 return [4 /*yield*/, User.findById(req.params.userid)];
             case 1:
-                otherUser = _a.sent();
+                targetUser = _a.sent();
                 _a.label = 2;
             case 2:
-                if (!otherUser) {
+                if (!targetUser) {
                     // flash message
                     res.redirect("/");
                     return [2 /*return*/];
                 }
                 myConnection = req.session.user &&
-                    req.session.user.connections.some(function (conn) { return String(conn) === String(otherUser._id); });
+                    req.session.user.connections.some(function (conn) { return String(conn) === String(targetUser._id); });
                 res.render("user.ejs", {
                     title: "Profile",
                     user: req.session.user,
-                    otherUser: otherUser,
+                    targetUser: targetUser,
                     myAccount: false,
                     myConnection: myConnection,
                 });
@@ -231,7 +231,7 @@ router.delete("/permadelete", function (req, res) { return __awaiter(void 0, voi
         }
     });
 }); });
-router.get("/", function (req, res) {
+router.get("/me", function (req, res) {
     if (req.session.user) {
         res.redirect("/user/profile/" + req.session.user._id);
     }

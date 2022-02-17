@@ -116,7 +116,7 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
             case 0:
                 _b.trys.push([0, 6, , 7]);
                 file = req.file;
-                img = void 0;
+                img = "https://joybee.s3.amazonaws.com/37ca0cc0f10936bd31bd2ec38ae31e25";
                 if (!file) return [3 /*break*/, 2];
                 return [4 /*yield*/, uploadFile(file)];
             case 1:

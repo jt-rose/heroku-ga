@@ -46,6 +46,7 @@ router.get("/", async (req, res) => {
   // remove blacklisted users
   const bl =
     req.session.user?.blackListed.map((person) => String(person)) || [];
+
   users = users.filter((u) => !bl.includes(String(u)));
 
   res.render("search.ejs", {

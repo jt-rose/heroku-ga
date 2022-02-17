@@ -34,18 +34,18 @@ router.get("/profile/:userid", async (req, res) => {
     res.render("user.ejs", {
       title: "Profile",
       user: req.session.user,
-      otherUser: null,
+      targetUser: req.session.user,
       myAccount: true,
       myConnection: false,
     });
     return;
   }
-  let otherUser: IUser | null = null;
+  let targetUser: IUser | null = null;
   if (mongoose.isValidObjectId(req.params.userid)) {
-    otherUser = await User.findById(req.params.userid);
+    targetUser = await User.findById(req.params.userid);
   }
 
-  if (!otherUser) {
+  if (!targetUser) {
     // flash message
     res.redirect("/");
     return;
@@ -54,13 +54,13 @@ router.get("/profile/:userid", async (req, res) => {
   const myConnection =
     req.session.user &&
     req.session.user.connections.some(
-      (conn) => String(conn) === String(otherUser!._id)
+      (conn) => String(conn) === String(targetUser!._id)
     );
 
   res.render("user.ejs", {
     title: "Profile",
     user: req.session.user,
-    otherUser,
+    targetUser,
     myAccount: false,
     myConnection,
   });
@@ -186,7 +186,7 @@ router.delete("/permadelete", async (req, res) => {
   res.redirect("/");
 });
 
-router.get("/", (req, res) => {
+router.get("/me", (req, res) => {
   if (req.session.user) {
     res.redirect("/user/profile/" + req.session.user._id);
   } else {

@@ -66,7 +66,11 @@ router.post("/register", upload.single("img"), async (req, res) => {
   try {
     // upload user avatar to s3 and capture img path
     const file = req.file;
-    let img;
+    // set up default image
+    let img =
+      "https://joybee.s3.amazonaws.com/37ca0cc0f10936bd31bd2ec38ae31e25";
+
+    // if image file present, upload to s3 and overwrite the default img
     if (file) {
       // ! add validation around img type and size
       const result = await uploadFile(file);

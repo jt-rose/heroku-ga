@@ -2,13 +2,18 @@
   <div class="level">
     <div class="level-item">
       <figure class="image">
-        <img src="<%=user.img %>" alt="" class="is-rounded" id="profile-img" />
+        <img
+          src="<%=targetUser.img %>"
+          alt=""
+          class="is-rounded"
+          id="profile-img"
+        />
       </figure>
     </div>
     <div class="level level-item has-text-centered">
       <div id="profile-name-spacer">
-        <h1 class="title"><%=user.username %></h1>
-        <p><%=user.aboutMeText %></p>
+        <h1 class="title"><%=targetUser.username %></h1>
+        <p><%=targetUser.aboutMeText %></p>
       </div>
       <div class="level-left" id="profile-desc-spacer"></div>
     </div>
@@ -16,19 +21,21 @@
   <div class="level">
     <div class="level-item has-text-centered">
       <div>
-        <p class="subtitle"><strong>Country: </strong><%=user.country %></p>
         <p class="subtitle">
-          <strong>City / Region: </strong><%=user.cityOrState %>
+          <strong>Country: </strong><%=targetUser.country %>
         </p>
         <p class="subtitle">
-          <strong>Native Language: </strong><%=user.nativeLanguage %>
+          <strong>City / Region: </strong><%=targetUser.cityOrState %>
         </p>
         <p class="subtitle">
-          <strong>Currently Learning: </strong><%=user.targetLanguage %>
+          <strong>Native Language: </strong><%=targetUser.nativeLanguage %>
+        </p>
+        <p class="subtitle">
+          <strong>Currently Learning: </strong><%=targetUser.targetLanguage %>
         </p>
         <p class="subtitle">
           <strong>I'd say my level is... </strong
-          ><%=user.targetLanguageProficiency %>
+          ><%=targetUser.targetLanguageProficiency %>
         </p>
       </div>
     </div>

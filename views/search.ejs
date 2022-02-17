@@ -64,7 +64,22 @@
     </form>
     <ul>
       <% for (let i = 0; i < users.length; i++) { %>
-      <a href="/user/profile/<%=users[i]._id%>"><%=users[i].username%></a>
+      <a href="/user/profile/<%=users[i]._id%>">
+        
+        <div class="card"><div class="card-content"><h4 class="title is-4"><%=users[i].username%></h4>
+          <p class="subtitle"><span class="icon is-small is-left">
+            <i class="fa-solid fa-earth-americas"></i>
+          </span>  <%=users[i].country%> <span class="icon is-small is-left">
+            <i class="fa-solid fa-comments"></i>
+          </span> <%=users[i].nativeLanguage%>
+          <% if (users[i].nativeLanguage !== users[i].targetLanguage) { %>
+            , <%=users[i].targetLanguage%>
+       <%   } %>
+      </p>
+        <p><%=users[i].aboutMeText%></p>
+      </div></div>
+        
+      </a>
       <% } %>
     </ul>
     <% if (!users.length) { %>
