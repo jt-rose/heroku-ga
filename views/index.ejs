@@ -4,26 +4,65 @@
     <%- include('./partials/header.ejs') %>
     <div class="container is-fluid">
       <h1 class="title">Upcoming Meetups</h1>
+
       <ul>
         <% for (let i = 0; i < meetups.length; i++) { %>
-        <li>
-          <a href="/meetups"><%=meetups[i].meetup.name%></a>
-          <p><%=meetups[i].partnerUsername%></p>
-        </li>
+        <a href="/meetups">
+          <div class="card user-card-container">
+            <figure class="image is-128x128">
+              <img
+                src="<%=meetups[i].partnerImg %>"
+                alt=""
+                class="is-rounded user-card"
+              />
+            </figure>
+            <div class="card-content">
+              <h3 class="title is-3"><%=meetups[i].meetup.name%></h3>
+              <p>
+                <%=meetups[i].meetup.description.length > 140 ?
+                meetups[i].meetup.description.slice(0, 139) + "..." :
+                meetups[i].meetup.description %>
+              </p>
+            </div>
+          </div>
+        </a>
         <% } %>
       </ul>
+      <% if (meetups.length === 0) { %>
+      <p class="subtitle">
+        No meetups scheduled! Why not <a href="/search">connect</a> with some
+        new users? Don't bee a stranger!
+      </p>
+      <% } %>
 
       <h1 class="title">New Messages</h1>
+
       <ul>
         <% for (let i = 0; i < messages.length; i++) { %>
-        <li>
-          <a href="/conversations/post/<%=messages[i].message.from%>"
-            ><%=messages[i].message.message%></a
-          >
-          <p><%=messages[i].partnerUsername%></p>
-        </li>
+        <a href="/conversations/post/<%=messages[i].message.from%>">
+          <div class="card user-card-container">
+            <figure class="image is-128x128">
+              <img
+                src="<%=messages[i].partnerImg %>"
+                alt=""
+                class="is-rounded user-card"
+              />
+            </figure>
+            <div class="card-content">
+              <h3 class="title is-3"><%=messages[i].partnerUsername%></h3>
+              <p>
+                <%=messages[i].message.message.length > 140 ?
+                messages[i].message.message.slice(0, 139) + "..." :
+                messages[i].message.message %>
+              </p>
+            </div>
+          </div>
+        </a>
         <% } %>
       </ul>
+      <% if (messages.length === 0) { %>
+      <p class="subtitle">No new messages!</p>
+      <% } %>
 
       <h1 class="title">New Invites</h1>
 
@@ -51,7 +90,9 @@
         <% } %>
       </ul>
       <% if (invites.length === 0) { %>
-      <p>No new invites! Go out and <a href="/search">meet</a> some people!</p>
+      <p class="subtitle">
+        No new invites! Go out and <a href="/search">meet</a> some people!
+      </p>
       <% } %>
     </div>
   </body>
