@@ -25,7 +25,9 @@ router.post("/create", async (req, res) => {
   }
   const { name, description, invitee, date, start, duration, platform } =
     req.body;
+
   const startTime = new Date(date + " " + start);
+
   const endTime = new Date(startTime.getTime() + parseInt(duration) * 60000);
 
   const newMeetup = new Meetup({
@@ -39,7 +41,7 @@ router.post("/create", async (req, res) => {
     cancelled: false,
     response: "NO_RESPONSE",
   });
-  console.log(newMeetup);
+
   await User.updateMany(
     { _id: { $in: [req.session.user._id, invitee] } },
     { $push: { currentMeetups: newMeetup } }
@@ -125,6 +127,7 @@ router.get("/edit/:meetupid", async (req, res) => {
   });
   res.render("edit-meetup.ejs", {
     title: "Edit Meetup",
+    user: req.session.user,
     meetup,
     connections,
     duration: fmtDuration,
@@ -244,6 +247,7 @@ router.get("/:meetupid", async (req, res) => {
   const alreadyDone = new Date() > meetup.endTime;
   res.render("meetup.ejs", {
     title: "Meetup",
+    user: req.session.user,
     meetup,
     myMeetup: String(req.session.user?._id) === String(meetup?.creator),
     alreadyDone,
@@ -276,13 +280,14 @@ router.get("/", async (req, res) => {
   });
 
   let meetupPartnerIds: typeof ObjectId[] = [];
+
   meetups.forEach((meet) => {
     const partnerId = meet.createdByMe ? meet.invitee : meet.creator;
     meetupPartnerIds.push(partnerId);
   });
-  console.log("parterIds", meetupPartnerIds);
+
   const meetupPartners = await User.find({ _id: { $in: meetupPartnerIds } });
-  console.log(meetupPartners);
+
   meetups.forEach((meet) => {
     if (meet.createdByMe) {
       const partner = meetupPartners.find(
@@ -309,14 +314,13 @@ router.get("/", async (req, res) => {
     }
   });
 
-  console.log("meetups", meetups);
-
   const activeMeetups = meetups.filter((meet) => !meet.cancelled);
   const cancelledMeetups = meetups.filter((meet) => meet.cancelled);
   const hasMeetups = meetups.length > 0;
 
   res.render("meetups.ejs", {
     title: "Meetups",
+    user: req.session.user,
     activeMeetups,
     cancelledMeetups,
     hasMeetups,

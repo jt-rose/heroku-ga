@@ -69,6 +69,7 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 users = users.filter(function (u) { return !bl.includes(String(u)); });
                 res.render("search.ejs", {
                     title: "Search",
+                    user: req.session.user,
                     users: users,
                     languages: languages,
                     language: language,
@@ -86,8 +87,6 @@ router.post("/", function (req, res) { return __awaiter(void 0, void 0, void 0, 
     var _a, language, country, proficiency, searchQuery, i, formattedQuery;
     return __generator(this, function (_b) {
         _a = req.body, language = _a.language, country = _a.country, proficiency = _a.proficiency;
-        console.log("lang", language);
-        console.log("country", country), console.log("prof", proficiency);
         searchQuery = [];
         if (language && language !== "BLANK") {
             searchQuery.push("language=" + language);

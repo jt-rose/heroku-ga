@@ -109,8 +109,6 @@ router.put("/response", function (req, res) { return __awaiter(void 0, void 0, v
                     return [2 /*return*/];
                 }
                 _a = req.body, inviteId = _a.inviteId, message = _a.message, date = _a.date, inviteAccepted = _a.inviteAccepted, newConnectionId = _a.newConnectionId;
-                console.log("date", date);
-                console.log(new Date(date));
                 if (!(inviteAccepted === "true")) return [3 /*break*/, 4];
                 firstMessage = new Message({
                     from: newConnectionId,
@@ -227,6 +225,7 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 // display with ejs
                 res.render("invites.ejs", {
                     title: "Invites",
+                    user: req.session.user,
                     invitesFromMe: invitesFromMe,
                     invitesToMe: invitesToMe,
                 });

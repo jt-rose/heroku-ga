@@ -62,8 +62,7 @@ router.put("/response", async (req, res) => {
     return;
   }
   const { inviteId, message, date, inviteAccepted, newConnectionId } = req.body;
-  console.log("date", date);
-  console.log(new Date(date));
+
   if (inviteAccepted === "true") {
     // store the invite message to start the conversation history
     const firstMessage = new Message({
@@ -184,6 +183,7 @@ router.get("/", async (req, res) => {
   // display with ejs
   res.render("invites.ejs", {
     title: "Invites",
+    user: req.session.user,
     invitesFromMe,
     invitesToMe,
   });

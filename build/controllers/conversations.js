@@ -40,43 +40,34 @@ import { User } from "../models/User.js";
 export var router = express.Router();
 // show conversations
 router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var conversations, unread, unreadAuthors, read, _i, conversations_1, convo, alreadyRead, _loop_1, _a, unreadAuthors_1, unreadAuthor;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
-            case 0:
-                if (!req.session.user) {
-                    res.redirect("/auth/login");
-                    return [2 /*return*/];
-                }
-                return [4 /*yield*/, Conversation.find({
-                        speakers: req.session.user._id,
-                    })];
-            case 1:
-                conversations = _b.sent();
-                unread = req.session.user.unreadMessages;
-                unreadAuthors = unread.map(function (message) { return String(message.from); });
-                read = [];
-                for (_i = 0, conversations_1 = conversations; _i < conversations_1.length; _i++) {
-                    convo = conversations_1[_i];
-                    alreadyRead = true;
-                    _loop_1 = function (unreadAuthor) {
-                        if (convo.speakers.map(function (speaker) { return String(speaker).includes(unreadAuthor); })) {
-                            alreadyRead = false;
-                        }
-                    };
-                    for (_a = 0, unreadAuthors_1 = unreadAuthors; _a < unreadAuthors_1.length; _a++) {
-                        unreadAuthor = unreadAuthors_1[_a];
-                        _loop_1(unreadAuthor);
-                    }
-                    if (alreadyRead) {
-                        read.push(convo);
-                    }
-                }
-                console.log(unread);
-                console.log(read);
-                res.redirect("/");
-                return [2 /*return*/];
-        }
+    return __generator(this, function (_a) {
+        // if (!req.session.user) {
+        //   res.redirect("/auth/login");
+        //   return;
+        // }
+        // const conversations = await Conversation.find({
+        //   speakers: req.session.user._id,
+        // });
+        // const unread = req.session.user.unreadMessages;
+        // const unreadAuthors = unread.map((message) => String(message.from));
+        // const read: typeof conversations = [];
+        // for (const convo of conversations) {
+        //   let alreadyRead = true;
+        //   for (const unreadAuthor of unreadAuthors) {
+        //     if (
+        //       convo.speakers.map((speaker) => String(speaker).includes(unreadAuthor))
+        //     ) {
+        //       alreadyRead = false;
+        //     }
+        //   }
+        //   if (alreadyRead) {
+        //     read.push(convo);
+        //   }
+        // }
+        // console.log(unread);
+        // console.log(read);
+        res.redirect("/connections");
+        return [2 /*return*/];
     });
 }); });
 // create a new message
@@ -149,7 +140,7 @@ router.get("/post/:userid", function (req, res) { return __awaiter(void 0, void 
                 console.log(previousConversation);
                 res.render("create-conversation.ejs", {
                     title: "Send a New Message",
-                    me: req.session.user,
+                    user: req.session.user,
                     recipient: recipient,
                     previousConversation: previousConversation,
                 });

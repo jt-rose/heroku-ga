@@ -147,6 +147,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                                 if (!req.session.user) {
                                     res.render("welcome.ejs", {
                                         title: "Welcome",
+                                        user: undefined,
                                     });
                                     return [2 /*return*/];
                                 }
@@ -155,6 +156,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                                 users = _a.sent();
                                 res.render("index.ejs", {
                                     title: "Index",
+                                    user: req.session.user,
                                     users: users,
                                     myAccount: req.session.user,
                                 });

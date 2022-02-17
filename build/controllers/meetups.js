@@ -82,7 +82,6 @@ router.post("/create", function (req, res) { return __awaiter(void 0, void 0, vo
                     cancelled: false,
                     response: "NO_RESPONSE",
                 });
-                console.log(newMeetup);
                 return [4 /*yield*/, User.updateMany({ _id: { $in: [req.session.user._id, invitee] } }, { $push: { currentMeetups: newMeetup } })];
             case 1:
                 _b.sent();
@@ -192,6 +191,7 @@ router.get("/edit/:meetupid", function (req, res) { return __awaiter(void 0, voi
                 connections = _c.sent();
                 res.render("edit-meetup.ejs", {
                     title: "Edit Meetup",
+                    user: req.session.user,
                     meetup: meetup,
                     connections: connections,
                     duration: fmtDuration,
@@ -325,6 +325,7 @@ router.get("/:meetupid", function (req, res) { return __awaiter(void 0, void 0, 
         alreadyDone = new Date() > meetup.endTime;
         res.render("meetup.ejs", {
             title: "Meetup",
+            user: req.session.user,
             meetup: meetup,
             myMeetup: String((_b = req.session.user) === null || _b === void 0 ? void 0 : _b._id) === String(meetup === null || meetup === void 0 ? void 0 : meetup.creator),
             alreadyDone: alreadyDone,
@@ -362,11 +363,9 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
                     var partnerId = meet.createdByMe ? meet.invitee : meet.creator;
                     meetupPartnerIds.push(partnerId);
                 });
-                console.log("parterIds", meetupPartnerIds);
                 return [4 /*yield*/, User.find({ _id: { $in: meetupPartnerIds } })];
             case 1:
                 meetupPartners = _a.sent();
-                console.log(meetupPartners);
                 meetups.forEach(function (meet) {
                     if (meet.createdByMe) {
                         var partner = meetupPartners.find(function (p) { return String(p._id) === String(meet.invitee); });
@@ -391,12 +390,12 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
                         }
                     }
                 });
-                console.log("meetups", meetups);
                 activeMeetups = meetups.filter(function (meet) { return !meet.cancelled; });
                 cancelledMeetups = meetups.filter(function (meet) { return meet.cancelled; });
                 hasMeetups = meetups.length > 0;
                 res.render("meetups.ejs", {
                     title: "Meetups",
+                    user: req.session.user,
                     activeMeetups: activeMeetups,
                     cancelledMeetups: cancelledMeetups,
                     hasMeetups: hasMeetups,

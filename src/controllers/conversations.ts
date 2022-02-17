@@ -10,35 +10,35 @@ export const router = express.Router();
 
 // show conversations
 router.get("/", async (req, res) => {
-  if (!req.session.user) {
-    res.redirect("/auth/login");
-    return;
-  }
-  const conversations = await Conversation.find({
-    speakers: req.session.user._id,
-  });
-  const unread = req.session.user.unreadMessages;
-  const unreadAuthors = unread.map((message) => String(message.from));
+  // if (!req.session.user) {
+  //   res.redirect("/auth/login");
+  //   return;
+  // }
+  // const conversations = await Conversation.find({
+  //   speakers: req.session.user._id,
+  // });
+  // const unread = req.session.user.unreadMessages;
+  // const unreadAuthors = unread.map((message) => String(message.from));
 
-  const read: typeof conversations = [];
+  // const read: typeof conversations = [];
 
-  for (const convo of conversations) {
-    let alreadyRead = true;
-    for (const unreadAuthor of unreadAuthors) {
-      if (
-        convo.speakers.map((speaker) => String(speaker).includes(unreadAuthor))
-      ) {
-        alreadyRead = false;
-      }
-    }
-    if (alreadyRead) {
-      read.push(convo);
-    }
-  }
-  console.log(unread);
-  console.log(read);
+  // for (const convo of conversations) {
+  //   let alreadyRead = true;
+  //   for (const unreadAuthor of unreadAuthors) {
+  //     if (
+  //       convo.speakers.map((speaker) => String(speaker).includes(unreadAuthor))
+  //     ) {
+  //       alreadyRead = false;
+  //     }
+  //   }
+  //   if (alreadyRead) {
+  //     read.push(convo);
+  //   }
+  // }
+  // console.log(unread);
+  // console.log(read);
 
-  res.redirect("/");
+  res.redirect("/connections");
 });
 
 // create a new message
@@ -95,7 +95,7 @@ router.get("/post/:userid", async (req, res) => {
 
   res.render("create-conversation.ejs", {
     title: "Send a New Message",
-    me: req.session.user,
+    user: req.session.user,
     recipient,
     previousConversation,
   });

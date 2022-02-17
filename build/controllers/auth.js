@@ -46,6 +46,7 @@ var upload = multer({ dest: "uploads/" });
 router.get("/login", function (req, res) {
     res.render("login.ejs", {
         title: "Login",
+        user: req.session.user,
     });
 });
 router.post("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -103,6 +104,7 @@ router.delete("/logout", function (req, res) { return __awaiter(void 0, void 0, 
 router.get("/register", function (req, res) {
     res.render("register.ejs", {
         title: "Sign Up",
+        user: req.session.user,
         languages: languages,
         proficiencyLevels: proficiencyLevels,
     });
@@ -131,6 +133,7 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                 if (userAlreadyExists) {
                     res.render("/register", {
                         title: "Register",
+                        user: req.session.user,
                         error: "Username / Email already in use",
                     });
                     return [2 /*return*/];

@@ -125,6 +125,7 @@ const main = async () => {
     if (!req.session.user) {
       res.render("welcome.ejs", {
         title: "Welcome",
+        user: undefined,
       });
       return;
     }
@@ -132,6 +133,7 @@ const main = async () => {
     const users = await User.find({ active: true }); // add limit
     res.render("index.ejs", {
       title: "Index",
+      user: req.session.user,
       users,
       myAccount: req.session.user,
     });

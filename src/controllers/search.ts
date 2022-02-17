@@ -50,6 +50,7 @@ router.get("/", async (req, res) => {
 
   res.render("search.ejs", {
     title: "Search",
+    user: req.session.user,
     users,
     languages,
     language,
@@ -63,8 +64,7 @@ router.get("/", async (req, res) => {
 // return to search page with current search data
 router.post("/", async (req, res) => {
   const { language, country, proficiency } = req.body;
-  console.log("lang", language);
-  console.log("country", country), console.log("prof", proficiency);
+
   let searchQuery: string[] = [];
 
   if (language && language !== "BLANK") {

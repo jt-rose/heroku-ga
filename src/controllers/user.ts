@@ -23,6 +23,7 @@ router.get("/connects", async (req, res) => {
 
   res.render("connects.ejs", {
     title: "Connections",
+    user: req.session.user,
     connections,
     invites,
   });
@@ -33,17 +34,18 @@ router.get("/profile/:userid", async (req, res) => {
     res.render("user.ejs", {
       title: "Profile",
       user: req.session.user,
+      otherUser: null,
       myAccount: true,
       myConnection: false,
     });
     return;
   }
-  let user: IUser | null = null;
+  let otherUser: IUser | null = null;
   if (mongoose.isValidObjectId(req.params.userid)) {
-    user = await User.findById(req.params.userid);
+    otherUser = await User.findById(req.params.userid);
   }
 
-  if (!user) {
+  if (!otherUser) {
     // flash message
     res.redirect("/");
     return;
@@ -52,12 +54,13 @@ router.get("/profile/:userid", async (req, res) => {
   const myConnection =
     req.session.user &&
     req.session.user.connections.some(
-      (conn) => String(conn) === String(user!._id)
+      (conn) => String(conn) === String(otherUser!._id)
     );
 
   res.render("user.ejs", {
     title: "Profile",
-    user,
+    user: req.session.user,
+    otherUser,
     myAccount: false,
     myConnection,
   });

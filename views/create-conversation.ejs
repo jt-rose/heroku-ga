@@ -16,7 +16,7 @@
           placeholder="...write your message"
           class="textarea"
         ></textarea>
-        <input type="text" name="from" id="" value="<%=me._id%>" hidden />
+        <input type="text" name="from" id="" value="<%=user._id%>" hidden />
         <input type="text" name="to" id="" value="<%=recipient._id%>" hidden />
         <input
           type="text"
@@ -52,7 +52,7 @@
           <ul id="message-container" class="content">
             <% for (let i = 0; i < previousConversation.messages.length; i++) {
             %> <% if (String(previousConversation.messages[i].from) ===
-            String(me._id)) { %>
+            String(user._id)) { %>
 
             <li class="conversation-message from-me">
               <div class="message-spacer"></div>

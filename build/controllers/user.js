@@ -60,6 +60,7 @@ router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, v
                 invites = req.session.user.connectionInvites;
                 res.render("connects.ejs", {
                     title: "Connections",
+                    user: req.session.user,
                     connections: connections,
                     invites: invites,
                 });
@@ -68,7 +69,7 @@ router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, myConnection;
+    var otherUser, myConnection;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -76,28 +77,30 @@ router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, vo
                     res.render("user.ejs", {
                         title: "Profile",
                         user: req.session.user,
+                        otherUser: null,
                         myAccount: true,
                         myConnection: false,
                     });
                     return [2 /*return*/];
                 }
-                user = null;
+                otherUser = null;
                 if (!mongoose.isValidObjectId(req.params.userid)) return [3 /*break*/, 2];
                 return [4 /*yield*/, User.findById(req.params.userid)];
             case 1:
-                user = _a.sent();
+                otherUser = _a.sent();
                 _a.label = 2;
             case 2:
-                if (!user) {
+                if (!otherUser) {
                     // flash message
                     res.redirect("/");
                     return [2 /*return*/];
                 }
                 myConnection = req.session.user &&
-                    req.session.user.connections.some(function (conn) { return String(conn) === String(user._id); });
+                    req.session.user.connections.some(function (conn) { return String(conn) === String(otherUser._id); });
                 res.render("user.ejs", {
                     title: "Profile",
-                    user: user,
+                    user: req.session.user,
+                    otherUser: otherUser,
                     myAccount: false,
                     myConnection: myConnection,
                 });

@@ -23,7 +23,6 @@
 
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
-      <a class="navbar-item" href="/user"> Profile </a>
 
       <a class="navbar-item" href="/meetups"> Meetups </a>
 
@@ -37,10 +36,19 @@
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
-          <a class="button is-primary">
+          <% if (user) { %>
+            <a href="/user/profile/<%=user._id%>" class="button is-primary is-rounded">
+              <strong>Profile</strong>
+            </a>
+            <form action="/auth/logout?_method=DELETE" method="POST">
+              <button type="submit" class="button is-light is-rounded"> Log out </button>
+            </form>
+            <% } else { %>
+          <a href="/auth/register" class="button is-primary is-rounded">
             <strong>Sign up</strong>
           </a>
-          <a class="button is-light"> Log in </a>
+          <a href="'/auth/login" class="button is-light is-rounded"> Log in </a>
+          <% } %>
         </div>
       </div>
     </div>

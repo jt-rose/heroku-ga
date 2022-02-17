@@ -13,6 +13,7 @@ const upload = multer({ dest: "uploads/" });
 router.get("/login", (req, res) => {
   res.render("login.ejs", {
     title: "Login",
+    user: req.session.user,
   });
 });
 router.post("/login", async (req, res) => {
@@ -52,9 +53,11 @@ router.delete("/logout", async (req, res) => {
   await req.session.destroy(() => {});
   res.redirect("/");
 });
+
 router.get("/register", (req, res) => {
   res.render("register.ejs", {
     title: "Sign Up",
+    user: req.session.user,
     languages,
     proficiencyLevels,
   });
@@ -90,6 +93,7 @@ router.post("/register", upload.single("img"), async (req, res) => {
     if (userAlreadyExists) {
       res.render("/register", {
         title: "Register",
+        user: req.session.user,
         error: "Username / Email already in use",
       });
       return;
