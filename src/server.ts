@@ -22,6 +22,9 @@ import { router as searchRouter } from "./controllers/search.js";
 import { __PROD__ } from "./constants/PROD.js";
 import { User } from "./models/User.js";
 import { isAuth } from "./utils/isAuth.js";
+import { IMeetup } from "./models/Meetup.js";
+import { defaultImg } from "./constants/defaultImg.js";
+import { IMessage } from "./models/Conversation.js";
 
 const main = async () => {
   await dotenv.config();
@@ -130,12 +133,98 @@ const main = async () => {
       return;
     }
 
-    const users = await User.find({ active: true }); // add limit
+    let { currentMeetups, unreadMessages, connectionInvites } =
+      req.session.user;
+
+    // filter out new invites that originated from self
+    connectionInvites = connectionInvites.filter(
+      (conn) => String(conn.from) !== String(req.session.user!._id)
+    );
+
+    const meetupsWith = currentMeetups
+      .map((meet) => [meet.creator, meet.invitee])
+      .flat();
+
+    const unreadMsgFrom = unreadMessages.map((msg) => msg.from);
+
+    const invitesFrom = connectionInvites
+      .map((invite) => [invite.from, invite.to])
+      .flat();
+
+    const usersToSearchFor = [...meetupsWith, ...unreadMsgFrom, ...invitesFrom];
+
+    let users = await User.find({
+      active: true,
+      _id: { $in: usersToSearchFor },
+    });
+
+    // filter self out from users
+    users = users.filter(
+      (u) => String(u._id) !== String(req.session.user!._id)
+    );
+
+    // associate partner data with each meetup
+    let meetups: {
+      partnerImg: string;
+      partnerUsername: string;
+      meetup: IMeetup;
+    }[] = [];
+    for (const meetup of currentMeetups) {
+      const partner = users.find(
+        (u) =>
+          String(u._id) === String(meetup.invitee) ||
+          String(u._id) === String(meetup.creator)
+      );
+      const meetupWithPartnerInfo = {
+        partnerImg: partner ? partner.img : defaultImg,
+        partnerUsername: partner ? partner.username : "Busy bee",
+        meetup,
+      };
+      meetups.push(meetupWithPartnerInfo);
+    }
+    console.log("users found: ", users);
+
+    // associate partner data with each new message
+    let messages: {
+      partnerImg: string;
+      partnerUsername: string;
+      message: IMessage;
+    }[] = [];
+
+    for (const message of unreadMessages) {
+      const partner = users.find((u) => String(u._id) === String(message.from));
+      const messageWithPartnerInfo = {
+        partnerImg: partner ? partner.img : defaultImg,
+        partnerUsername: partner ? partner.username : "Busy bee",
+        message,
+      };
+      messages.push(messageWithPartnerInfo);
+    }
+    // associate partner data with each invite
+    let invites: {
+      partnerImg: string;
+      partnerUsername: string;
+      invite: IMessage;
+    }[] = [];
+
+    for (const invite of connectionInvites) {
+      const partner = users.find((u) => String(u._id) === String(invite.from));
+      const inviteWithPartnerInfo = {
+        partnerImg: partner ? partner.img : defaultImg,
+        partnerUsername: partner ? partner.username : "Busy bee",
+        invite,
+      };
+      invites.push(inviteWithPartnerInfo);
+    }
+
     res.render("index.ejs", {
       title: "Index",
       user: req.session.user,
       users,
       myAccount: req.session.user,
+      meetups,
+      messages,
+      invites,
     });
   });
 

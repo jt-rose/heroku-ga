@@ -3,56 +3,41 @@
   <body>
     <%- include('./partials/header.ejs') %>
     <div class="container is-fluid">
-      <h1>Upcoming Meetups</h1>
+      <h1 class="title">Upcoming Meetups</h1>
       <ul>
-        <% for (let i = 0; i < myAccount.currentMeetups.length; i++) { %>
-        <li><a href="/meetups"><%=myAccount.currentMeetups[i].name%></a></li>
+        <% for (let i = 0; i < meetups.length; i++) { %>
+        <li>
+          <a href="/meetups"><%=meetups[i].meetup.name%></a>
+          <p><%=meetups[i].partnerUsername%></p>
+        </li>
         <% } %>
       </ul>
 
-      <h1>New Messages</h1>
+      <h1 class="title">New Messages</h1>
       <ul>
-        <% for (let i = 0; i < myAccount.unreadMessages.length; i++) { %>
+        <% for (let i = 0; i < messages.length; i++) { %>
         <li>
-          <a href="/conversations/<%=myAccount.unreadMessages[i].from%>"
-            ><%=myAccount.unreadMessages[i].message%></a
+          <a href="/conversations/post/<%=messages[i].message.from%>"
+            ><%=messages[i].message.message%></a
           >
+          <p><%=messages[i].partnerUsername%></p>
         </li>
         <% } %>
       </ul>
 
-      <h1>New Invites</h1>
+      <h1 class="title">New Invites</h1>
       <ul>
-        <% for (let i = 0; i < myAccount.connectionInvites.length; i++) { %>
+        <% for (let i = 0; i < invites.length; i++) { %>
         <li>
-          <a href="/invites%>"><%=myAccount.connectionInvites[i].from%></a>
+          <a href="/user/profile/<%=invites[i].invite.from%>"
+            ><%=invites[i].invite.message%></a
+          >
+          <p><%=invites[i].partnerUsername%></p>
         </li>
         <% } %>
       </ul>
 
-      <ul>
-        <% for (let i = 0; i < users.length; i++) { if (!myAccount ||
-        users[i].username !== myAccount.username) { %>
-        <li>
-          <a href="/user/profile/<%=users[i]._id%>"><%=users[i].username%></a>
-        </li>
-        <% } } %>
-      </ul>
-      <% if (!myAccount) { %>
-      <a href="/auth/register">
-        <button>Register</button>
-      </a>
-      <br />
-      <a href="/auth/login">
-        <button>Login</button>
-      </a>
-      <% } %> <% if (myAccount) { %>
-      <form action="/auth/logout?_method=DELETE" method="post">
-        <button type="submit">Logout</button>
-      </form>
-      <% } %> <% if (myAccount) { %>
-      <a href="/invites">Invites</a>
-      <a href="/meetups">Meetups</a>
+      <% if (myAccount) { %>
       <p>logged in as <%=myAccount.username%></p>
       <% } %>
     </div>

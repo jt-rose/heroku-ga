@@ -69,7 +69,7 @@ router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, v
     });
 }); });
 router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var targetUser, myConnection;
+    var targetUser, myConnection, connectionRequestFromMe, connectionRequestToMe, invite, inviteToMe, inviteFromMe;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -80,6 +80,9 @@ router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, vo
                         targetUser: req.session.user,
                         myAccount: true,
                         myConnection: false,
+                        connectionRequestToMe: false,
+                        connectionRequestFromMe: false,
+                        invite: null,
                     });
                     return [2 /*return*/];
                 }
@@ -97,12 +100,32 @@ router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, vo
                 }
                 myConnection = req.session.user &&
                     req.session.user.connections.some(function (conn) { return String(conn) === String(targetUser._id); });
+                connectionRequestFromMe = false;
+                connectionRequestToMe = false;
+                invite = null;
+                if (!myConnection && req.session.user) {
+                    inviteToMe = req.session.user.connectionInvites.find(function (invite) { return String(invite.from) === String(targetUser._id); });
+                    if (inviteToMe) {
+                        connectionRequestToMe = true;
+                        invite = inviteToMe;
+                    }
+                    else {
+                        inviteFromMe = req.session.user.connectionInvites.find(function (invite) { return String(invite.to) === String(targetUser._id); });
+                        if (inviteFromMe) {
+                            connectionRequestFromMe = true;
+                            invite = inviteFromMe;
+                        }
+                    }
+                }
                 res.render("user.ejs", {
                     title: "Profile",
                     user: req.session.user,
                     targetUser: targetUser,
                     myAccount: false,
                     myConnection: myConnection,
+                    connectionRequestFromMe: connectionRequestFromMe,
+                    connectionRequestToMe: connectionRequestToMe,
+                    invite: invite,
                 });
                 return [2 /*return*/];
         }

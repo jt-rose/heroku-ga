@@ -1,0 +1,34 @@
+<ul>
+  <% for (let i = 0; i < users.length; i++) { %>
+  <a href="/user/profile/<%=users[i]._id%>">
+    <div class="card user-card-container">
+      <figure class="image is-128x128">
+        <img src="<%=users[i].img %>" alt="" class="is-rounded user-card" />
+      </figure>
+      <div class="card-content">
+        <h3 class="title is-3"><%=users[i].username%></h3>
+        <div class="user-logos subtitle">
+          <p>
+            <span class="icon is-small is-left">
+              <i class="fa-solid fa-earth-americas"></i>
+            </span>
+            <%=users[i].country%>
+          </p>
+          <p>
+            <span class="icon is-small is-left">
+              <i class="fa-solid fa-comments"></i>
+            </span>
+            <%=users[i].nativeLanguage%> <% if (users[i].nativeLanguage !==
+            users[i].targetLanguage) { %> , <%=users[i].targetLanguage%> <% } %>
+          </p>
+        </div>
+
+        <p>
+          <%=users[i].aboutMeText.length > 140 ? users[i].aboutMeText.slice(0,
+          139) + "..." : users[i].aboutMeText %>
+        </p>
+      </div>
+    </div>
+  </a>
+  <% } %>
+</ul>

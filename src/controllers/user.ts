@@ -37,6 +37,9 @@ router.get("/profile/:userid", async (req, res) => {
       targetUser: req.session.user,
       myAccount: true,
       myConnection: false,
+      connectionRequestToMe: false,
+      connectionRequestFromMe: false,
+      invite: null,
     });
     return;
   }
@@ -57,12 +60,37 @@ router.get("/profile/:userid", async (req, res) => {
       (conn) => String(conn) === String(targetUser!._id)
     );
 
+  let connectionRequestFromMe = false;
+  let connectionRequestToMe = false;
+  let invite = null;
+
+  if (!myConnection && req.session.user) {
+    const inviteToMe = req.session.user.connectionInvites.find(
+      (invite) => String(invite.from) === String(targetUser!._id)
+    );
+    if (inviteToMe) {
+      connectionRequestToMe = true;
+      invite = inviteToMe;
+    } else {
+      const inviteFromMe = req.session.user.connectionInvites.find(
+        (invite) => String(invite.to) === String(targetUser!._id)
+      );
+      if (inviteFromMe) {
+        connectionRequestFromMe = true;
+        invite = inviteFromMe;
+      }
+    }
+  }
+
   res.render("user.ejs", {
     title: "Profile",
     user: req.session.user,
     targetUser,
     myAccount: false,
     myConnection,
+    connectionRequestFromMe,
+    connectionRequestToMe,
+    invite,
   });
 });
 

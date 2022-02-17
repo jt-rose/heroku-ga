@@ -9,7 +9,7 @@ export interface IUser {
   username: string;
   password: string;
   email: string;
-  img?: string;
+  img: string;
   country: string;
   cityOrState: string;
   aboutMeText: string;
@@ -32,7 +32,7 @@ export const userSchema = new mongoose.Schema<IUser>({
   username: { type: String, required: true },
   password: { type: String, required: true },
   email: { type: String, required: true },
-  img: String, // images will be saved to the public folder and the url will be stored
+  img: { type: String, required: true },
   country: { type: String, required: true },
   cityOrState: { type: String, required: true },
   aboutMeText: { type: String, required: true },

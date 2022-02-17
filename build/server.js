@@ -34,6 +34,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 //___________________
 //Dependencies
 //___________________
@@ -58,6 +67,7 @@ import { router as searchRouter } from "./controllers/search.js";
 import { __PROD__ } from "./constants/PROD.js";
 import { User } from "./models/User.js";
 import { isAuth } from "./utils/isAuth.js";
+import { defaultImg } from "./constants/defaultImg.js";
 var main = function () { return __awaiter(void 0, void 0, void 0, function () {
     var app, db, PORT, MONGODB_URI, RedisStore, redisURL, redis;
     return __generator(this, function (_a) {
@@ -139,9 +149,9 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 app.use("/conversations", conversationsRouter);
                 app.use("/search", searchRouter);
                 app.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-                    var users;
-                    return __generator(this, function (_a) {
-                        switch (_a.label) {
+                    var _a, currentMeetups, unreadMessages, connectionInvites, meetupsWith, unreadMsgFrom, invitesFrom, usersToSearchFor, users, meetups, _loop_1, _i, currentMeetups_1, meetup, messages, _loop_2, _b, unreadMessages_1, message, invites, _loop_3, _c, connectionInvites_1, invite;
+                    return __generator(this, function (_d) {
+                        switch (_d.label) {
                             case 0:
                                 console.log(req.session.user);
                                 if (!req.session.user) {
@@ -151,14 +161,79 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                                     });
                                     return [2 /*return*/];
                                 }
-                                return [4 /*yield*/, User.find({ active: true })];
+                                _a = req.session.user, currentMeetups = _a.currentMeetups, unreadMessages = _a.unreadMessages, connectionInvites = _a.connectionInvites;
+                                // filter out new invites that originated from self
+                                connectionInvites = connectionInvites.filter(function (conn) { return String(conn.from) !== String(req.session.user._id); });
+                                meetupsWith = currentMeetups
+                                    .map(function (meet) { return [meet.creator, meet.invitee]; })
+                                    .flat();
+                                unreadMsgFrom = unreadMessages.map(function (msg) { return msg.from; });
+                                invitesFrom = connectionInvites
+                                    .map(function (invite) { return [invite.from, invite.to]; })
+                                    .flat();
+                                usersToSearchFor = __spreadArray(__spreadArray(__spreadArray([], meetupsWith, true), unreadMsgFrom, true), invitesFrom, true);
+                                return [4 /*yield*/, User.find({
+                                        active: true,
+                                        _id: { $in: usersToSearchFor },
+                                    })];
                             case 1:
-                                users = _a.sent();
+                                users = _d.sent();
+                                // filter self out from users
+                                users = users.filter(function (u) { return String(u._id) !== String(req.session.user._id); });
+                                meetups = [];
+                                _loop_1 = function (meetup) {
+                                    var partner = users.find(function (u) {
+                                        return String(u._id) === String(meetup.invitee) ||
+                                            String(u._id) === String(meetup.creator);
+                                    });
+                                    var meetupWithPartnerInfo = {
+                                        partnerImg: partner ? partner.img : defaultImg,
+                                        partnerUsername: partner ? partner.username : "Busy bee",
+                                        meetup: meetup,
+                                    };
+                                    meetups.push(meetupWithPartnerInfo);
+                                };
+                                for (_i = 0, currentMeetups_1 = currentMeetups; _i < currentMeetups_1.length; _i++) {
+                                    meetup = currentMeetups_1[_i];
+                                    _loop_1(meetup);
+                                }
+                                console.log("users found: ", users);
+                                messages = [];
+                                _loop_2 = function (message) {
+                                    var partner = users.find(function (u) { return String(u._id) === String(message.from); });
+                                    var messageWithPartnerInfo = {
+                                        partnerImg: partner ? partner.img : defaultImg,
+                                        partnerUsername: partner ? partner.username : "Busy bee",
+                                        message: message,
+                                    };
+                                    messages.push(messageWithPartnerInfo);
+                                };
+                                for (_b = 0, unreadMessages_1 = unreadMessages; _b < unreadMessages_1.length; _b++) {
+                                    message = unreadMessages_1[_b];
+                                    _loop_2(message);
+                                }
+                                invites = [];
+                                _loop_3 = function (invite) {
+                                    var partner = users.find(function (u) { return String(u._id) === String(invite.from); });
+                                    var inviteWithPartnerInfo = {
+                                        partnerImg: partner ? partner.img : defaultImg,
+                                        partnerUsername: partner ? partner.username : "Busy bee",
+                                        invite: invite,
+                                    };
+                                    invites.push(inviteWithPartnerInfo);
+                                };
+                                for (_c = 0, connectionInvites_1 = connectionInvites; _c < connectionInvites_1.length; _c++) {
+                                    invite = connectionInvites_1[_c];
+                                    _loop_3(invite);
+                                }
                                 res.render("index.ejs", {
                                     title: "Index",
                                     user: req.session.user,
                                     users: users,
                                     myAccount: req.session.user,
+                                    meetups: meetups,
+                                    messages: messages,
+                                    invites: invites,
                                 });
                                 return [2 /*return*/];
                         }
