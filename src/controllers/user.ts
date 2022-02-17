@@ -15,11 +15,16 @@ router.get("/connects", async (req, res) => {
     return;
   }
 
-  const connects = await Invite.find({
-    $or: [{ from: req.session.user._id }, { to: req.session.user._id }],
+  const connections = await User.find({
+    _id: { $in: req.session.user.connections },
   });
+
+  const invites = req.session.user.connectionInvites;
+
   res.render("connects.ejs", {
-    connects,
+    title: "Connections",
+    connections,
+    invites,
   });
 });
 

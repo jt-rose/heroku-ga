@@ -37,7 +37,6 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 import express from "express";
 import mongoose from "mongoose";
 import { User } from "../models/User.js";
-import { Invite } from "../models/Invite.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
 import multer from "multer";
@@ -45,7 +44,7 @@ import { uploadFile } from "../utils/s3.js";
 var upload = multer({ dest: "uploads/" });
 export var router = express.Router();
 router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var connects;
+    var connections, invites;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -53,13 +52,16 @@ router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, v
                     res.redirect("/auth/login");
                     return [2 /*return*/];
                 }
-                return [4 /*yield*/, Invite.find({
-                        $or: [{ from: req.session.user._id }, { to: req.session.user._id }],
+                return [4 /*yield*/, User.find({
+                        _id: { $in: req.session.user.connections },
                     })];
             case 1:
-                connects = _a.sent();
+                connections = _a.sent();
+                invites = req.session.user.connectionInvites;
                 res.render("connects.ejs", {
-                    connects: connects,
+                    title: "Connections",
+                    connections: connections,
+                    invites: invites,
                 });
                 return [2 /*return*/];
         }

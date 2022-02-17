@@ -1,0 +1,26 @@
+<html>
+  <%- include('./partials/head.ejs') %>
+  <body>
+    <%- include('./partials/header.ejs') %>
+    <div class="container is-fluid content">
+      <h1 class="title">Invites</h1>
+      <ul>
+        <% for (let i = 0; i < invites.length; i++) { %>
+        <li>
+          <p><%=invites[i].from%></p>
+        </li>
+        <% } %>
+      </ul>
+      <h1 class="title">Connections</h1>
+      <ul>
+        <% for (let i = 0; i < connections.length; i++) { %>
+        <li>
+          <a href="/user/profile/<%=connections[i]._id%>"
+            ><%=connections[i].username%></a
+          >
+        </li>
+        <% } %>
+      </ul>
+    </div>
+  </body>
+</html>
