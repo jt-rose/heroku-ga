@@ -1,13 +1,13 @@
 # Joybee
 
-An app that allows language learners to connect for language exchange, where users can create profiles, search for and send invites to other users, schedule meetups, and message one another.
+A fullstack app that allows language learners to connect for language exchange, where users can create profiles, search for and send invites to other users, schedule meetups, and message one another.
 
 The site can be visited [here].
 
 ### Core Dependencies
 
 - [typescript] - statically typed superset of JavaScript
-- [express] - DOM Manipulation library
+- [express] - minimalist NodeJS server framework
 - [ejs] - HTML templating engine
 - [express-session] - server-side session management using cookies
 - [argon2] - encryption library
@@ -27,6 +27,7 @@ The app is currently working and hosted via Heroku. The compiled TypeScript file
 [here]: https://joybee.herokuapp.com
 [typescript]: https://www.typescriptlang.org
 [express]: https://expressjs.com/
+[ejs]: https://ejs.co/
 [express-session]: https://www.npmjs.com/package/express-session
 [argon2]: https://github.com/P-H-C/phc-winner-argon2
 [mongoose]: https://mongoosejs.com/
