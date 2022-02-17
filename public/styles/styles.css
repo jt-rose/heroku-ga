@@ -137,3 +137,47 @@
 #joybee-welcome-img {
   width: 150px;
 }
+
+/* overwrite bulma styling */
+.image img.user-card {
+  width: 128px;
+  min-width: 128px;
+  height: 128px;
+  border: 3px solid hsl(171, 100%, 41%);
+}
+
+.user-card-container {
+  display: flex;
+}
+
+.user-card-container figure {
+  margin: 1rem;
+}
+.user-card-container h3 {
+  text-align: center;
+}
+
+@media (max-width: 550px) {
+  .user-card-container {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* text-align: center; */
+  }
+
+  .user-card-container figure {
+    margin-bottom: 0;
+  }
+}
+
+.user-logos {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.user-logos p {
+  width: 100%;
+  margin-right: 1rem;
+  margin-top: 0.5rem;
+}
