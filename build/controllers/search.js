@@ -42,9 +42,10 @@ import { User } from "../models/User.js";
 export var router = express.Router();
 // get search page
 router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, language, country, proficiency, filter, users;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var _a, language, country, proficiency, filter, users, bl;
+    var _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 _a = req.query, language = _a.language, country = _a.country, proficiency = _a.proficiency;
                 filter = [{}, {}];
@@ -59,11 +60,13 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
                     filter[0].country = String(country);
                     filter[1].country = String(country);
                 }
-                return [4 /*yield*/, User.find({ $or: filter })];
+                return [4 /*yield*/, User.find({ active: true, $or: filter })];
             case 1:
-                users = _b.sent();
+                users = _c.sent();
                 // remove self from search results
                 users = users.filter(function (u) { var _a; return !req.session.user || String(u._id) !== String((_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id); });
+                bl = ((_b = req.session.user) === null || _b === void 0 ? void 0 : _b.blackListed.map(function (person) { return String(person); })) || [];
+                users = users.filter(function (u) { return !bl.includes(String(u)); });
                 res.render("search.ejs", {
                     title: "Search",
                     users: users,

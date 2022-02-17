@@ -177,3 +177,11 @@ router.delete("/permadelete", async (req, res) => {
   await req.session.destroy(() => {});
   res.redirect("/");
 });
+
+router.get("/", (req, res) => {
+  if (req.session.user) {
+    res.redirect("/user/profile/" + req.session.user._id);
+  } else {
+    res.redirect("/search");
+  }
+});

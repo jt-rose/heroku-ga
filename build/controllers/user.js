@@ -226,3 +226,11 @@ router.delete("/permadelete", function (req, res) { return __awaiter(void 0, voi
         }
     });
 }); });
+router.get("/", function (req, res) {
+    if (req.session.user) {
+        res.redirect("/user/profile/" + req.session.user._id);
+    }
+    else {
+        res.redirect("/search");
+    }
+});
