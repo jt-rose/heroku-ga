@@ -195,3 +195,9 @@
 .card {
   margin-bottom: 1rem;
 }
+
+#connection-buttons {
+  display: flex;
+  flex-direction: column;
+  margin-top: 2rem;
+}

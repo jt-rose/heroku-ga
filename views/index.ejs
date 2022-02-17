@@ -26,19 +26,32 @@
       </ul>
 
       <h1 class="title">New Invites</h1>
+
       <ul>
         <% for (let i = 0; i < invites.length; i++) { %>
-        <li>
-          <a href="/user/profile/<%=invites[i].invite.from%>"
-            ><%=invites[i].invite.message%></a
-          >
-          <p><%=invites[i].partnerUsername%></p>
-        </li>
+        <a href="/user/profile/<%=invites[i].invite.from%>">
+          <div class="card user-card-container">
+            <figure class="image is-128x128">
+              <img
+                src="<%=invites[i].partnerImg %>"
+                alt=""
+                class="is-rounded user-card"
+              />
+            </figure>
+            <div class="card-content">
+              <h3 class="title is-3"><%=invites[i].partnerUsername%></h3>
+              <p>
+                <%=invites[i].invite.message.length > 140 ?
+                invites[i].invite.message.slice(0, 139) + "..." :
+                invites[i].invite.message %>
+              </p>
+            </div>
+          </div>
+        </a>
         <% } %>
       </ul>
-
-      <% if (myAccount) { %>
-      <p>logged in as <%=myAccount.username%></p>
+      <% if (invites.length === 0) { %>
+      <p>No new invites! Go out and <a href="/search">meet</a> some people!</p>
       <% } %>
     </div>
   </body>

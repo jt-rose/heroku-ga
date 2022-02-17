@@ -21,93 +21,107 @@
 
           <button class="button is-primary is-rounded">Invite to Meetup</button>
           <% } else if (connectionRequestToMe && invite) { %>
-          <form action="/invites/response?_method=PUT" method="post">
-            <input
-              type="text"
-              name="inviteId"
-              id=""
-              value="<%=invite._id%>"
-              hidden
-            />
-            <input
-              type="text"
-              name="inviteAccepted"
-              id=""
-              value="true"
-              hidden
-            />
-            <input
-              type="text"
-              name="message"
-              id=""
-              value="<%=invite.message%>"
-              hidden
-            />
-            <input
-              type="text"
-              name="newConnectionId"
-              id=""
-              value="<%=invite.from%>"
-              hidden
-            />
-            <input
-              type="text"
-              name="date"
-              id=""
-              value="<%=invite.date%>"
-              hidden
-            />
-            <button type="submit" class="button is-primary is-rounded">
-              Accept
-            </button>
-          </form>
+          <div id="connection-buttons">
+            <p>
+              <strong><%=targetUser.username%> would like to connect!</strong>
+            </p>
+            <p>"<%=invite.message%>"</p>
+            <div class="level">
+              <div class="level-item">
+                <form action="/invites/response?_method=PUT" method="post">
+                  <input
+                    type="text"
+                    name="inviteId"
+                    id=""
+                    value="<%=invite._id%>"
+                    hidden
+                  />
+                  <input
+                    type="text"
+                    name="inviteAccepted"
+                    id=""
+                    value="true"
+                    hidden
+                  />
+                  <input
+                    type="text"
+                    name="message"
+                    id=""
+                    value="<%=invite.message%>"
+                    hidden
+                  />
+                  <input
+                    type="text"
+                    name="newConnectionId"
+                    id=""
+                    value="<%=invite.from%>"
+                    hidden
+                  />
+                  <input
+                    type="text"
+                    name="date"
+                    id=""
+                    value="<%=invite.date%>"
+                    hidden
+                  />
+                  <button type="submit" class="button is-primary is-rounded">
+                    Accept
+                  </button>
+                </form>
 
-          <form action="/invites/response?_method=PUT" method="post">
-            <input
-              type="text"
-              name="inviteId"
-              id=""
-              value="<%=invite._id%>"
-              hidden
-            />
-            <input
-              type="text"
-              name="inviteAccepted"
-              id=""
-              value="false"
-              hidden
-            />
-            <input
-              type="text"
-              name="newConnectionId"
-              id=""
-              value="<%=invite.from%>"
-              hidden
-            />
-            <button type="submit" class="button is-primary is-rounded">
-              Decline
-            </button>
-          </form>
+                <form action="/invites/response?_method=PUT" method="post">
+                  <input
+                    type="text"
+                    name="inviteId"
+                    id=""
+                    value="<%=invite._id%>"
+                    hidden
+                  />
+                  <input
+                    type="text"
+                    name="inviteAccepted"
+                    id=""
+                    value="false"
+                    hidden
+                  />
+                  <input
+                    type="text"
+                    name="newConnectionId"
+                    id=""
+                    value="<%=invite.from%>"
+                    hidden
+                  />
+                  <button type="submit" class="button is-primary is-rounded">
+                    Decline
+                  </button>
+                </form>
+              </div>
+            </div>
+          </div>
           <% } else if (connectionRequestFromMe && invite) { %>
-          <form action="/invites?_method=DELETE" method="post">
-            <input type="text" name="inviteId" id="" value="<%=invite._id%>""
-            hidden>
-            <input
-              type="text"
-              name="invitedUserId"
-              value="<%=invite.to%>"
-              hidden
-            />
-            <button type="submit" class="button is-primary is-rounded">
-              Rescind Invite
-            </button>
-          </form>
-          <% } else { %>
-          <a href="/invites/create/<%=targetUser._id%>"
-            ><button type="submit" class="button is-primary is-rounded">
-              Connect
-            </button></a
-          >
+          <div id="connection-buttons">
+            <p>You've sent a connection invite to this user!</p>
+            <p>Can't wait to hear back!</p>
+            <form action="/invites?_method=DELETE" method="post">
+              <input type="text" name="inviteId" id="" value="<%=invite._id%>""
+              hidden>
+              <input
+                type="text"
+                name="invitedUserId"
+                value="<%=invite.to%>"
+                hidden
+              />
+              <button type="submit" class="button is-primary is-rounded">
+                Rescind Invite
+              </button>
+            </form>
+            <% } else { %>
+            <a href="/invites/create/<%=targetUser._id%>"
+              ><button type="submit" class="button is-primary is-rounded">
+                Connect
+              </button></a
+            >
+          </div>
           <% } %>
         </div>
       </div>
