@@ -51,8 +51,8 @@
       <div class="level">
         <div class="level-item">
           <ul id="message-container" class="content">
-            <% for (let i = 0; i < previousConversation.messages.length; i++) {
-            %> <% if (String(previousConversation.messages[i].from) ===
+            <% for (let i = previousConversation.messages.length - 1; i >= 0;
+            i--) { %> <% if (String(previousConversation.messages[i].from) ===
             String(user._id)) { %>
 
             <li class="conversation-message from-me">
