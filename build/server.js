@@ -77,6 +77,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                 _a.sent();
                 app = express();
                 app.set("trust proxy", 1);
+                app.set("view engine", "ejs");
                 db = mongoose.connection;
                 PORT = process.env.PORT || 3003;
                 MONGODB_URI = process.env.MONGODB_URI;

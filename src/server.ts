@@ -31,6 +31,7 @@ const main = async () => {
 
   const app = express();
   app.set("trust proxy", 1);
+  app.set("view engine", "ejs");
   const db = mongoose.connection;
   //___________________
   //Port
