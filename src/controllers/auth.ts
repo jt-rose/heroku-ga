@@ -7,6 +7,7 @@ import { uploadFile, getFileStream } from "../utils/s3.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
 import { countries } from "../constants/countries.js";
+import { Redshift } from "aws-sdk";
 export const router = express.Router();
 
 const upload = multer({ dest: "uploads/" });
@@ -84,6 +85,7 @@ router.post("/register", upload.single("img"), async (req, res) => {
       username,
       email,
       password,
+      password2,
       aboutMeText,
       country,
       cityOrState,
@@ -91,6 +93,11 @@ router.post("/register", upload.single("img"), async (req, res) => {
       targetLanguage,
       targetLanguageProficiency,
     } = req.body;
+
+    if (password !== password2) {
+      res.redirect("/auth/register");
+      return;
+    }
 
     // confirm no such username / email already present
     const userAlreadyExists = await User.findOne({
