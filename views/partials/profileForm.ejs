@@ -12,7 +12,7 @@
       <label for="username" class="label">Username</label>
       <div class="field">
         <p class="control has-icons-left">
-          <input type="text" name="username" class="input is-rounded" value="<%=user.username %>"/>
+          <input type="text" name="username" class="input is-rounded" value="<%=user.username %>" required/>
           <span class="icon is-small is-left">
             <i class="fa-solid fa-user"></i>
           </span>
@@ -52,7 +52,7 @@
       <label for="email" class="label">Email</label>
       <div class="field">
         <p class="control has-icons-left">
-          <input type="text" name="email" class="input is-rounded" value="<%=user.email %>"/>
+          <input type="text" name="email" class="input is-rounded" value="<%=user.email %>" required/>
           <span class="icon is-small is-left">
             <i class="fa-solid fa-at"></i>
           </span>
@@ -75,7 +75,7 @@
       <label for="cityOrState" class="label">City / Region</label>
       <div class="field">
         <p class="control has-icons-left">
-          <input type="text" name="cityOrState" class="input is-rounded" value="<%=user.cityOrState %>"/>
+          <input type="text" name="cityOrState" class="input is-rounded" value="<%=user.cityOrState %>" required/>
           <span class="icon is-small is-left">
             <i class="fa-solid fa-city"></i>
           </span>
@@ -83,7 +83,7 @@
       </div>
 
       <label for="aboutMetext" class="label">About me</label>
-      <textarea name="aboutMeText" class="textarea" rows="6"><%=user.aboutMeText%></textarea>
+      <textarea name="aboutMeText" class="textarea" rows="6" required><%=user.aboutMeText%></textarea>
 
       <div class="columns">
         <div class="column">
