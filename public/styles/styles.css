@@ -168,6 +168,11 @@ body {
   border: 5px solid hsl(171, 100%, 41%);
 }
 
+#joybee-logo-header-img {
+  width: 36px;
+  width: 36px;
+}
+
 #login-text {
   margin-bottom: 1rem;
 }
