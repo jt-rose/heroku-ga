@@ -208,3 +208,7 @@
   /* font-family: "Bebas Neue", cursive; */
   font-family: "Ubuntu", sans-serif;
 }
+
+.card-content {
+  width: 100%;
+}
