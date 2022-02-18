@@ -94,6 +94,8 @@ router.post("/register", upload.single("img"), async (req, res) => {
       targetLanguageProficiency,
     } = req.body;
 
+    console.log("I'm here");
+    console.log("passwords", password !== password2);
     if (password !== password2) {
       res.redirect("/auth/register");
       return;

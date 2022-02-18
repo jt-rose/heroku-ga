@@ -127,6 +127,8 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                 _b.label = 2;
             case 2:
                 _a = req.body, username = _a.username, email = _a.email, password = _a.password, password2 = _a.password2, aboutMeText = _a.aboutMeText, country = _a.country, cityOrState = _a.cityOrState, nativeLanguage = _a.nativeLanguage, targetLanguage = _a.targetLanguage, targetLanguageProficiency = _a.targetLanguageProficiency;
+                console.log("I'm here");
+                console.log("passwords", password !== password2);
                 if (password !== password2) {
                     res.redirect("/auth/register");
                     return [2 /*return*/];
