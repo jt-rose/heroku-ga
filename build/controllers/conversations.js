@@ -103,7 +103,7 @@ router.post("/post", function (req, res) { return __awaiter(void 0, void 0, void
                     })];
             case 2:
                 _b.sent();
-                res.redirect("/");
+                res.redirect("/conversations/post/" + to);
                 return [2 /*return*/];
         }
     });

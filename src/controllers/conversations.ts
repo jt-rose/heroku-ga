@@ -68,7 +68,7 @@ router.post("/post", async (req, res) => {
       unreadMessages: newMessage,
     },
   });
-  res.redirect("/");
+  res.redirect("/conversations/post/" + to);
 });
 
 // ! add pagination
