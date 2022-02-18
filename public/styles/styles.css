@@ -216,3 +216,22 @@ body {
 .card-content {
   width: 100%;
 }
+
+/* .container {
+  margin-left: 32px;
+  margin-right: 32px;
+} */
+
+@media (min-width: 420px) and (max-width: 1023px) {
+  .container {
+    margin-left: 32px;
+    margin-right: 32px;
+  }
+}
+
+@media (max-width: 420px) {
+  .container {
+    margin-left: 0;
+    margin-right: 0;
+  }
+}

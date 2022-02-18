@@ -2,14 +2,14 @@
   <%- include('./partials/head.ejs') %>
   <body>
     <%- include('./partials/header.ejs') %>
-    <div class="container is-fluid">
+    <div class="container">
       <a href="/meetups/create"
         ><button class="button is-primary is-rounded">
           Create new meetup
         </button></a
       >
       <% if (activeMeetups.length) { %>
-      <h2 class="title is-2">Active Meetups</h2>
+      <h2 class="title is-2 has-text-centered">Active Meetups</h2>
       <ul class="content">
         <% for (let i = 0; i < activeMeetups.length; i++) { %>
         <li>
@@ -38,7 +38,6 @@
                 </div>
                 <div class="meetup-content">
                   <p class="title is-3"><%=activeMeetups[i].name%></p>
-                  <p class="subtitle"><%=activeMeetups[i].description%></p>
                   <p>
                     <strong>
                       <%=activeMeetups[i].month%>/<%=activeMeetups[i].day%></strong
@@ -48,6 +47,8 @@
                     |
                     <strong><%=activeMeetups[i].platform%></strong>
                   </p>
+                  <p class="subtitle"><%=activeMeetups[i].description%></p>
+                  
                 </div>
               </div>
             </div>
