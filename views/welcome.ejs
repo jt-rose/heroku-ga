@@ -1,34 +1,51 @@
 <html>
   <%- include('./partials/head.ejs') %>
   <body>
-    <div class="container content">
-      <div id="welcome-container">
-        <div id="welcome-message">
-          <h1>Welcome</h1>
-          <h1>to</h1>
-          <h1>Message</h1>
+    <div id="outer-centering">
+      <div id="outer-welcome-container" class="container has-text-centered">
+        <div id="welcome-container" class="level">
+          <div id="welcome-banner" class="level-item">
+            <div id="welcome-message">
+              <h1 class="title has-text-centered">Welcome</h1>
+              <h1 class="has-text-centered">to</h1>
+              <h1 class="has-text-centered">Joybee</h1>
+            </div>
+            <div id="welcome-img-container">
+              <img id="joybee-welcome-img" src="/avatars/bee.svg" alt="" />
+            </div>
+          </div>
         </div>
-        <div id="welcome-img-container">
-          <img id="joybee-welcome-img" src="/avatars/bee.svg" alt="" />
+        <p class="subtitle">
+          Connect with other language learners around the world to
+          <strong>chat</strong>, <strong>share</strong>, and
+          <strong>meetup</strong>, gaining greater fluency one
+          <strong>fun conversation</strong> at a time
+        </p>
+        <p class="subtitle">
+          With <strong>Joybee</strong>, you can connect to a worldwide network
+          of enthusiastic language learners just like you
+        </p>
+        <div class="level">
+          <div class="level-item">
+            <a href="/auth/register"
+              ><button class="button is-primary is-large is-rounded is-1">
+                Connect to Joybee
+              </button></a
+            >
+          </div>
+        </div>
+
+        <p id="login-text" class="has-text-centered">already a member?</p>
+        <div class="level">
+          <div class="level-item">
+            <a href="/auth/login"
+              ><button class="button is-primary is-medium is-rounded">
+                sign in
+              </button></a
+            >
+          </div>
         </div>
       </div>
-      <p>
-        Lorem ipsum dolor sit, amet consectetur adipisicing elit. Ea odio, iusto
-        assumenda labore sit laudantium officia nam? Aperiam, explicabo
-        consectetur. Cupiditate eaque molestias quae repellat non molestiae
-        suscipit soluta hic!
-      </p>
-      <a href="/auth/register"
-        ><button class="button is-primary is-large is-rounded">
-          Connect
-        </button></a
-      >
-      <p>already a member?</p>
-      <a href="/auth/login"
-        ><button class="button is-primary is-medium is-rounded">
-          sign in
-        </button></a
-      >
     </div>
   </body>
 </html>
