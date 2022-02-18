@@ -1,14 +1,13 @@
 <nav class="navbar" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="https://joybee.herokuapp.com">
-      <figure class="image" >
-      <img
-        src="https://joybee.s3.amazonaws.com/37ca0cc0f10936bd31bd2ec38ae31e25"
-        
-        id="joybee-logo-header-img"
-        class="is-rounded"
-      />
-    </figure>
+      <figure class="image">
+        <img
+          src="https://joybee.s3.amazonaws.com/37ca0cc0f10936bd31bd2ec38ae31e25"
+          id="joybee-logo-header-img"
+          class="is-rounded"
+        />
+      </figure>
       <h4 class="title is-4" id="joybee-logo">JOYBEE</h4>
     </a>
 
@@ -27,27 +26,29 @@
 
   <div id="navbarBasicExample" class="navbar-menu">
     <div class="navbar-start">
-
       <a class="navbar-item" href="/meetups"> Meetups </a>
 
       <a class="navbar-item" href="/user/connects"> Connects </a>
 
       <a class="navbar-item" href="/search"> Search </a>
-
-
-      
+    </div>
 
     <div class="navbar-end">
       <div class="navbar-item">
         <div class="buttons">
           <% if (user) { %>
-            <a href="/user/profile/<%=user._id%>" class="button is-primary is-rounded">
-              <strong>Profile</strong>
-            </a>
-            <form action="/auth/logout?_method=DELETE" method="POST">
-              <button type="submit" class="button is-light is-rounded"> Log out </button>
-            </form>
-            <% } else { %>
+          <a
+            href="/user/profile/<%=user._id%>"
+            class="button is-primary is-rounded"
+          >
+            <strong>Profile</strong>
+          </a>
+          <form action="/auth/logout?_method=DELETE" method="POST">
+            <button type="submit" class="button is-light is-rounded">
+              Log out
+            </button>
+          </form>
+          <% } else { %>
           <a href="/auth/register" class="button is-primary is-rounded">
             <strong>Sign up</strong>
           </a>
