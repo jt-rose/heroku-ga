@@ -5,6 +5,10 @@
   /* font-family: "Ubuntu", sans-serif; */
 }
 
+body {
+  max-width: 100%;
+}
+
 #clear-updates-btn {
   color: hsl(348, 100%, 61%);
 }
