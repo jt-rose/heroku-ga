@@ -1,12 +1,13 @@
 import express from "express";
 import mongoose from "mongoose";
 import { User, IUser } from "../models/User.js";
-import { Invite } from "../models/Invite.js";
+import { Invite, InviteSchema } from "../models/Invite.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
 import multer from "multer";
 import { uploadFile } from "../utils/s3.js";
 import { countries } from "../constants/countries.js";
+import { defaultImg } from "../constants/defaultImg.js";
 const upload = multer({ dest: "uploads/" });
 export const router = express.Router();
 
@@ -15,12 +16,46 @@ router.get("/connects", async (req, res) => {
     res.redirect("/auth/login");
     return;
   }
+  let { connectionInvites } = req.session.user;
+  // filter out new invites that originated from self
+  connectionInvites = connectionInvites.filter(
+    (conn) => String(conn.from) !== String(req.session.user!._id)
+  );
+  const connectionIds = req.session.user.connections;
+  const inviteIds = connectionInvites
+    .map((invite) => [invite.from, invite.to])
+    .flat();
 
-  const connections = await User.find({
-    _id: { $in: req.session.user.connections },
+  const otherUserIds = [...connectionIds, ...inviteIds];
+
+  let users = await User.find({
+    _id: { $in: otherUserIds },
   });
 
-  const invites = req.session.user.connectionInvites;
+  // filter self out from users
+  users = users.filter((u) => String(u._id) !== String(req.session.user!._id));
+
+  // associate partner data with each invite
+  let invites: {
+    partnerImg: string;
+    partnerUsername: string;
+    invite: InviteSchema;
+  }[] = [];
+
+  for (const invite of connectionInvites) {
+    const partner = users.find((u) => String(u._id) === String(invite.from));
+    const inviteWithPartnerInfo = {
+      partnerImg: partner ? partner.img : defaultImg,
+      partnerUsername: partner ? partner.username : "Busy bee",
+      invite,
+    };
+    invites.push(inviteWithPartnerInfo);
+  }
+
+  // grab only users that are currently connections
+  const connections = users.filter((u) =>
+    connectionIds.map((x) => String(x)).includes(String(u._id))
+  );
 
   res.render("connects.ejs", {
     title: "Connections",

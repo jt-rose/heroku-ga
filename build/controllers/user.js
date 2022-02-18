@@ -34,6 +34,15 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
         if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
     }
 };
+var __spreadArray = (this && this.__spreadArray) || function (to, from, pack) {
+    if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
+        if (ar || !(i in from)) {
+            if (!ar) ar = Array.prototype.slice.call(from, 0, i);
+            ar[i] = from[i];
+        }
+    }
+    return to.concat(ar || Array.prototype.slice.call(from));
+};
 import express from "express";
 import mongoose from "mongoose";
 import { User } from "../models/User.js";
@@ -42,10 +51,11 @@ import { proficiencyLevels } from "../constants/proficiency.js";
 import multer from "multer";
 import { uploadFile } from "../utils/s3.js";
 import { countries } from "../constants/countries.js";
+import { defaultImg } from "../constants/defaultImg.js";
 var upload = multer({ dest: "uploads/" });
 export var router = express.Router();
 router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var connections, invites;
+    var connectionInvites, connectionIds, inviteIds, otherUserIds, users, invites, _loop_1, _i, connectionInvites_1, invite, connections;
     return __generator(this, function (_a) {
         switch (_a.label) {
             case 0:
@@ -53,12 +63,38 @@ router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, v
                     res.redirect("/auth/login");
                     return [2 /*return*/];
                 }
+                connectionInvites = req.session.user.connectionInvites;
+                // filter out new invites that originated from self
+                connectionInvites = connectionInvites.filter(function (conn) { return String(conn.from) !== String(req.session.user._id); });
+                connectionIds = req.session.user.connections;
+                inviteIds = connectionInvites
+                    .map(function (invite) { return [invite.from, invite.to]; })
+                    .flat();
+                otherUserIds = __spreadArray(__spreadArray([], connectionIds, true), inviteIds, true);
                 return [4 /*yield*/, User.find({
-                        _id: { $in: req.session.user.connections },
+                        _id: { $in: otherUserIds },
                     })];
             case 1:
-                connections = _a.sent();
-                invites = req.session.user.connectionInvites;
+                users = _a.sent();
+                // filter self out from users
+                users = users.filter(function (u) { return String(u._id) !== String(req.session.user._id); });
+                invites = [];
+                _loop_1 = function (invite) {
+                    var partner = users.find(function (u) { return String(u._id) === String(invite.from); });
+                    var inviteWithPartnerInfo = {
+                        partnerImg: partner ? partner.img : defaultImg,
+                        partnerUsername: partner ? partner.username : "Busy bee",
+                        invite: invite,
+                    };
+                    invites.push(inviteWithPartnerInfo);
+                };
+                for (_i = 0, connectionInvites_1 = connectionInvites; _i < connectionInvites_1.length; _i++) {
+                    invite = connectionInvites_1[_i];
+                    _loop_1(invite);
+                }
+                connections = users.filter(function (u) {
+                    return connectionIds.map(function (x) { return String(x); }).includes(String(u._id));
+                });
                 res.render("connects.ejs", {
                     title: "Connections",
                     user: req.session.user,

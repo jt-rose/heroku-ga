@@ -6,21 +6,81 @@
       <h1 class="title">Invites</h1>
       <ul>
         <% for (let i = 0; i < invites.length; i++) { %>
-        <li>
-          <p><%=invites[i].from%></p>
-        </li>
+        <a href="/user/profile/<%=invites[i].invite.from%>">
+          <div class="card user-card-container">
+            <figure class="image is-128x128">
+              <img
+                src="<%=invites[i].partnerImg %>"
+                alt=""
+                class="is-rounded user-card"
+              />
+            </figure>
+            <div class="card-content">
+              <h3 class="title is-3"><%=invites[i].partnerUsername%></h3>
+              <p>
+                <%=invites[i].invite.message.length > 140 ?
+                invites[i].invite.message.slice(0, 139) + "..." :
+                invites[i].invite.message %>
+              </p>
+            </div>
+          </div>
+        </a>
         <% } %>
       </ul>
+      <% if (invites.length === 0) { %>
+      <p class="subtitle">
+        No new invites! Go out and <a href="/search">meet</a> some people!
+      </p>
+      <% } %>
       <h1 class="title">Connections</h1>
+
       <ul>
         <% for (let i = 0; i < connections.length; i++) { %>
-        <li>
-          <a href="/user/profile/<%=connections[i]._id%>"
-            ><%=connections[i].username%></a
-          >
-        </li>
+        <a href="/user/profile/<%=connections[i]._id%>">
+          <div class="card user-card-container">
+            <figure class="image is-128x128">
+              <img
+                src="<%=connections[i].img %>"
+                alt=""
+                class="is-rounded user-card"
+              />
+            </figure>
+            <div class="card-content">
+              <h3 class="title is-3"><%=connections[i].username%></h3>
+              <div class="user-logos subtitle">
+                <p>
+                  <span class="icon is-small is-left">
+                    <i class="fa-solid fa-earth-americas"></i>
+                  </span>
+                  <%=connections[i].country%>
+                </p>
+                <p>
+                  <span class="icon is-small is-left">
+                    <i class="fa-solid fa-comments"></i>
+                  </span>
+                  <%=connections[i].nativeLanguage%> <% if
+                  (connections[i].nativeLanguage !==
+                  connections[i].targetLanguage) { %> ,
+                  <%=connections[i].targetLanguage%> <% } %>
+                </p>
+              </div>
+
+              <p>
+                <%=connections[i].aboutMeText.length > 140 ?
+                connections[i].aboutMeText.slice(0, 139) + "..." :
+                connections[i].aboutMeText %>
+              </p>
+            </div>
+          </div>
+        </a>
         <% } %>
       </ul>
+      <% if (!connections.length) { %>
+      <p>
+        No connections yet! Why not try the <a href="/search">search</a> page to
+        find some other language learners to connect with!
+      </p>
+      <% } %>
     </div>
   </body>
 </html>
