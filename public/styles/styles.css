@@ -235,3 +235,8 @@ body {
     margin-right: 0;
   }
 }
+
+#create-meetup-btn {
+  margin-top: 1rem;
+  margin-bottom: 1rem;
+}
