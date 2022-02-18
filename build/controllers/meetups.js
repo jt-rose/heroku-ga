@@ -40,20 +40,23 @@ import { Meetup } from "../models/Meetup.js";
 import { formatTime } from "../utils/formatTime.js";
 export var router = express.Router();
 // create meetup
-router.get("/create", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var connections;
+router.get("/create/:username", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
+    var username, connections;
     var _a;
     return __generator(this, function (_b) {
         switch (_b.label) {
-            case 0: return [4 /*yield*/, User.find({
-                    _id: { $in: (_a = req.session.user) === null || _a === void 0 ? void 0 : _a.connections },
-                })];
+            case 0:
+                username = req.params.username;
+                return [4 /*yield*/, User.find({
+                        _id: { $in: (_a = req.session.user) === null || _a === void 0 ? void 0 : _a.connections },
+                    })];
             case 1:
                 connections = _b.sent();
                 res.render("create-meetup.ejs", {
                     title: "Create Meetup",
                     user: req.session.user,
                     connections: connections,
+                    username: username,
                 });
                 return [2 /*return*/];
         }

@@ -26,7 +26,11 @@
               <div class="select is-rounded">
                 <select name="invitee" id="">
                   <% for (let i = 0; i < connections.length; i++) { %>
-                  <option value="<%=connections[i]._id%>">
+                  <option value="<%=connections[i]._id%>"
+                    <% if (username === connections[i].username) { %>
+                      selected
+                    <% } %>
+                    >
                     <%=connections[i].username%>
                   </option>
                   <% } %>

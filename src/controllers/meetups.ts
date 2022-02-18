@@ -7,7 +7,8 @@ import { ObjectId } from "../models/ObjectId.js";
 export const router = express.Router();
 
 // create meetup
-router.get("/create", async (req, res) => {
+router.get("/create/:username", async (req, res) => {
+  const { username } = req.params;
   const connections = await User.find({
     _id: { $in: req.session.user?.connections },
   });
@@ -15,6 +16,7 @@ router.get("/create", async (req, res) => {
     title: "Create Meetup",
     user: req.session.user,
     connections,
+    username,
   });
 });
 

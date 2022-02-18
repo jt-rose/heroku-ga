@@ -19,7 +19,11 @@
             ><button class="button is-primary is-rounded">Message</button></a
           >
 
-          <button class="button is-primary is-rounded">Invite to Meetup</button>
+          <a href="/meetups/create/<%=targetUser._id%>"
+            ><button class="button is-primary is-rounded">
+              Invite to Meetup
+            </button></a
+          >
           <% } else if (connectionRequestToMe && invite) { %>
           <div id="connection-buttons">
             <p>
