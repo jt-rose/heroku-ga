@@ -158,9 +158,12 @@ router.put("/edit-profile", upload.single("img"), async (req, res) => {
   const file = req.file;
   let img;
   if (file) {
-    // ! add validation around img type and size
-    const result = await uploadFile(file);
-    img = result.Location;
+    const allowedImgTypes = ["image/jpeg", "image/png"];
+    if (allowedImgTypes.includes(file.mimetype)) {
+      console.log("image file type allowed");
+      const result = await uploadFile(file);
+      img = result.Location;
+    }
   }
   const {
     username,

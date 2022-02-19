@@ -104,7 +104,7 @@ router.get("/register", function (req, res) {
     });
 });
 router.post("/register", upload.single("img"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var file, img, result, _a, username, email, password, password2, aboutMeText, country, cityOrState, nativeLanguage, targetLanguage, targetLanguageProficiency, userAlreadyExists, hashedPassword, user, e_1;
+    var file, img, allowedImgTypes, result, _a, username, email, password, password2, aboutMeText, country, cityOrState, nativeLanguage, targetLanguage, targetLanguageProficiency, userAlreadyExists, hashedPassword, user, e_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -112,6 +112,10 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                 file = req.file;
                 img = "https://joybee.s3.amazonaws.com/37ca0cc0f10936bd31bd2ec38ae31e25";
                 if (!file) return [3 /*break*/, 2];
+                console.log(file.mimetype);
+                allowedImgTypes = ["image/jpeg", "image/png"];
+                if (!allowedImgTypes.includes(file.mimetype)) return [3 /*break*/, 2];
+                console.log("file type allowed");
                 return [4 /*yield*/, uploadFile(file)];
             case 1:
                 result = _b.sent();

@@ -65,9 +65,13 @@ router.post("/register", upload.single("img"), async (req, res) => {
 
     // if image file present, upload to s3 and overwrite the default img
     if (file) {
-      // ! add validation around img type and size
-      const result = await uploadFile(file);
-      img = result.Location;
+      console.log(file.mimetype);
+      const allowedImgTypes = ["image/jpeg", "image/png"];
+      if (allowedImgTypes.includes(file.mimetype)) {
+        console.log("file type allowed");
+        const result = await uploadFile(file);
+        img = result.Location;
+      }
     }
 
     // get form parameters from req.body

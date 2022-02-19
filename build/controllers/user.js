@@ -184,7 +184,7 @@ router.get("/edit-profile", function (req, res) {
     });
 });
 router.put("/edit-profile", upload.single("img"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, file, img, result, _a, username, email, country, cityOrState, aboutMeText, nativeLanguage, targetLanguage, targetLanguageProficiency, sameUsers;
+    var user, file, img, allowedImgTypes, result, _a, username, email, country, cityOrState, aboutMeText, nativeLanguage, targetLanguage, targetLanguageProficiency, sameUsers;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -196,6 +196,9 @@ router.put("/edit-profile", upload.single("img"), function (req, res) { return _
                 }
                 file = req.file;
                 if (!file) return [3 /*break*/, 2];
+                allowedImgTypes = ["image/jpeg", "image/png"];
+                if (!allowedImgTypes.includes(file.mimetype)) return [3 /*break*/, 2];
+                console.log("image file type allowed");
                 return [4 /*yield*/, uploadFile(file)];
             case 1:
                 result = _b.sent();
