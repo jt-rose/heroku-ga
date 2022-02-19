@@ -126,6 +126,7 @@ const main = async () => {
   app.get("/", async (req: Request, res: Response) => {
     console.log(req.session.user);
 
+    console.log("user found: ", req.session.user);
     if (!req.session.user) {
       res.render("welcome.ejs", {
         title: "Welcome",

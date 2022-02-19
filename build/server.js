@@ -155,6 +155,7 @@ var main = function () { return __awaiter(void 0, void 0, void 0, function () {
                         switch (_d.label) {
                             case 0:
                                 console.log(req.session.user);
+                                console.log("user found: ", req.session.user);
                                 if (!req.session.user) {
                                     res.render("welcome.ejs", {
                                         title: "Welcome",
