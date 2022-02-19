@@ -63,10 +63,6 @@ router.post("/login", function (req, res) { return __awaiter(void 0, void 0, voi
                 foundUser = _b.sent();
                 if (!foundUser) {
                     res.redirect("/auth/login");
-                    // res.render("/auth/login", {
-                    //   title: "Login",
-                    //   error: "No user with that username / password",
-                    // });
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, argon2.verify(foundUser.password, password)];
@@ -74,10 +70,6 @@ router.post("/login", function (req, res) { return __awaiter(void 0, void 0, voi
                 matchingPassword = _b.sent();
                 if (!matchingPassword) {
                     res.redirect("/auth/login");
-                    // res.render("/auth/login", {
-                    //   title: "Login",
-                    //   error: "No user with that username / password",
-                    // });
                     return [2 /*return*/];
                 }
                 // set cookie if username and password match
@@ -127,8 +119,6 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                 _b.label = 2;
             case 2:
                 _a = req.body, username = _a.username, email = _a.email, password = _a.password, password2 = _a.password2, aboutMeText = _a.aboutMeText, country = _a.country, cityOrState = _a.cityOrState, nativeLanguage = _a.nativeLanguage, targetLanguage = _a.targetLanguage, targetLanguageProficiency = _a.targetLanguageProficiency;
-                console.log("I'm here");
-                console.log("passwords", password !== password2);
                 if (password !== password2) {
                     res.redirect("/auth/register");
                     return [2 /*return*/];

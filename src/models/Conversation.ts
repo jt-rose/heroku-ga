@@ -3,8 +3,8 @@ import { ObjectId } from "./ObjectId.js";
 
 export interface IMessage extends Types.Subdocument {
   message: string;
-  from: typeof ObjectId; // mongo id
-  to: typeof ObjectId; // mongo id
+  from: typeof ObjectId;
+  to: typeof ObjectId;
   date: Date;
 }
 

@@ -2,12 +2,12 @@ import mongoose, { Types } from "mongoose";
 import { ObjectId } from "./ObjectId.js";
 
 export interface InviteSchema extends Types.Subdocument {
-  from: typeof ObjectId; // mongo id - string?
+  from: typeof ObjectId;
   to: typeof ObjectId;
 
   date: Date; // refers to either date invite sent or date accepted, depending on status
   message: string;
-  targetLanguage: string; // constant
+  targetLanguage: string;
   inviteAccepted: boolean;
 }
 

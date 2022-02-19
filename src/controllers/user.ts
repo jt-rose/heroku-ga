@@ -1,7 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import { User, IUser } from "../models/User.js";
-import { Invite, InviteSchema } from "../models/Invite.js";
+import { InviteSchema } from "../models/Invite.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
 import multer from "multer";
@@ -85,7 +85,7 @@ router.get("/profile/:userid", async (req, res) => {
   }
 
   if (!targetUser) {
-    // flash message
+    // ! flash message
     res.redirect("/");
     return;
   }
@@ -175,12 +175,14 @@ router.put("/edit-profile", upload.single("img"), async (req, res) => {
   //confirm that email and username are available
 
   const sameUsers = await User.find({ $or: [{ username }, { email }] });
-  console.log(sameUsers);
+
   if (
     sameUsers.length &&
     sameUsers.some((u) => String(u._id) !== String(user._id))
   ) {
-    console.log("email or username already taken");
+    console.log(
+      "REGISTRATION FAILED FOR SAME USERNAME / EMAIL ALREADY REGISTERED"
+    );
     // ! add flash message warning and reroute
     res.redirect("/user/edit-profile");
     return;

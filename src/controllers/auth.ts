@@ -1,13 +1,11 @@
 import express from "express";
 import argon2 from "argon2";
-import { User, IUser } from "../models/User.js";
-import path from "path";
+import { User } from "../models/User.js";
 import multer from "multer";
-import { uploadFile, getFileStream } from "../utils/s3.js";
+import { uploadFile } from "../utils/s3.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
 import { countries } from "../constants/countries.js";
-import { Redshift } from "aws-sdk";
 export const router = express.Router();
 
 const upload = multer({ dest: "uploads/" });
@@ -27,20 +25,12 @@ router.post("/login", async (req, res) => {
   });
   if (!foundUser) {
     res.redirect("/auth/login");
-    // res.render("/auth/login", {
-    //   title: "Login",
-    //   error: "No user with that username / password",
-    // });
     return;
   }
   // compare password
   const matchingPassword = await argon2.verify(foundUser.password, password);
   if (!matchingPassword) {
     res.redirect("/auth/login");
-    // res.render("/auth/login", {
-    //   title: "Login",
-    //   error: "No user with that username / password",
-    // });
     return;
   }
   // set cookie if username and password match
@@ -94,8 +84,6 @@ router.post("/register", upload.single("img"), async (req, res) => {
       targetLanguageProficiency,
     } = req.body;
 
-    console.log("I'm here");
-    console.log("passwords", password !== password2);
     if (password !== password2) {
       res.redirect("/auth/register");
       return;

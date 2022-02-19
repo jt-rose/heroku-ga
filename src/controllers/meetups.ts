@@ -1,6 +1,6 @@
 import express from "express";
 import { User } from "../models/User.js";
-import { IMeetup, Meetup } from "../models/Meetup.js";
+import { Meetup } from "../models/Meetup.js";
 import { formatTime } from "../utils/formatTime.js";
 import { ObjectId } from "../models/ObjectId.js";
 
@@ -110,7 +110,7 @@ router.get("/edit/:meetupid", async (req, res) => {
   const meetup = req.session.user?.currentMeetups.find(
     (meet) => String(meet._id) === String(meetupid)
   );
-  console.log("meetup", meetup);
+
   if (!meetup) {
     res.redirect("/");
     return;
@@ -127,6 +127,7 @@ router.get("/edit/:meetupid", async (req, res) => {
   const connections = await User.find({
     _id: { $in: req.session.user?.connections },
   });
+
   res.render("edit-meetup.ejs", {
     title: "Edit Meetup",
     user: req.session.user,
@@ -152,6 +153,7 @@ router.put("/edit", async (req, res) => {
     platform,
     meetupid,
   } = req.body;
+
   const startTime = new Date(date + " " + start);
   const endTime = new Date(startTime.getTime() + parseInt(duration) * 60000);
 
@@ -166,7 +168,7 @@ router.put("/edit", async (req, res) => {
     cancelled: false,
     response: "MEETUP_CHANGED",
   });
-  console.log("edited meetup", newMeetup);
+
   await User.updateMany(
     { _id: { $in: [req.session.user._id, invitee] } },
     {
@@ -175,12 +177,14 @@ router.put("/edit", async (req, res) => {
       },
     }
   );
+
   await User.updateMany(
     { _id: { $in: [req.session.user._id, invitee] } },
     {
       $push: { currentMeetups: newMeetup },
     }
   );
+
   res.redirect("/");
 });
 
@@ -194,7 +198,6 @@ router.put("/response", async (req, res) => {
   if (rsvp === "true") {
     await User.updateMany(
       {
-        //_id: { $in: [req.session.user._id, creator] },
         "currentMeetups._id": meetupid,
       },
       {
@@ -204,18 +207,8 @@ router.put("/response", async (req, res) => {
       }
     );
   } else {
-    // template:
-    // await User.updateOne(
-    //     { _id: invitee, "currentMeetups._id": meetupid },
-    //     {
-    //       $set: {
-    //         "currentMeetups.$.cancelled": true,
-    //       },
-    //     }
-    //   );
     await User.updateMany(
       {
-        //_id: { $in: [req.session.user._id, creator] },
         "currentMeetups._id": meetupid,
       },
       {

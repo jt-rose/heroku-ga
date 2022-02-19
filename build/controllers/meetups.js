@@ -176,7 +176,6 @@ router.get("/edit/:meetupid", function (req, res) { return __awaiter(void 0, voi
                 meetupid = req.params.meetupid;
                 console.log("mmetup id ", meetupid);
                 meetup = (_a = req.session.user) === null || _a === void 0 ? void 0 : _a.currentMeetups.find(function (meet) { return String(meet._id) === String(meetupid); });
-                console.log("meetup", meetup);
                 if (!meetup) {
                     res.redirect("/");
                     return [2 /*return*/];
@@ -227,7 +226,6 @@ router.put("/edit", function (req, res) { return __awaiter(void 0, void 0, void 
                     cancelled: false,
                     response: "MEETUP_CHANGED",
                 });
-                console.log("edited meetup", newMeetup);
                 return [4 /*yield*/, User.updateMany({ _id: { $in: [req.session.user._id, invitee] } }, {
                         $pull: {
                             currentMeetups: { _id: meetupid },
@@ -258,7 +256,6 @@ router.put("/response", function (req, res) { return __awaiter(void 0, void 0, v
                 _a = req.body, rsvp = _a.rsvp, meetupid = _a.meetupid, creator = _a.creator;
                 if (!(rsvp === "true")) return [3 /*break*/, 2];
                 return [4 /*yield*/, User.updateMany({
-                        //_id: { $in: [req.session.user._id, creator] },
                         "currentMeetups._id": meetupid,
                     }, {
                         $set: {
@@ -268,18 +265,7 @@ router.put("/response", function (req, res) { return __awaiter(void 0, void 0, v
             case 1:
                 _b.sent();
                 return [3 /*break*/, 5];
-            case 2: 
-            // template:
-            // await User.updateOne(
-            //     { _id: invitee, "currentMeetups._id": meetupid },
-            //     {
-            //       $set: {
-            //         "currentMeetups.$.cancelled": true,
-            //       },
-            //     }
-            //   );
-            return [4 /*yield*/, User.updateMany({
-                    //_id: { $in: [req.session.user._id, creator] },
+            case 2: return [4 /*yield*/, User.updateMany({
                     "currentMeetups._id": meetupid,
                 }, {
                     $set: {
@@ -287,15 +273,6 @@ router.put("/response", function (req, res) { return __awaiter(void 0, void 0, v
                     },
                 })];
             case 3:
-                // template:
-                // await User.updateOne(
-                //     { _id: invitee, "currentMeetups._id": meetupid },
-                //     {
-                //       $set: {
-                //         "currentMeetups.$.cancelled": true,
-                //       },
-                //     }
-                //   );
                 _b.sent();
                 return [4 /*yield*/, User.findByIdAndUpdate(req.session.user._id, {
                         $pull: {

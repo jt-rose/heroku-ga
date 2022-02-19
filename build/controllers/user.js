@@ -131,7 +131,7 @@ router.get("/profile/:userid", function (req, res) { return __awaiter(void 0, vo
                 _a.label = 2;
             case 2:
                 if (!targetUser) {
-                    // flash message
+                    // ! flash message
                     res.redirect("/");
                     return [2 /*return*/];
                 }
@@ -206,10 +206,9 @@ router.put("/edit-profile", upload.single("img"), function (req, res) { return _
                 return [4 /*yield*/, User.find({ $or: [{ username: username }, { email: email }] })];
             case 3:
                 sameUsers = _b.sent();
-                console.log(sameUsers);
                 if (sameUsers.length &&
                     sameUsers.some(function (u) { return String(u._id) !== String(user._id); })) {
-                    console.log("email or username already taken");
+                    console.log("REGISTRATION FAILED FOR SAME USERNAME / EMAIL ALREADY REGISTERED");
                     // ! add flash message warning and reroute
                     res.redirect("/user/edit-profile");
                     return [2 /*return*/];

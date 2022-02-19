@@ -41,7 +41,7 @@ router.post("/create", async (req, res) => {
   });
 
   // add new invite to from and to users
-  const fromAndTo = await User.updateMany(
+  await User.updateMany(
     { $or: [{ _id: req.session.user._id }, { _id: invitee }] },
     { $push: { connectionInvites: newInvite } },
     { new: true }
@@ -147,7 +147,7 @@ router.delete("/", async (req, res) => {
   }
   const { invitedUserId, inviteId } = req.body;
   // remove the invite from both users
-  const updatedUsers = await User.updateMany(
+  await User.updateMany(
     { _id: { $in: [req.session.user?._id, invitedUserId] } },
     { $pull: { connectionInvites: { _id: inviteId } } }
   );
@@ -179,7 +179,7 @@ router.get("/", async (req, res) => {
   const invitesToMe = user.connectionInvites.filter(
     (invite) => String(invite.to) === String(req.session.user?._id)
   );
-  console.log("invites", invitesToMe);
+
   // display with ejs
   res.render("invites.ejs", {
     title: "Invites",

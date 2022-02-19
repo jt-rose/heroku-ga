@@ -64,7 +64,7 @@ router.get("/create/:userid", function (req, res) { return __awaiter(void 0, voi
     });
 }); });
 router.post("/create", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, invitee, message, targetLanguage, newInvite, fromAndTo, me;
+    var _a, invitee, message, targetLanguage, newInvite, me;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -82,9 +82,11 @@ router.post("/create", function (req, res) { return __awaiter(void 0, void 0, vo
                     targetLanguage: targetLanguage,
                     inviteAccepted: false,
                 });
+                // add new invite to from and to users
                 return [4 /*yield*/, User.updateMany({ $or: [{ _id: req.session.user._id }, { _id: invitee }] }, { $push: { connectionInvites: newInvite } }, { new: true })];
             case 1:
-                fromAndTo = _c.sent();
+                // add new invite to from and to users
+                _c.sent();
                 return [4 /*yield*/, User.findById(req.session.user._id)];
             case 2:
                 me = _c.sent();
@@ -182,7 +184,7 @@ router.put("/response", function (req, res) { return __awaiter(void 0, void 0, v
 }); });
 // rescind invite that has been sent
 router.delete("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, invitedUserId, inviteId, updatedUsers;
+    var _a, invitedUserId, inviteId;
     var _b;
     return __generator(this, function (_c) {
         switch (_c.label) {
@@ -192,9 +194,11 @@ router.delete("/", function (req, res) { return __awaiter(void 0, void 0, void 0
                     return [2 /*return*/];
                 }
                 _a = req.body, invitedUserId = _a.invitedUserId, inviteId = _a.inviteId;
+                // remove the invite from both users
                 return [4 /*yield*/, User.updateMany({ _id: { $in: [(_b = req.session.user) === null || _b === void 0 ? void 0 : _b._id, invitedUserId] } }, { $pull: { connectionInvites: { _id: inviteId } } })];
             case 1:
-                updatedUsers = _c.sent();
+                // remove the invite from both users
+                _c.sent();
                 res.redirect("/");
                 return [2 /*return*/];
         }
@@ -221,7 +225,6 @@ router.get("/", function (req, res) { return __awaiter(void 0, void 0, void 0, f
                 }
                 invitesFromMe = user.connectionInvites.filter(function (invite) { var _a; return String(invite.from) === String((_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id); });
                 invitesToMe = user.connectionInvites.filter(function (invite) { var _a; return String(invite.to) === String((_a = req.session.user) === null || _a === void 0 ? void 0 : _a._id); });
-                console.log("invites", invitesToMe);
                 // display with ejs
                 res.render("invites.ejs", {
                     title: "Invites",
