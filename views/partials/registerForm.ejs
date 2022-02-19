@@ -71,7 +71,7 @@
         </div>
       </div>
       <p id="photo-size-warning">
-        for best results please use a JPEG/ PNG with a 1x1 aspect ratio
+        please use a JPEG/ PNG with a 1x1 aspect ratio
       </p>
 
       <label for="email" class="label">Email</label>
@@ -164,14 +164,4 @@
     </form>
   </div>
 </div>
-<script>
-  const fileInput = document.querySelector("#file-js input[type=file]");
-  fileInput.onchange = () => {
-    if (fileInput.files.length > 0) {
-      const fileName = document.querySelector("#file-js .file-name");
-      const imgPreview = (document.querySelector("#preview").src =
-        URL.createObjectURL(fileInput.files[0]));
-      fileName.textContent = fileInput.files[0].name;
-    }
-  };
-</script>
+<script src="/scripts/handleImgUpload.js"></script>
