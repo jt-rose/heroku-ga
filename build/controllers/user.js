@@ -52,6 +52,7 @@ import multer from "multer";
 import { uploadFile } from "../utils/s3.js";
 import { countries } from "../constants/countries.js";
 import { defaultImg } from "../constants/defaultImg.js";
+import { formatErrorMsg } from "../utils/formatErrorMsg.js";
 var upload = multer({ dest: "uploads/" });
 export var router = express.Router();
 router.get("/connects", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
@@ -175,16 +176,19 @@ router.get("/edit-profile", function (req, res) {
         res.redirect("/auth/login");
         return;
     }
+    var errorMessage = req.query.errorMessage;
+    errorMessage = formatErrorMsg(errorMessage);
     res.render("edit-profile.ejs", {
         title: "Edit Profile",
         user: user,
         countries: countries,
         languages: languages,
         proficiencyLevels: proficiencyLevels,
+        errorMessage: errorMessage,
     });
 });
 router.put("/edit-profile", upload.single("img"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var user, file, img, allowedImgTypes, result, _a, username, email, country, cityOrState, aboutMeText, nativeLanguage, targetLanguage, targetLanguageProficiency, sameUsers;
+    var user, file, img, allowedImgTypes, result, _a, username, email, country, cityOrState, aboutMeText, nativeLanguage, targetLanguage, targetLanguageProficiency, sameUsers, otherUsers, sameUsername, sameEmail, errorMessage;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -209,12 +213,25 @@ router.put("/edit-profile", upload.single("img"), function (req, res) { return _
                 return [4 /*yield*/, User.find({ $or: [{ username: username }, { email: email }] })];
             case 3:
                 sameUsers = _b.sent();
-                if (sameUsers.length &&
-                    sameUsers.some(function (u) { return String(u._id) !== String(user._id); })) {
-                    console.log("REGISTRATION FAILED FOR SAME USERNAME / EMAIL ALREADY REGISTERED");
-                    // ! add flash message warning and reroute
-                    res.redirect("/user/edit-profile");
-                    return [2 /*return*/];
+                if (sameUsers.length) {
+                    otherUsers = sameUsers.filter(function (u) { return String(u._id) !== String(user._id); });
+                    if (otherUsers.length) {
+                        sameUsername = otherUsers.find(function (u) { return u.username === username; });
+                        sameEmail = otherUsers.find(function (u) { return u.email === email; });
+                        errorMessage = "internal";
+                        if (sameUsername && sameEmail) {
+                            errorMessage = "usernameAndEmailTaken";
+                        }
+                        else if (sameUsername) {
+                            errorMessage = "usernameTaken";
+                        }
+                        else if (sameEmail) {
+                            errorMessage = "emailTaken";
+                        }
+                        console.log("REGISTRATION FAILED FOR SAME USERNAME / EMAIL ALREADY REGISTERED");
+                        res.redirect("/user/edit-profile?errorMessage=" + errorMessage);
+                        return [2 /*return*/];
+                    }
                 }
                 return [4 /*yield*/, User.findByIdAndUpdate(user._id, {
                         $set: {

@@ -8,6 +8,7 @@ import multer from "multer";
 import { uploadFile } from "../utils/s3.js";
 import { countries } from "../constants/countries.js";
 import { defaultImg } from "../constants/defaultImg.js";
+import { formatErrorMsg } from "../utils/formatErrorMsg.js";
 const upload = multer({ dest: "uploads/" });
 export const router = express.Router();
 
@@ -137,12 +138,18 @@ router.get("/edit-profile", (req, res) => {
     res.redirect("/auth/login");
     return;
   }
+
+  let { errorMessage } = req.query;
+
+  errorMessage = formatErrorMsg(errorMessage);
+
   res.render("edit-profile.ejs", {
     title: "Edit Profile",
     user,
     countries,
     languages,
     proficiencyLevels,
+    errorMessage,
   });
 });
 
@@ -179,16 +186,28 @@ router.put("/edit-profile", upload.single("img"), async (req, res) => {
 
   const sameUsers = await User.find({ $or: [{ username }, { email }] });
 
-  if (
-    sameUsers.length &&
-    sameUsers.some((u) => String(u._id) !== String(user._id))
-  ) {
-    console.log(
-      "REGISTRATION FAILED FOR SAME USERNAME / EMAIL ALREADY REGISTERED"
+  if (sameUsers.length) {
+    const otherUsers = sameUsers.filter(
+      (u) => String(u._id) !== String(user._id)
     );
-    // ! add flash message warning and reroute
-    res.redirect("/user/edit-profile");
-    return;
+    if (otherUsers.length) {
+      let sameUsername = otherUsers.find((u) => u.username === username);
+      let sameEmail = otherUsers.find((u) => u.email === email);
+      let errorMessage = "internal";
+      if (sameUsername && sameEmail) {
+        errorMessage = "usernameAndEmailTaken";
+      } else if (sameUsername) {
+        errorMessage = "usernameTaken";
+      } else if (sameEmail) {
+        errorMessage = "emailTaken";
+      }
+
+      console.log(
+        "REGISTRATION FAILED FOR SAME USERNAME / EMAIL ALREADY REGISTERED"
+      );
+      res.redirect("/user/edit-profile?errorMessage=" + errorMessage);
+      return;
+    }
   }
 
   await User.findByIdAndUpdate(user._id, {

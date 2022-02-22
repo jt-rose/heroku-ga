@@ -51,5 +51,25 @@
         </div>
       </form>
     </div>
+
+    <!-- modal form to present erros to user -->
+    <div class="modal<%=errorMessage ? " is-active" : ""%>">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <!-- Any other Bulma elements you want -->
+        <div class="container">
+          <article class="message is-danger">
+            <div class="message-header">
+              <p id="error-modal-title">Error!</p>
+            </div>
+            <div class="message-body has-text-centered">
+              <%=errorMessage%>
+            </div>
+          </article>
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+      </div>
+    </div>
   </body>
+  <script src="/scripts/removeModal.js"></script>
 </html>
