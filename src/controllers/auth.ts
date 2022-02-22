@@ -6,6 +6,8 @@ import { uploadFile } from "../utils/s3.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
 import { countries } from "../constants/countries.js";
+import { validatePassword } from "../utils/validate.js";
+import { formatErrorMsg } from "../utils/formatErrorMsg.js";
 export const router = express.Router();
 
 const upload = multer({ dest: "uploads/" });
@@ -47,12 +49,18 @@ router.delete("/logout", async (req, res) => {
 });
 
 router.get("/register", (req, res) => {
+  let { errorMessage } = req.query;
+
+  errorMessage = formatErrorMsg(errorMessage);
+
+  console.log("registration error: ", errorMessage);
   res.render("register.ejs", {
     title: "Sign Up",
     user: req.session.user,
     languages,
     proficiencyLevels,
     countries,
+    errorMessage,
   });
 });
 router.post("/register", upload.single("img"), async (req, res) => {
@@ -88,8 +96,14 @@ router.post("/register", upload.single("img"), async (req, res) => {
       targetLanguageProficiency,
     } = req.body;
 
-    if (password !== password2) {
-      res.redirect("/auth/register");
+    // most validation will be shown on the client side
+    // before ever submitting the registration request
+    // this serverside validation is just for security
+    // therefore, the error propagated will be left generic
+    const passwordCheck = validatePassword(password, password2);
+
+    if (!passwordCheck.valid) {
+      res.redirect("/auth/register?errorMessage=passwordInvalid");
       return;
     }
 
@@ -98,12 +112,17 @@ router.post("/register", upload.single("img"), async (req, res) => {
       $or: [{ username }, { email }],
     });
     if (userAlreadyExists) {
-      res.render("/register", {
-        title: "Register",
-        user: req.session.user,
-        error: "Username / Email already in use",
-        countries,
-      });
+      const usernameTaken = userAlreadyExists.username === username;
+      const emailTaken = userAlreadyExists.email === email;
+      let errorMessage = "internal";
+      if (usernameTaken && emailTaken) {
+        errorMessage = "usernameAndEmailTaken";
+      } else if (usernameTaken) {
+        errorMessage = "usernameTaken";
+      } else if (emailTaken) {
+        errorMessage = "emailTaken";
+      }
+      res.redirect("/auth/register?errorMessage=" + errorMessage);
       return;
     }
     // validate data
@@ -131,20 +150,14 @@ router.post("/register", upload.single("img"), async (req, res) => {
       updatedMeetups: [],
     }).save();
 
-    // if err
-    // ! add later
-
     // set cookie
     req.session.user = user;
 
     // return to homepage
     res.redirect("/");
   } catch (e) {
-    console.log(e);
-    // res.redirect('/register', {
-    //   title: 'Register',
-    //   error: 'internal server error'
-    // })
+    console.log("Error: " + e);
+    res.redirect("/auth/register?errorMessage=internal");
   }
 });
 

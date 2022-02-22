@@ -12,23 +12,25 @@
 
       <%- include('./partials/registerForm.ejs') %>
     </div>
-  </body>
-</html>
 
-<!-- username: { type: String, required: true },
-  password: { type: String, required: true },
-  email: { type: String, required: true },
-  // img
-  country: { type: String, required: true },
-  cityOrState: { type: String, required: true },
-  aboutMeText: { type: String, required: true },
-  joinedOn: { type: Date, required: true },
-  active: { type: Boolean, required: true },
-  languages: [{ type: String, required: true }],
-  hobbies: [{ type: String, required: true }],
-  // to limit mongo's excessive data duplication, we will only
-  // store recently updated fields, manage these as changes are made
-  // and limit pulling data on the full data set unless needed
-  updatedConnects: [Connect],
-  updatedConversations: [Conversation],
-  updatedMeetups: [Meetup], -->
+    <!-- modal form to present erros to user -->
+    <div class="modal<%=errorMessage ? " is-active" : ""%>">
+      <div class="modal-background"></div>
+      <div class="modal-content">
+        <!-- Any other Bulma elements you want -->
+        <div class="container">
+          <article class="message is-danger">
+            <div class="message-header">
+              <p id="error-modal-title">Error!</p>
+            </div>
+            <div class="message-body has-text-centered">
+              <%=errorMessage%>
+            </div>
+          </article>
+        </div>
+        <button class="modal-close is-large" aria-label="close"></button>
+      </div>
+    </div>
+  </body>
+  <script src="/scripts/removeModal.js"></script>
+</html>

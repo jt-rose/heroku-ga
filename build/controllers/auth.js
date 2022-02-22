@@ -42,6 +42,8 @@ import { uploadFile } from "../utils/s3.js";
 import { languages } from "../constants/languages.js";
 import { proficiencyLevels } from "../constants/proficiency.js";
 import { countries } from "../constants/countries.js";
+import { validatePassword } from "../utils/validate.js";
+import { formatErrorMsg } from "../utils/formatErrorMsg.js";
 export var router = express.Router();
 var upload = multer({ dest: "uploads/" });
 router.get("/login", function (req, res) {
@@ -95,16 +97,20 @@ router.delete("/logout", function (req, res) { return __awaiter(void 0, void 0, 
     });
 }); });
 router.get("/register", function (req, res) {
+    var errorMessage = req.query.errorMessage;
+    errorMessage = formatErrorMsg(errorMessage);
+    console.log("registration error: ", errorMessage);
     res.render("register.ejs", {
         title: "Sign Up",
         user: req.session.user,
         languages: languages,
         proficiencyLevels: proficiencyLevels,
         countries: countries,
+        errorMessage: errorMessage,
     });
 });
 router.post("/register", upload.single("img"), function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var file, img, allowedImgTypes, result, _a, username, email, password, password2, aboutMeText, country, cityOrState, nativeLanguage, targetLanguage, targetLanguageProficiency, userAlreadyExists, hashedPassword, user, e_1;
+    var file, img, allowedImgTypes, result, _a, username, email, password, password2, aboutMeText, country, cityOrState, nativeLanguage, targetLanguage, targetLanguageProficiency, passwordCheck, userAlreadyExists, usernameTaken, emailTaken, errorMessage, hashedPassword, user, e_1;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
@@ -123,8 +129,9 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                 _b.label = 2;
             case 2:
                 _a = req.body, username = _a.username, email = _a.email, password = _a.password, password2 = _a.password2, aboutMeText = _a.aboutMeText, country = _a.country, cityOrState = _a.cityOrState, nativeLanguage = _a.nativeLanguage, targetLanguage = _a.targetLanguage, targetLanguageProficiency = _a.targetLanguageProficiency;
-                if (password !== password2) {
-                    res.redirect("/auth/register");
+                passwordCheck = validatePassword(password, password2);
+                if (!passwordCheck.valid) {
+                    res.redirect("/auth/register?errorMessage=passwordInvalid");
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, User.findOne({
@@ -133,12 +140,19 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
             case 3:
                 userAlreadyExists = _b.sent();
                 if (userAlreadyExists) {
-                    res.render("/register", {
-                        title: "Register",
-                        user: req.session.user,
-                        error: "Username / Email already in use",
-                        countries: countries,
-                    });
+                    usernameTaken = userAlreadyExists.username === username;
+                    emailTaken = userAlreadyExists.email === email;
+                    errorMessage = "internal";
+                    if (usernameTaken && emailTaken) {
+                        errorMessage = "usernameAndEmailTaken";
+                    }
+                    else if (usernameTaken) {
+                        errorMessage = "usernameTaken";
+                    }
+                    else if (emailTaken) {
+                        errorMessage = "emailTaken";
+                    }
+                    res.redirect("/auth/register?errorMessage=" + errorMessage);
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, argon2.hash(password)];
@@ -163,8 +177,6 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                     }).save()];
             case 5:
                 user = _b.sent();
-                // if err
-                // ! add later
                 // set cookie
                 req.session.user = user;
                 // return to homepage
@@ -172,7 +184,8 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                 return [3 /*break*/, 7];
             case 6:
                 e_1 = _b.sent();
-                console.log(e_1);
+                console.log("Error: " + e_1);
+                res.redirect("/auth/register?errorMessage=internal");
                 return [3 /*break*/, 7];
             case 7: return [2 /*return*/];
         }
