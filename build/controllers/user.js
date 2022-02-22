@@ -210,14 +210,19 @@ router.put("/edit-profile", upload.single("img"), function (req, res) { return _
                 _b.label = 2;
             case 2:
                 _a = req.body, username = _a.username, email = _a.email, country = _a.country, cityOrState = _a.cityOrState, aboutMeText = _a.aboutMeText, nativeLanguage = _a.nativeLanguage, targetLanguage = _a.targetLanguage, targetLanguageProficiency = _a.targetLanguageProficiency;
-                return [4 /*yield*/, User.find({ $or: [{ username: username }, { email: email }] })];
+                return [4 /*yield*/, User.find({
+                        $or: [
+                            { username: { $regex: new RegExp(username), $options: "i" } },
+                            { email: { $regex: new RegExp(email), $options: "i" } },
+                        ],
+                    })];
             case 3:
                 sameUsers = _b.sent();
                 if (sameUsers.length) {
                     otherUsers = sameUsers.filter(function (u) { return String(u._id) !== String(user._id); });
                     if (otherUsers.length) {
-                        sameUsername = otherUsers.find(function (u) { return u.username === username; });
-                        sameEmail = otherUsers.find(function (u) { return u.email === email; });
+                        sameUsername = otherUsers.find(function (u) { return u.username.toLowerCase() === username.toLowerCase(); });
+                        sameEmail = otherUsers.find(function (u) { return u.email.toLowerCase() === email.toLowerCase(); });
                         errorMessage = "internal";
                         if (sameUsername && sameEmail) {
                             errorMessage = "usernameAndEmailTaken";

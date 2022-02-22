@@ -22,8 +22,13 @@ router.post("/login", async (req, res) => {
   const { usernameOrEmail, password } = req.body;
 
   // check for user in system
+  // regexp with an 'i' flag is used for case insensitive searches
+  // if this app grew in size we would want to update this to use case-insensitive indexes
+  // but rolling index builds aren't available on the free tier
+  // so this will suffice for now
+  const searchOptions = { $regex: new RegExp(usernameOrEmail), $options: "i" };
   const foundUser = await User.findOne({
-    $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+    $or: [{ username: searchOptions }, { email: searchOptions }],
   });
   if (!foundUser) {
     res.redirect("/auth/login");
@@ -109,11 +114,17 @@ router.post("/register", upload.single("img"), async (req, res) => {
 
     // confirm no such username / email already present
     const userAlreadyExists = await User.findOne({
-      $or: [{ username }, { email }],
+      $or: [
+        { username: { $regex: new RegExp(username), $options: "i" } },
+        { email: { $regex: new RegExp(email), $options: "i" } },
+      ],
     });
+
     if (userAlreadyExists) {
-      const usernameTaken = userAlreadyExists.username === username;
-      const emailTaken = userAlreadyExists.email === email;
+      const usernameTaken =
+        userAlreadyExists.username.toLowerCase() === username.toLowerCase();
+      const emailTaken =
+        userAlreadyExists.email.toLowerCase() === email.toLowerCase();
       let errorMessage = "internal";
       if (usernameTaken && emailTaken) {
         errorMessage = "usernameAndEmailTaken";

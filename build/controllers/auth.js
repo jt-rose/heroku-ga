@@ -53,13 +53,14 @@ router.get("/login", function (req, res) {
     });
 });
 router.post("/login", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var _a, usernameOrEmail, password, foundUser, matchingPassword;
+    var _a, usernameOrEmail, password, searchOptions, foundUser, matchingPassword;
     return __generator(this, function (_b) {
         switch (_b.label) {
             case 0:
                 _a = req.body, usernameOrEmail = _a.usernameOrEmail, password = _a.password;
+                searchOptions = { $regex: new RegExp(usernameOrEmail), $options: "i" };
                 return [4 /*yield*/, User.findOne({
-                        $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+                        $or: [{ username: searchOptions }, { email: searchOptions }],
                     })];
             case 1:
                 foundUser = _b.sent();
@@ -135,13 +136,16 @@ router.post("/register", upload.single("img"), function (req, res) { return __aw
                     return [2 /*return*/];
                 }
                 return [4 /*yield*/, User.findOne({
-                        $or: [{ username: username }, { email: email }],
+                        $or: [
+                            { username: { $regex: new RegExp(username), $options: "i" } },
+                            { email: { $regex: new RegExp(email), $options: "i" } },
+                        ],
                     })];
             case 3:
                 userAlreadyExists = _b.sent();
                 if (userAlreadyExists) {
-                    usernameTaken = userAlreadyExists.username === username;
-                    emailTaken = userAlreadyExists.email === email;
+                    usernameTaken = userAlreadyExists.username.toLowerCase() === username.toLowerCase();
+                    emailTaken = userAlreadyExists.email.toLowerCase() === email.toLowerCase();
                     errorMessage = "internal";
                     if (usernameTaken && emailTaken) {
                         errorMessage = "usernameAndEmailTaken";

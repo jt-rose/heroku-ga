@@ -184,15 +184,24 @@ router.put("/edit-profile", upload.single("img"), async (req, res) => {
   } = req.body;
   //confirm that email and username are available
 
-  const sameUsers = await User.find({ $or: [{ username }, { email }] });
+  const sameUsers = await User.find({
+    $or: [
+      { username: { $regex: new RegExp(username), $options: "i" } },
+      { email: { $regex: new RegExp(email), $options: "i" } },
+    ],
+  });
 
   if (sameUsers.length) {
     const otherUsers = sameUsers.filter(
       (u) => String(u._id) !== String(user._id)
     );
     if (otherUsers.length) {
-      let sameUsername = otherUsers.find((u) => u.username === username);
-      let sameEmail = otherUsers.find((u) => u.email === email);
+      let sameUsername = otherUsers.find(
+        (u) => u.username.toLowerCase() === username.toLowerCase()
+      );
+      let sameEmail = otherUsers.find(
+        (u) => u.email.toLowerCase() === email.toLowerCase()
+      );
       let errorMessage = "internal";
       if (sameUsername && sameEmail) {
         errorMessage = "usernameAndEmailTaken";
